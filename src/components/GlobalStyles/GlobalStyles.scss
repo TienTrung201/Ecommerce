@@ -1,5 +1,6 @@
 // npm install --save normalize.css reset css
 @import 'normalize.css'; // reset css
+
 @mixin mobile {
     @media screen and (max-width: 739px) {
         @content;
@@ -7,8 +8,12 @@
 }
 @font-face {
     font-family: fontMain;
-    src: url('../../assets/font/roboto/Roboto-Regular.ttf');
+    src: url('../../assets/fonts/roboto/Roboto-Regular.ttf');
 }
+* {
+    box-sizing: border-box;
+}
+
 $active--Color: #31a24c;
 :root {
     --primary: #fe2c55;
