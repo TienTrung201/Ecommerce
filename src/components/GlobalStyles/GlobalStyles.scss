@@ -1,0 +1,41 @@
+// npm install --save normalize.css reset css
+@import 'normalize.css'; // reset css
+@mixin mobile {
+    @media screen and (max-width: 739px) {
+        @content;
+    }
+}
+@font-face {
+    font-family: fontMain;
+    src: url('../../assets/font/roboto/Roboto-Regular.ttf');
+}
+$active--Color: #31a24c;
+:root {
+    --primary: #fe2c55;
+    --backGround-App: #6e00ff;
+    --backGround-App2: #6e01fd;
+    --text-color: #2b3036;
+    --text-chat: #333;
+    --Icon-Color: #fff;
+    --backGround--page: #f3f6ff;
+    --backGround--page2--white: #fff;
+
+    --backgroundTransparent: transparent;
+    // --backGround--page2--white: transparent;
+    // --backGround--page: transparent;
+
+    //defaultLayout
+    --default-layout-Nav-height: 60px;
+    --default-layout-Nav-height--mobile: 50px;
+    --default-layout--mobile--bottom: 8px;
+}
+
+html {
+    font-size: 62.5%;
+}
+body {
+    font-family: fontMain;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+}
