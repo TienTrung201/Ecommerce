@@ -5659,17 +5659,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
     display: inline-block;
     font-size: 13px;
 }
-.breadcrumb > li + li:before {
-    content: '\f105';
-    font-family: 'FontAwesome', sans-serif;
-    padding: 0 10px;
-    color: #888;
-}
-@media (max-width: 480px) {
-    .breadcrumb > li + li:before {
-        padding: 0 5px;
-    }
-}
+
 .breadcrumb > li a {
     color: #888;
     font-size: 13px;
