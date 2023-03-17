@@ -383,7 +383,7 @@ function Header() {
                             </div>
                             <div className="col-md-4 col flex justify-content-center">
                                 <Link href="#">
-                                    <img src={require('@/assets/image/logo.png')} alt="" className="img-reponsive" />\
+                                    <img src={require('@/assets/image/logo.png')} alt="" className="img-reponsive" />
                                 </Link>
                             </div>
                             <div className="col-md-4 col flex justify-content-end">

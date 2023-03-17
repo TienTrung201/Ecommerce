@@ -21,7 +21,7 @@ function Contact() {
                                 <FontAwesomeIcon icon={faChevronRight} />
                             </i>
                         </li>
-                        <li className="active">About Us</li>
+                        <li className="active">Contact</li>
                     </ul>
                 </div>
                 <div className="container">
