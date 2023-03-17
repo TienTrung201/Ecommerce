@@ -78,28 +78,28 @@ function Footer() {
                     <div className="f-content">
                         <div className="f-col">
                             <div className="social">
-                                <Link href="">
+                                <Link to="/">
                                     <i className="fa fa-rss">
                                         {' '}
                                         <FontAwesomeIcon icon={faInstagram} />
                                     </i>
                                 </Link>
-                                <Link href="">
+                                <Link to="/">
                                     <i className="fa fa-facebook">
                                         <FontAwesomeIcon icon={faTwitter} />
                                     </i>
                                 </Link>
-                                <Link href="">
+                                <Link to="/">
                                     <i className="fa fa-twitter">
                                         <FontAwesomeIcon icon={faLinkedinIn} />
                                     </i>
                                 </Link>
-                                <Link href="">
+                                <Link to="/">
                                     <i className="fa fa-linkedin">
                                         <FontAwesomeIcon icon={faFacebookF} />
                                     </i>
                                 </Link>
-                                <Link href="">
+                                <Link to="/">
                                     <i className="fa fa-rss">
                                         <FontAwesomeIcon icon={faTiktok} />
                                     </i>
@@ -108,19 +108,19 @@ function Footer() {
                         </div>
                         <div className="f-col align-items-center">
                             <p>
-                                © 2018 <Link href="">Zoa.</Link>
+                                © 2018 <Link to="/">Zoa.</Link>
                             </p>
                             <ul>
                                 <li>
-                                    <Link href="">Privacy Policy</Link>
+                                    <Link to="/">Privacy Policy</Link>
                                 </li>
                                 <li>
-                                    <Link href="">Terms of Use</Link>
+                                    <Link to="/">Terms of Use</Link>
                                 </li>
                             </ul>
                         </div>
                         <div className="f-col">
-                            <Link href="">
+                            <Link to="/">
                                 <img
                                     src={require('@/assets/image/credit-card-icons.png')}
                                     alt=""

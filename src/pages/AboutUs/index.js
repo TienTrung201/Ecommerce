@@ -130,49 +130,49 @@ function AboutUs() {
                     <div className="about-brand">
                         <div className="owl-carousel owl-theme js-owl-team centerRow">
                             <div className="brand-item">
-                                <a href="" className="hover-images">
+                                <Link to="/" className="hover-images">
                                     <img
                                         src={require('@/assets/image/about/brand-urbane.png')}
                                         className="img-responsive"
                                         alt=""
                                     />
-                                </a>
+                                </Link>
                             </div>
                             <div className="brand-item">
-                                <a href="" className="hover-images">
+                                <Link to="/" className="hover-images">
                                     <img
                                         src={require('@/assets/image/about/brand-nordic.png')}
                                         className="img-responsive"
                                         alt=""
                                     />
-                                </a>
+                                </Link>
                             </div>
                             <div className="brand-item">
-                                <a href="" className="hover-images">
+                                <Link to="/" className="hover-images">
                                     <img
                                         src={require('@/assets/image/about/brand-cupcake.jpg')}
                                         className="img-responsive"
                                         alt=""
                                     />
-                                </a>
+                                </Link>
                             </div>
                             <div className="brand-item">
-                                <a href="" className="hover-images">
+                                <Link to="/" className="hover-images">
                                     <img
                                         src={require('@/assets/image/about/brand-moment.png')}
                                         className="img-responsive"
                                         alt=""
                                     />
-                                </a>
+                                </Link>
                             </div>
                             <div className="brand-item">
-                                <a href="" className="hover-images ">
+                                <Link to="/" className="hover-images ">
                                     <img
                                         src={require('@/assets/image/about/brand-antonio.png')}
                                         className="img-responsive"
                                         alt=""
                                     />
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>

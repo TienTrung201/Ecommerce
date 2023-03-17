@@ -96,30 +96,30 @@ function Header() {
                     </ul>
                     <ul className="mobile-account">
                         <li>
-                            <Link href="">
+                            <Link to="/">
                                 <i className="fa fa-unlock-alt"></i>Login
                             </Link>
                         </li>
                         <li>
-                            <Link href="">
+                            <Link to="/">
                                 <i className="fa fa-user-plus"></i>Register
                             </Link>
                         </li>
                         <li>
-                            <Link href="">
+                            <Link to="/">
                                 <i className="fa fa-heart"></i>Wishlist
                             </Link>
                         </li>
                     </ul>
                     <h4 className="mb-title">connect and follow</h4>
                     <div className="mobile-social mg-bottom-30">
-                        <Link href="">
+                        <Link to="/">
                             <i className="fa fa-facebook"></i>
                         </Link>
-                        <Link href="">
+                        <Link to="/">
                             <i className="fa fa-twitter"></i>
                         </Link>
-                        <Link href="">
+                        <Link to="/">
                             <i className="fa fa-google-plus"></i>
                         </Link>
                     </div>
@@ -280,22 +280,22 @@ function Header() {
                     </div>
                     <ul className="zoa-category text-center">
                         <li>
-                            <Link href="">All Categories</Link>
+                            <Link to="/">All Categories</Link>
                         </li>
                         <li>
-                            <Link href="">Woman</Link>
+                            <Link to="/">Woman</Link>
                         </li>
                         <li>
-                            <Link href="">Man</Link>
+                            <Link to="/">Man</Link>
                         </li>
                         <li>
-                            <Link href="">Accessories</Link>
+                            <Link to="/">Accessories</Link>
                         </li>
                         <li>
-                            <Link href="">Kid</Link>
+                            <Link to="/">Kid</Link>
                         </li>
                         <li>
-                            <Link href="">Others</Link>
+                            <Link to="/">Others</Link>
                         </li>
                     </ul>
                     <form method="get" action="/search" role="search" className="search-form has-categories-select">
