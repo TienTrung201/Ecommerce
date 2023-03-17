@@ -15,6 +15,9 @@ import LayoutPage from '@/components/Layout/LayoutPage';
 import LayoutHome from '@/components/Layout/LayoutHome';
 import Collection from '@/pages/Collection';
 
+// Admin
+import LayoutAdmin from '@/components/Admin/Layout/LayoutAdmin';
+
 const publicRoutes = [
     { path: '/', component: Home, layout: LayoutHome },
     { path: '/aboutUs', component: AboutUs, layout: LayoutPage },
@@ -31,6 +34,6 @@ const publicRoutes = [
     { path: '/login', component: Login, layout: null },
 ];
 
-const privateRoutes = []; //cần đăng nhâp
+const privateRoutes = [{ path: '/admin', component: Login, layout: LayoutAdmin }]; //cần đăng nhâp
 
 export { publicRoutes, privateRoutes };
