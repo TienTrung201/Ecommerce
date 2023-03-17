@@ -10207,7 +10207,7 @@ span.star:before {
 }
 .menu-home5.pushmenu-open {
     transform: translate(-100%, 0);
-    transform: translate3d(-100%, 0, 0);
+    transform: translate3d(0%, 0, 0);
 }
 @media (max-width: 320px) {
     .menu-home5.pushmenu-open {

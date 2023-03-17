@@ -13,7 +13,6 @@ function Footer() {
                         <form className="form_newsletter" action="#" method="post">
                             <input
                                 type="email"
-                                value=""
                                 placeholder="Enter your emaill"
                                 name="EMAIL"
                                 id="mail"
