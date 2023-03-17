@@ -88,3 +88,13 @@
         background: url('../../assets/image/contact_bg.png') top center/ cover no-repeat;
     }
 }
+//cart
+.product-remove {
+    position: relative;
+    .btn-del {
+        font-size: 1.5rem !important;
+        position: absolute;
+        top: 40%;
+        // padding-bottom: 10px !important;
+    }
+}
