@@ -2572,7 +2572,11 @@ th {
 }
 
 label {
+    font-family: 'Roboto', sans-serif !important;
+    text-transform: none !important;
+    font-weight: 400;
     display: inline-block;
+    color: #343a40 !important;
 }
 
 button {
@@ -2815,7 +2819,7 @@ progress {
 
 .initialism {
     font-size: 0.875em;
-    text-transform: uppercase;
+    text-transform: none;
 }
 
 .blockquote {
@@ -4268,7 +4272,7 @@ progress {
     margin-bottom: 1rem;
     color: #212529;
     vertical-align: top;
-    border-color: #ebedf2;
+    border-color: #d9d9d9;
 }
 .table > :not(caption) > * > * {
     padding: 0.8rem 0.8rem;
@@ -4494,18 +4498,18 @@ progress {
 .form-control {
     display: block;
     width: 100%;
-    padding: 0.94rem 1.375rem;
-    font-size: 1.3rem;
+    padding: 1.4rem 2.2rem;
+    font-size: 1.4rem;
     font-weight: 400;
     line-height: 1;
     color: #212529;
     background-color: color(white);
     background-clip: padding-box;
-    border: 1px solid #ced4da;
+    border: 1px solid #d9d9d9;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    border-radius: 2px;
+    border-radius: 0.6rem;
     -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
     transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -4551,7 +4555,7 @@ progress {
     opacity: 1;
 }
 .form-control::placeholder {
-    color: #c9c8c8;
+    color: #d9d9d9;
     opacity: 1;
 }
 .form-control:disabled,
@@ -4641,12 +4645,12 @@ progress {
 
 .form-control-sm {
     min-height: 2.575rem;
-    padding: 0.8rem 0.81rem;
-    font-size: 1.4rem;
-    border-radius: 0.2rem;
+    padding: 0.8rem 1.1rem;
+    font-size: 1.4rem !important;
+    border-radius: 0.6rem;
 }
 .form-control-sm::file-selector-button {
-    padding: 0.8rem 0.81rem;
+    padding: 0.4rem 1.1rem;
     margin: -0.8rem -0.81rem;
     -webkit-margin-end: 0.81rem;
     margin-inline-end: 0.81rem;
@@ -5199,7 +5203,7 @@ textarea.form-control-lg {
     padding-right: calc(1.5em + 0.75rem);
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
-    background-position: right calc(0.375em + 0.1875rem) center;
+    background-position: right calc(0.375em + 0.6rem) center;
     background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
 .was-validated .form-control:valid:focus,
@@ -5212,7 +5216,7 @@ textarea.form-control-lg {
 .was-validated textarea.form-control:valid,
 textarea.form-control.is-valid {
     padding-right: calc(1.5em + 0.75rem);
-    background-position: top calc(0.375em + 0.1875rem) right calc(0.375em + 0.1875rem);
+    background-position: top calc(0.375em + 0.6rem) right calc(0.375em + 0.6rem);
 }
 
 .was-validated .form-select:valid,
@@ -5306,7 +5310,7 @@ textarea.form-control.is-valid {
     padding-right: calc(1.5em + 0.75rem);
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
-    background-position: right calc(0.375em + 0.1875rem) center;
+    background-position: right calc(0.375em + 0.6rem) center;
     background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
 .was-validated .form-control:invalid:focus,
@@ -5319,7 +5323,7 @@ textarea.form-control.is-valid {
 .was-validated textarea.form-control:invalid,
 textarea.form-control.is-invalid {
     padding-right: calc(1.5em + 0.75rem);
-    background-position: top calc(0.375em + 0.1875rem) right calc(0.375em + 0.1875rem);
+    background-position: top calc(0.375em + 0.6rem) right calc(0.375em + 0.6rem);
 }
 
 .was-validated .form-select:invalid,
@@ -5395,7 +5399,7 @@ textarea.form-control.is-invalid {
     border: 1px solid transparent;
     padding: 1.4rem 2.5rem;
     font-size: 1.4rem;
-    border-radius: 0.1875rem;
+    border-radius: 0.6rem;
     -webkit-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
         -webkit-box-shadow 0.15s ease-in-out;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
@@ -6074,16 +6078,16 @@ fieldset:disabled .btn {
 
 .btn-lg,
 .btn-group-lg > .btn {
-    padding: 1rem 3rem;
+    padding: 1.6rem 4.8rem;
     font-size: 1.4rem;
-    border-radius: 0.1875rem;
+    border-radius: 0.6rem;
 }
 
 .btn-sm,
 .btn-group-sm > .btn {
-    padding: 0.8rem 0.81rem;
+    padding: 0.8rem 1.4rem;
     font-size: 1.4rem;
-    border-radius: 0.1875rem;
+    border-radius: 0.6rem;
 }
 
 .fade {
@@ -6166,7 +6170,7 @@ fieldset:disabled .btn {
     list-style: none;
     background-color: #fff;
     background-clip: padding-box;
-    border: 1px solid #ebedf2;
+    border: 1px solid #d9d9d9;
     border-radius: 0.4rem;
 }
 .dropdown-menu[data-bs-popper] {
@@ -6366,7 +6370,7 @@ fieldset:disabled .btn {
     height: 0;
     margin: 0.8rem 0;
     overflow: hidden;
-    border-top: 1px solid #ebedf2;
+    border-top: 1px solid #d9d9d9;
 }
 
 .dropdown-item {
@@ -6605,7 +6609,7 @@ fieldset:disabled .btn {
 }
 
 .nav-tabs {
-    border-bottom: 1px solid #ebedf2;
+    border-bottom: 1px solid #d9d9d9;
 }
 .nav-tabs .nav-link {
     margin-bottom: -1px;
@@ -6616,7 +6620,7 @@ fieldset:disabled .btn {
 }
 .nav-tabs .nav-link:hover,
 .nav-tabs .nav-link:focus {
-    border-color: #ebedf2 #ebedf2 #ebedf2;
+    border-color: #d9d9d9 #d9d9d9 #d9d9d9;
     isolation: isolate;
 }
 .nav-tabs .nav-link.disabled {
@@ -6628,7 +6632,7 @@ fieldset:disabled .btn {
 .nav-tabs .nav-item.show .nav-link {
     color: #343a40;
     background-color: #ffffff;
-    border-color: #ebedf2 #ebedf2 #ffffff;
+    border-color: #d9d9d9 #d9d9d9 #ffffff;
 }
 .nav-tabs .dropdown-menu {
     margin-top: -1px;
@@ -7621,6 +7625,7 @@ fieldset:disabled .btn {
     flex-wrap: wrap;
     padding: 0.56rem 1.13rem;
     margin-bottom: 1rem;
+    font-family: 'Roboto', sans-serif;
     font-size: 1.4rem;
     list-style: none;
     background-color: transparent;
@@ -8484,7 +8489,7 @@ fieldset:disabled .btn {
     pointer-events: auto;
     background-color: #f2edf3;
     background-clip: padding-box;
-    border: 1px solid #ebedf2;
+    border: 1px solid #d9d9d9;
     border-radius: 0.3rem;
     outline: 0;
 }
@@ -8518,7 +8523,7 @@ fieldset:disabled .btn {
     -ms-flex-pack: justify;
     justify-content: space-between;
     padding: 1rem 1rem;
-    border-bottom: 1px solid #ebedf2;
+    border-bottom: 1px solid #d9d9d9;
     border-top-left-radius: calc(0.3rem - 1px);
     border-top-right-radius: calc(0.3rem - 1px);
 }
@@ -8555,7 +8560,7 @@ fieldset:disabled .btn {
     -ms-flex-pack: end;
     justify-content: flex-end;
     padding: 0.6875rem;
-    border-top: 1px solid #ebedf2;
+    border-top: 1px solid #d9d9d9;
     border-bottom-right-radius: calc(0.3rem - 1px);
     border-bottom-left-radius: calc(0.3rem - 1px);
 }
@@ -9952,7 +9957,7 @@ fieldset:disabled .btn {
 
 .border,
 .loader-demo-box {
-    border: 1px solid #ebedf2 !important;
+    border: 1px solid #d9d9d9 !important;
 }
 
 .border-0 {
@@ -9960,7 +9965,7 @@ fieldset:disabled .btn {
 }
 
 .border-top {
-    border-top: 1px solid #ebedf2 !important;
+    border-top: 1px solid #d9d9d9 !important;
 }
 
 .border-top-0 {
@@ -9968,7 +9973,7 @@ fieldset:disabled .btn {
 }
 
 .border-end {
-    border-right: 1px solid #ebedf2 !important;
+    border-right: 1px solid #d9d9d9 !important;
 }
 
 .border-end-0 {
@@ -9976,7 +9981,7 @@ fieldset:disabled .btn {
 }
 
 .border-bottom {
-    border-bottom: 1px solid #ebedf2 !important;
+    border-bottom: 1px solid #d9d9d9 !important;
 }
 
 .border-bottom-0 {
@@ -9984,7 +9989,7 @@ fieldset:disabled .btn {
 }
 
 .border-start {
-    border-left: 1px solid #ebedf2 !important;
+    border-left: 1px solid #d9d9d9 !important;
 }
 
 .border-start-0 {
@@ -14373,42 +14378,44 @@ input:focus {
     outline: none;
 }
 
-/* Fonts */
-@font-face {
-    font-family: 'ubuntu-light';
-    src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Light.eot');
-    /* IE9 Compat Modes */
-    src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Light.woff2') format('woff2'),
-        url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Light.woff') format('woff'),
-        url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Light.ttf') format('truetype');
-}
+// /* Fonts */
+// @font-face {
+//     font-family: 'ubuntu-light';
+//     src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Light.eot');
+//     /* IE9 Compat Modes */
+//     src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Light.woff2') format('woff2'),
+//         url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Light.woff') format('woff'),
+//         url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Light.ttf') format('truetype');
+// }
 
-@font-face {
-    font-family: 'ubuntu-regular';
-    src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Regular.eot');
-    /* IE9 Compat Modes */
-    src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Regular.woff2') format('woff2'),
-        url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Regular.woff') format('woff'),
-        url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Regular.ttf') format('truetype');
-}
+// @font-face {
+//     font-family: 'ubuntu-regular';
+//     src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Regular.eot');
+//     /* IE9 Compat Modes */
+//     src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Regular.woff2') format('woff2'),
+//         url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Regular.woff') format('woff'),
+//         url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Regular.ttf') format('truetype');
+// }
 
-@font-face {
-    font-family: 'ubuntu-medium';
-    src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Medium.eot');
-    /* IE9 Compat Modes */
-    src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Medium.woff2') format('woff2'),
-        url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Medium.woff') format('woff'),
-        url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Medium.ttf') format('truetype');
-}
+// @font-face {
+//     font-family: 'ubuntu-medium';
+//     src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Medium.eot');
+//     /* IE9 Compat Modes */
+//     src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Medium.woff2') format('woff2'),
+//         url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Medium.woff') format('woff'),
+//         url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Medium.ttf') format('truetype');
+// }
 
-@font-face {
-    font-family: 'ubuntu-bold';
-    src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Bold.eot');
-    /* IE9 Compat Modes */
-    src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Bold.woff2') format('woff2'),
-        url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Bold.woff') format('woff'),
-        url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Bold.ttf') format('truetype');
-}
+// @font-face {
+//     font-family: 'ubuntu-bold';
+//     src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Bold.eot');
+//     /* IE9 Compat Modes */
+//     src: url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Bold.woff2') format('woff2'),
+//         url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Bold.woff') format('woff'),
+//         url('../../../../assets/admin/fonts/Ubuntu/Ubuntu-Bold.ttf') format('truetype');
+// }
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 
 .text-twitter {
     color: #2caae1;
@@ -14493,7 +14500,8 @@ input:focus {
 /* Typography */
 body {
     font-size: 1rem;
-    font-family: 'ubuntu-regular', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     font-weight: initial;
     line-height: normal;
     -webkit-font-smoothing: antialiased;
@@ -14517,7 +14525,8 @@ h6,
 .h4,
 .h5,
 .h6 {
-    font-family: 'ubuntu-medium', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
 }
 
 p {
@@ -14612,7 +14621,7 @@ p {
 
 .blockquote {
     padding: 2rem;
-    border: 1px solid #ebedf2;
+    border: 1px solid #d9d9d9;
 }
 
 address p {
@@ -14724,13 +14733,14 @@ pre {
 code {
     padding: 5px;
     color: #fe7c96;
-    font-family: 'ubuntu-light', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     font-size: 1.4rem;
     border-radius: 4px;
 }
 
 .page-header {
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 2.4rem 0;
 }
 .page-header .breadcrumb {
     border: 0;
@@ -14739,7 +14749,9 @@ code {
 
 .page-title {
     color: #343a40;
-    font-size: 1.8rem;
+    font-size: 2.2rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
     margin-bottom: 0;
 }
 .page-title .page-title-icon {
@@ -14767,7 +14779,8 @@ code {
     -webkit-transition: all 0.25s ease;
     -ms-transition: all 0.25s ease;
     font-size: calc(1.4rem - 0.05rem);
-    font-family: 'ubuntu-regular', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
 }
 .footer a {
     color: #1bcfb4;
@@ -14850,37 +14863,37 @@ code {
 
 @media (min-width: 576px) {
     .border-right-sm {
-        border-right: 1px solid #ebedf2;
+        border-right: 1px solid #d9d9d9;
     }
 }
 
 @media (min-width: 768px) {
     .border-right-md {
-        border-right: 1px solid #ebedf2;
+        border-right: 1px solid #d9d9d9;
     }
 }
 
 @media (min-width: 992px) {
     .border-right-lg {
-        border-right: 1px solid #ebedf2;
+        border-right: 1px solid #d9d9d9;
     }
 }
 
 @media (min-width: 576px) {
     .border-left-sm {
-        border-left: 1px solid #ebedf2;
+        border-left: 1px solid #d9d9d9;
     }
 }
 
 @media (min-width: 768px) {
     .border-left-md {
-        border-left: 1px solid #ebedf2;
+        border-left: 1px solid #d9d9d9;
     }
 }
 
 @media (min-width: 992px) {
     .border-left-lg {
-        border-left: 1px solid #ebedf2;
+        border-left: 1px solid #d9d9d9;
     }
 }
 
@@ -14904,15 +14917,18 @@ code {
 }
 
 .font-weight-light {
-    font-family: 'ubuntu-light', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
 }
 
 .font-weight-bold {
-    font-family: 'ubuntu-bold', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
 }
 
 .font-weight-normal {
-    font-family: 'ubuntu-regular', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
 }
 
 .image-grouped {
@@ -15069,7 +15085,7 @@ code {
 .template-demo > .h6,
 .template-demo > h1,
 .template-demo > .h1 {
-    border-top: 1px solid #ebedf2;
+    border-top: 1px solid #d9d9d9;
     padding: 0.8rem 0 0;
 }
 
@@ -15095,7 +15111,7 @@ code {
 }
 
 .template-demo .editable-form > .form-group {
-    border-bottom: 1px solid #ebedf2;
+    border-bottom: 1px solid #d9d9d9;
     padding-bottom: 0.8rem;
     margin-bottom: 0.8rem;
 }
@@ -15173,8 +15189,8 @@ code {
     background: #000;
 }
 #proBanner .card-body-padding {
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
+    padding-top: 1.28rem;
+    padding-bottom: 1.28rem;
     padding-left: 2rem;
     padding-right: 2rem;
 }
@@ -15255,7 +15271,7 @@ code {
 }
 
 .card-statistics .card-col {
-    border-right: 1px solid #ebedf2;
+    border-right: 1px solid #d9d9d9;
 }
 .card-statistics .card-col:last-child {
     border-right: none;
@@ -15275,7 +15291,7 @@ code {
     .card-statistics .card-col:nth-child(3):before {
         content: '';
         position: absolute;
-        background: #ebedf2;
+        background: #d9d9d9;
     }
     .card-statistics .card-col:first-child:before {
         bottom: 0;
@@ -15303,7 +15319,7 @@ code {
 }
 
 .card-revenue-table .revenue-item {
-    border-bottom: 1px solid #ebedf2;
+    border-bottom: 1px solid #d9d9d9;
 }
 .card-revenue-table .revenue-item:last-child {
     border-bottom: 0;
@@ -15322,7 +15338,7 @@ code {
 .card-revenue-table .revenue-item .revenue-amount p {
     font-size: 2rem;
     font-family: 'roboto', sans-serif;
-    font-weight: 600;
+    font-weight: 500;
     text-align: right;
 }
 .rtl .card-revenue-table .revenue-item .revenue-amount p {
@@ -15427,7 +15443,7 @@ code {
     padding: 5px 15px;
     border-radius: 2px;
     -webkit-transition-duration: 0.7s;
-    transition-duration: 0.7s;
+    transition-duration: 0.4s;
     -webkit-transition-property: 'color';
     transition-property: 'color';
 }
@@ -15489,7 +15505,8 @@ code {
     font-weight: initial;
     line-height: 1;
     padding: 0.375rem 0.5625rem;
-    font-family: 'ubuntu-medium', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
 }
 .badge.badge-pill {
     border-radius: 10rem;
@@ -15661,7 +15678,8 @@ code {
 .btn {
     font-size: 1.4rem;
     line-height: 1;
-    font-family: 'ubuntu-bold', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
     /* Buttons with only icons */
     /* Buttons with icon and text */
 }
@@ -16623,7 +16641,7 @@ code {
 
 /* Breadcrumbs */
 .breadcrumb {
-    border: 1px solid #ebedf2;
+    border: 1px solid #d9d9d9;
 }
 .breadcrumb .breadcrumb-item {
     font-size: 1.4rem;
@@ -17007,27 +17025,31 @@ code {
     background: #fff;
 }
 .card .card-body {
-    padding: 2.5rem 2.5rem;
+    padding: 3.2rem 3.2rem;
 }
 .card .card-body + .card-body {
     padding-top: 1rem;
 }
 .card .card-title {
     color: #343a40;
-    margin-bottom: 0.75rem;
-    text-transform: capitalize;
-    font-family: 'ubuntu-medium', sans-serif;
-    font-size: 1.8rem;
+    margin-bottom: 1.2rem;
+    text-transform: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 1.6rem;
 }
 .card .card-subtitle {
-    font-family: 'ubuntu-regular', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     margin-top: 0.625rem;
     margin-bottom: 0.625rem;
 }
 .card .card-description {
     color: #76838f;
-    margin-bottom: 1.5rem;
-    font-family: 'ubuntu-regular', sans-serif;
+    margin-bottom: 2.4rem;
+    font-size: 1.4rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
 }
 .card.card-outline-success {
     border: 1px solid theme-color('success');
@@ -17157,13 +17179,13 @@ code {
 }
 .form-check .form-check-label {
     display: block;
-    margin-left: 1.75rem;
+    margin-left: 2.8rem;
     font-size: 1.4rem;
     line-height: 1.5;
 }
 .rtl .form-check .form-check-label {
     margin-left: 0;
-    margin-right: 1.75rem;
+    margin-right: 2.8rem;
 }
 .form-check .form-check-label input {
     position: absolute;
@@ -17234,10 +17256,10 @@ code {
     transform: scale(1);
 }
 .form-check .form-check-label input[type='checkbox']:disabled + .input-helper:before {
-    border-color: #ebedf2;
+    border-color: #d9d9d9;
 }
 .form-check .form-check-label input[type='checkbox']:disabled:checked + .input-helper:after {
-    background: #ebedf2;
+    background: #d9d9d9;
     color: #ffffff;
 }
 .form-check .form-check-label input[type='radio'] + .input-helper:before {
@@ -17296,10 +17318,10 @@ code {
     transform: scale(1);
 }
 .form-check .form-check-label input[type='radio']:disabled + .input-helper:before {
-    border-color: #ebedf2;
+    border-color: #d9d9d9;
 }
 .form-check .form-check-label input[type='radio']:disabled:checked + .input-helper:before {
-    background: #ebedf2;
+    background: #d9d9d9;
 }
 .form-check .form-check-label input[type='radio']:disabled:checked + .input-helper:after {
     background: #ffffff;
@@ -17414,7 +17436,7 @@ code {
 
 /* Forms */
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.4rem;
 }
 
 .input-group-append,
@@ -17425,30 +17447,33 @@ code {
 }
 .input-group-append .input-group-text,
 .input-group-prepend .input-group-text {
-    border-color: #ebedf2;
+    border-color: #d9d9d9;
     padding: 0.94rem 0.75rem;
     color: #c9c8c8;
 }
 
 .form-control {
-    border: 1px solid #ebedf2;
-    font-family: 'ubuntu-regular', sans-serif;
-    font-size: 1.3rem;
+    border: 1px solid #d9d9d9;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 1.6rem;
+    border-radius: 0.6rem;
 }
 .form-control:focus {
     background-color: #ffffff;
+    border-color: #86b7fe !important;
     color: #000000;
     outline: none;
 }
 
 select.form-control {
-    padding: 0.4375rem 0.75rem;
+    padding: 0.8rem 1.2rem;
     border: 0;
-    outline: 1px solid #ebedf2;
+    outline: 1px solid #d9d9d9;
     color: #c9c8c8;
 }
 select.form-control:focus {
-    outline: 1px solid #ebedf2;
+    outline: 1px solid #d9d9d9;
 }
 select.form-control.border-primary {
     outline: 1px solid #b66dff;
@@ -17523,12 +17548,12 @@ select.form-control.border-dark:focus {
 
 /* Icons */
 .icons-list {
-    border-left: 1px solid #ebedf2;
-    border-top: 1px solid #ebedf2;
+    border-left: 1px solid #d9d9d9;
+    border-top: 1px solid #d9d9d9;
 }
 .icons-list > div {
-    border-bottom: 1px solid #ebedf2;
-    border-right: 1px solid #ebedf2;
+    border-bottom: 1px solid #d9d9d9;
+    border-right: 1px solid #d9d9d9;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -17536,7 +17561,8 @@ select.form-control.border-dark:focus {
     -ms-flex-align: center;
     align-items: center;
     padding: 15px 15px;
-    font-family: 'ubuntu-regular', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     font-size: 1.4rem;
 }
 .icons-list > div i {
@@ -17678,7 +17704,7 @@ dl li {
 }
 .bullet-line-list li:after {
     content: '';
-    border: 1px solid #ebedf2;
+    border: 1px solid #d9d9d9;
     position: absolute;
     bottom: 0;
     left: -23px;
@@ -17771,9 +17797,10 @@ dl li {
     margin-bottom: 10px;
 }
 .preview-list .preview-item .preview-item-content p .content-category {
-    font-family: 'source-sans-pro-semibold', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
     padding-right: 15px;
-    border-right: 1px solid #ebedf2;
+    border-right: 1px solid #d9d9d9;
 }
 .rtl .preview-list .preview-item .preview-item-content {
     padding-left: 0;
@@ -17814,7 +17841,7 @@ dl li {
 }
 
 .preview-list.bordered .preview-item {
-    border-bottom: 1px solid #ebedf2;
+    border-bottom: 1px solid #d9d9d9;
 }
 .preview-list.bordered .preview-item:last-child {
     border-bottom: 0;
@@ -17827,7 +17854,8 @@ dl li {
 .table thead th {
     border-top: 0;
     border-bottom-width: 1px;
-    font-family: 'ubuntu-medium', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500 !important;
     font-weight: initial;
 }
 .table thead th i {
@@ -17835,6 +17863,7 @@ dl li {
 }
 .table th,
 .table td {
+    font-family: 'Roboto', sans-serif;
     vertical-align: middle;
     font-size: 1.4rem;
     line-height: 1;
@@ -17862,7 +17891,7 @@ dl li {
 
 .table > :not(:last-child) > :last-child > *,
 .jsgrid .jsgrid-table > :not(:last-child) > :last-child > * {
-    border-bottom-color: #ebedf2;
+    border-bottom-color: #d9d9d9;
 }
 
 .table > :not(:first-child),
@@ -17902,7 +17931,7 @@ dl li {
 .list-wrapper ul li {
     font-size: 1.5rem;
     padding: 0.4rem 0;
-    border-bottom: 1px solid #ebedf2;
+    border-bottom: 1px solid #d9d9d9;
 }
 .list-wrapper ul li:first-child {
     border-bottom: none;
@@ -17941,7 +17970,7 @@ dl li {
 }
 .auth .auth-form-light .input-group .form-control:focus,
 .auth .auth-form-light .input-group .form-control:active {
-    border-color: #ebedf2;
+    border-color: #d9d9d9;
 }
 
 .auth .brand-logo {
@@ -17977,7 +18006,8 @@ dl li {
 
 /* Navbar */
 .navbar {
-    font-family: 'ubuntu-light', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
     background: #fff;
     transition: background 0.25s ease;
     -webkit-transition: background 0.25s ease;
@@ -18082,22 +18112,26 @@ dl li {
 .navbar .navbar-menu-wrapper .search-field .input-group input:-ms-input-placeholder {
     font-size: 1.4rem;
     color: #9c9fa6;
-    font-family: 'ubuntu-light', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
 }
 .navbar .navbar-menu-wrapper .search-field .input-group input:-moz-placeholder {
     font-size: 1.4rem;
     color: #9c9fa6;
-    font-family: 'ubuntu-light', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
 }
 .navbar .navbar-menu-wrapper .search-field .input-group input::-moz-placeholder {
     font-size: 1.4rem;
     color: #9c9fa6;
-    font-family: 'ubuntu-light', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
 }
 .navbar .navbar-menu-wrapper .search-field .input-group input::-webkit-input-placeholder {
     font-size: 1.4rem;
     color: #9c9fa6;
-    font-family: 'ubuntu-light', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
 }
 .navbar .navbar-menu-wrapper .search-field .input-group i {
     font-size: 17px;
@@ -18485,7 +18519,8 @@ dl li {
 .sidebar {
     min-height: calc(100vh - 70px);
     background: #ffffff;
-    font-family: 'ubuntu-regular', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     padding: 0;
     width: 260px;
     z-index: 11;
@@ -18579,7 +18614,8 @@ dl li {
 }
 .sidebar .nav .nav-item.active > .nav-link .menu-title {
     color: #b66dff;
-    font-family: 'ubuntu-medium', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
 }
 .sidebar .nav .nav-item.active > .nav-link i {
     color: #b66dff;
@@ -18660,7 +18696,7 @@ dl li {
     background: transparent;
 }
 .sidebar .nav.sub-menu .nav-item .nav-link:hover {
-    color: #555555;
+    color: #b66dff;
 }
 .sidebar .nav.sub-menu .nav-item:hover {
     background: transparent;
@@ -18902,4 +18938,24 @@ dl li {
 
 .select-none {
     user-select: none;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.align-items-start {
+    align-items: flex-start;
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+
+.overflow-x-auto {
+    overflow-x: auto;
+}
+
+th {
+    text-transform: none !important;
 }

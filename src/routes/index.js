@@ -17,6 +17,13 @@ import Collection from '@/pages/Collection';
 
 // Admin
 import LayoutAdmin from '@/components/Admin/Layout/LayoutAdmin';
+import Dashboard from '@/pages/Admin/Dashboard';
+import ProductCategories from '@/pages/Admin/ProductCategories';
+import ProductCategoriesCreate from '@/pages/Admin/ProductCategoriesCreate';
+import Promotions from '@/pages/Admin/Promotions';
+import PromotionsCreate from '@/pages/Admin/PromotionsCreate';
+import Products from '@/pages/Admin/Products';
+import ProductsCreate from '@/pages/Admin/ProductsCreate';
 
 const publicRoutes = [
     { path: '/', component: Home, layout: LayoutHome },
@@ -34,6 +41,14 @@ const publicRoutes = [
     { path: '/login', component: Login, layout: null },
 ];
 
-const privateRoutes = [{ path: '/admin', component: Login, layout: LayoutAdmin }]; //cần đăng nhâp
+const privateRoutes = [
+    { path: '/admin', component: Dashboard, layout: LayoutAdmin },
+    { path: '/admin/products/categories', component: ProductCategories, layout: LayoutAdmin },
+    { path: '/admin/products/categories/create', component: ProductCategoriesCreate, layout: LayoutAdmin },
+    { path: '/admin/promotions', component: Promotions, layout: LayoutAdmin },
+    { path: '/admin/promotions/create', component: PromotionsCreate, layout: LayoutAdmin },
+    { path: '/admin/products', component: Products, layout: LayoutAdmin },
+    { path: '/admin/products/create', component: ProductsCreate, layout: LayoutAdmin },
+];
 
 export { publicRoutes, privateRoutes };
