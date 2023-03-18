@@ -13,8 +13,9 @@ import {
     faTags,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
 import { faBell, faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -22,10 +23,27 @@ function LayoutAdmin({ children }) {
     const [sidebarIconOnly, setSidebarIconOnly] = useState(false);
     const [sidebarActive, setSidebarActive] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
-    const [showMessages, setShowMessages] = useState(false);
     const [adminDropdown, setAdminDropdown] = useState(false);
-    const [orderMenuDropdown, setOrderMenuDropdown] = useState(false);
-    const [productMenuDropDown, setProductMenuDropDown] = useState(false);
+
+    const [activeItem, setActiveItem] = useState('dashboard');
+    const [activeSubItem, setActiveSubItem] = useState('');
+
+    const handleActiveItem = (e) => {
+        e.stopPropagation();
+        if (activeItem.includes('dropdown') && activeItem === e.currentTarget.dataset.active) {
+            setActiveItem('');
+        } else {
+            setActiveItem(e.currentTarget.dataset.active);
+        }
+        setActiveSubItem('');
+    };
+
+    const handleActiveSubItem = (e) => {
+        // e.currentTarget.getAttribute('data-active')
+        // e.currentTarget.dataset.active
+        e.stopPropagation();
+        setActiveSubItem(e.currentTarget.dataset.active);
+    };
 
     return (
         <>
@@ -41,6 +59,7 @@ function LayoutAdmin({ children }) {
                         'fixed-top',
                         'd-flex',
                         'flex-row',
+                        'select-none',
                     )}
                 >
                     <div
@@ -122,115 +141,7 @@ function LayoutAdmin({ children }) {
                                     </span>
                                 </div>
                             </li>
-                            <li className={cx('nav-item', 'dropdown')}>
-                                <span className={cx('nav-link', 'count-indicator', 'dropdown-toggle')}>
-                                    <i
-                                        onClick={() => {
-                                            setShowMessages(!showMessages);
-                                        }}
-                                        className={cx('mdi', 'pointer')}
-                                    >
-                                        <FontAwesomeIcon icon={faEnvelope} />
-                                    </i>
 
-                                    <span className={cx('count-symbol', 'bg-warning')}></span>
-                                </span>
-                                <div
-                                    className={cx(
-                                        'dropdown-menu',
-                                        'dropdown-menu-right',
-                                        'navbar-dropdown',
-                                        'preview-list',
-                                        { show: showMessages },
-                                    )}
-                                    aria-labelledby="messageDropdown"
-                                >
-                                    <h6 className={cx('p-3', 'mb-0')}>Messages</h6>
-                                    <div className={cx('dropdown-divider')}></div>
-                                    <div className={cx('dropdown-item', 'preview-item', 'pointer')}>
-                                        <div className={cx('preview-thumbnail')}>
-                                            <img src={images.faces.face4} alt="" className={cx('profile-pic')} />
-                                        </div>
-                                        <div
-                                            className={cx(
-                                                'preview-item-content',
-                                                'd-flex',
-                                                'align-items-start',
-                                                'flex-column',
-                                                'justify-content-center',
-                                            )}
-                                        >
-                                            <h6
-                                                className={cx(
-                                                    'preview-subject',
-                                                    'ellipsis',
-                                                    'mb-1',
-                                                    'font-weight-normal',
-                                                )}
-                                            >
-                                                Mark send you a message
-                                            </h6>
-                                            <p className={cx('text-gray', 'mb-0')}>1 Minutes ago</p>
-                                        </div>
-                                    </div>
-                                    <div className={cx('dropdown-divider')}></div>
-                                    <div className={cx('dropdown-item', 'preview-item', 'pointer')}>
-                                        <div className={cx('preview-thumbnail')}>
-                                            <img src={images.faces.face2} alt="" className={cx('profile-pic')} />
-                                        </div>
-                                        <div
-                                            className={cx(
-                                                'preview-item-content',
-                                                'd-flex',
-                                                'align-items-start',
-                                                'flex-column',
-                                                'justify-content-center',
-                                            )}
-                                        >
-                                            <h6
-                                                className={cx(
-                                                    'preview-subject',
-                                                    'ellipsis',
-                                                    'mb-1',
-                                                    'font-weight-normal',
-                                                )}
-                                            >
-                                                Cregh send you a message
-                                            </h6>
-                                            <p className={cx('text-gray', 'mb-0')}>15 Minutes ago</p>
-                                        </div>
-                                    </div>
-                                    <div className={cx('dropdown-divider')}></div>
-                                    <div className={cx('dropdown-item', 'preview-item', 'pointer')}>
-                                        <div className={cx('preview-thumbnail')}>
-                                            <img src={images.faces.face3} alt="" className={cx('profile-pic')} />
-                                        </div>
-                                        <div
-                                            className={cx(
-                                                'preview-item-content',
-                                                'd-flex',
-                                                'align-items-start',
-                                                'flex-column',
-                                                'justify-content-center',
-                                            )}
-                                        >
-                                            <h6
-                                                className={cx(
-                                                    'preview-subject',
-                                                    'ellipsis',
-                                                    'mb-1',
-                                                    'font-weight-normal',
-                                                )}
-                                            >
-                                                Profile picture updated
-                                            </h6>
-                                            <p className={cx('text-gray', 'mb-0')}>18 Minutes ago</p>
-                                        </div>
-                                    </div>
-                                    <div className={cx('dropdown-divider')}></div>
-                                    <h6 className={cx('p-3', 'mb-0', 'text-center')}>4 new messages</h6>
-                                </div>
-                            </li>
                             <li className={cx('nav-item', 'dropdown')}>
                                 <span
                                     className={cx('nav-link', 'count-indicator', 'dropdown-toggle')}
@@ -346,7 +257,10 @@ function LayoutAdmin({ children }) {
                 {/* <!-- partial --> */}
                 <div className={cx('container-fluid', 'page-body-wrapper')}>
                     {/* <!-- partial:../../partials/_sidebar.html --> */}
-                    <nav className={cx('sidebar', 'sidebar-offcanvas', { active: sidebarActive })} id="sidebar">
+                    <nav
+                        className={cx('sidebar', 'sidebar-offcanvas', 'select-none', { active: sidebarActive })}
+                        id="sidebar"
+                    >
                         <ul className={cx('nav')}>
                             <li className={cx('nav-item', 'nav-profile')}>
                                 <span href="#" className={cx('nav-link', 'pointer')}>
@@ -364,27 +278,24 @@ function LayoutAdmin({ children }) {
                                     ></i>
                                 </span>
                             </li>
-                            <li className={cx('nav-item')}>
-                                <a className={cx('nav-link')} href="../../index.html">
+                            <li
+                                onClick={handleActiveItem}
+                                data-active="dashboard"
+                                className={cx('nav-item', { active: activeItem === 'dashboard' })}
+                            >
+                                <Link to="/admin" className={cx('nav-link')} href="../../index.html">
                                     <span className={cx('menu-title')}>Tổng quan</span>
                                     <i className={cx('menu-icon')}>
                                         <FontAwesomeIcon icon={faHouse} />
                                     </i>
-                                </a>
+                                </Link>
                             </li>
                             <li
-                                onClick={() => {
-                                    setOrderMenuDropdown(!orderMenuDropdown);
-                                }}
-                                className={cx('nav-item')}
+                                onClick={handleActiveItem}
+                                data-active="orders-dropdown"
+                                className={cx('nav-item', { active: activeItem === 'orders-dropdown' })}
                             >
-                                <a
-                                    className={cx('nav-link')}
-                                    data-bs-toggle="collapse"
-                                    href="#"
-                                    aria-expanded="false"
-                                    aria-controls="ui-basic"
-                                >
+                                <span className={cx('nav-link', 'pointer')}>
                                     <span className={cx('menu-title')}>Đơn hàng</span>
                                     <i className={cx('menu-arrow')}>
                                         <FontAwesomeIcon icon={faAngleDown} />
@@ -392,26 +303,48 @@ function LayoutAdmin({ children }) {
                                     <i className={cx('menu-icon')}>
                                         <FontAwesomeIcon icon={faFileInvoiceDollar} />
                                     </i>
-                                </a>
-                                <div className={cx('collapse', { show: orderMenuDropdown })} id="ui-basic">
+                                </span>
+                                <div
+                                    className={cx('collapse', { show: activeItem === 'orders-dropdown' })}
+                                    id="ui-basic"
+                                >
                                     <ul className={cx('nav', 'flex-column', 'sub-menu')}>
-                                        <li className={cx('nav-item')}>
-                                            <a className={cx('nav-link')} href="../../pages/ui-features/buttons.html">
+                                        <li
+                                            onClick={handleActiveSubItem}
+                                            data-active="order-list"
+                                            className={cx('nav-item')}
+                                        >
+                                            <a
+                                                href="#"
+                                                className={cx('nav-link', { active: activeSubItem === 'order-list' })}
+                                            >
                                                 Danh sách đơn hàng
                                             </a>
                                         </li>
-                                        <li className={cx('nav-item')}>
+                                        <li
+                                            onClick={handleActiveSubItem}
+                                            data-active="order-pending"
+                                            className={cx('nav-item')}
+                                        >
                                             <a
-                                                className={cx('nav-link')}
-                                                href="../../pages/ui-features/typography.html"
+                                                className={cx('nav-link', {
+                                                    active: activeSubItem === 'order-pending',
+                                                })}
+                                                href="#"
                                             >
                                                 Đơn chưa hoàn tất
                                             </a>
                                         </li>
-                                        <li className={cx('nav-item')}>
+                                        <li
+                                            onClick={handleActiveSubItem}
+                                            data-active="order-shipping"
+                                            className={cx('nav-item')}
+                                        >
                                             <a
-                                                className={cx('nav-link')}
-                                                href="../../pages/ui-features/typography.html"
+                                                className={cx('nav-link', {
+                                                    active: activeSubItem === 'order-shipping',
+                                                })}
+                                                href="#"
                                             >
                                                 Quản lý vận chuyển
                                             </a>
@@ -420,18 +353,11 @@ function LayoutAdmin({ children }) {
                                 </div>
                             </li>
                             <li
-                                onClick={() => {
-                                    setProductMenuDropDown(!productMenuDropDown);
-                                }}
-                                className={cx('nav-item')}
+                                onClick={handleActiveItem}
+                                data-active="products-dropdown"
+                                className={cx('nav-item', { active: activeItem === 'products-dropdown' })}
                             >
-                                <a
-                                    className={cx('nav-link')}
-                                    data-bs-toggle="collapse"
-                                    href="#"
-                                    aria-expanded="false"
-                                    aria-controls="ui-basic"
-                                >
+                                <span className={cx('nav-link', 'pointer')}>
                                     <span className={cx('menu-title')}>Sản phẩm</span>
                                     <i className={cx('menu-arrow')}>
                                         <FontAwesomeIcon icon={faAngleDown} />
@@ -439,53 +365,71 @@ function LayoutAdmin({ children }) {
                                     <i className={cx('menu-icon')}>
                                         <FontAwesomeIcon icon={faBox} />
                                     </i>
-                                </a>
-                                <div className={cx('collapse', { show: productMenuDropDown })} id="ui-basic">
+                                </span>
+                                <div
+                                    className={cx('collapse', { show: activeItem === 'products-dropdown' })}
+                                    id="ui-basic"
+                                >
                                     <ul className={cx('nav', 'flex-column', 'sub-menu')}>
-                                        <li className={cx('nav-item')}>
-                                            <a className={cx('nav-link')} href="../../pages/ui-features/buttons.html">
+                                        <li
+                                            onClick={handleActiveSubItem}
+                                            data-active="product-list"
+                                            className={cx('nav-item')}
+                                        >
+                                            <Link
+                                                to="/admin/products"
+                                                className={cx('nav-link', { active: activeSubItem === 'product-list' })}
+                                                href="#"
+                                            >
                                                 Danh sách sản phẩm
-                                            </a>
+                                            </Link>
                                         </li>
-                                        <li className={cx('nav-item')}>
-                                            <a
-                                                className={cx('nav-link')}
-                                                href="../../pages/ui-features/typography.html"
+                                        <li
+                                            onClick={handleActiveSubItem}
+                                            data-active="product-category"
+                                            className={cx('nav-item')}
+                                        >
+                                            <Link
+                                                to="/admin/products/categories"
+                                                className={cx('nav-link', {
+                                                    active: activeSubItem === 'product-category',
+                                                })}
+                                                href="#"
                                             >
                                                 Danh mục sản phẩm
-                                            </a>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
-                            <li className={cx('nav-item')}>
-                                <a className={cx('nav-link')} href="../../pages/icons/mdi.html">
+                            <li
+                                onClick={handleActiveItem}
+                                data-active="discounts"
+                                className={cx('nav-item', { active: activeItem === 'discounts' })}
+                            >
+                                <Link to="/admin/promotions" className={cx('nav-link')} href="#">
                                     <span className={cx('menu-title')}>Khuyến mãi</span>
                                     <i className={cx('menu-icon')}>
                                         <FontAwesomeIcon icon={faTags} />
                                     </i>
-                                </a>
+                                </Link>
                             </li>
                             <li className={cx('nav-item', 'sidebar-actions')}>
-                                <span className={cx('nav-link')}>
+                                <div className={cx('border-bottom')}>
+                                    <h6 className={cx('font-weight-normal', 'mb-3')}>Website</h6>
+                                </div>
+                                <button className={cx('btn', 'btn-lg', 'btn-gradient-primary', 'mt-4')}>
+                                    Đến trang bán hàng
+                                </button>
+                                <div className={cx('mt-4')}>
                                     <div className={cx('border-bottom')}>
-                                        <h6 className={cx('font-weight-normal', 'mb-3')}>Projects</h6>
+                                        <p className={cx('text-secondary')}>Categories</p>
                                     </div>
-                                    <button
-                                        className={cx('btn', 'btn-block', 'btn-lg', 'btn-gradient-primary', 'mt-4')}
-                                    >
-                                        + Add a project
-                                    </button>
-                                    <div className={cx('mt-4')}>
-                                        <div className={cx('border-bottom')}>
-                                            <p className={cx('text-secondary')}>Categories</p>
-                                        </div>
-                                        <ul className={cx('gradient-bullet-list', 'mt-4')}>
-                                            <li>Free</li>
-                                            <li>Pro</li>
-                                        </ul>
-                                    </div>
-                                </span>
+                                    <ul className={cx('gradient-bullet-list', 'mt-4')}>
+                                        <li>Free</li>
+                                        <li>Pro</li>
+                                    </ul>
+                                </div>
                             </li>
                         </ul>
                     </nav>
