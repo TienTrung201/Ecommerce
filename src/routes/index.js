@@ -24,7 +24,7 @@ const publicRoutes = [
     { path: '/blog', component: Blog, layout: LayoutPage },
     { path: '/Cart', component: Cart, layout: LayoutPage },
     { path: '/checkOut', component: CheckOut, layout: LayoutPage },
-    { path: '/commingSoon', component: CommingSoon, layout: LayoutPage },
+    { path: '/commingSoon', component: CommingSoon, layout: null },
     { path: '/contact', component: Contact, layout: LayoutPage },
     { path: '/fAQs', component: FAQs, layout: LayoutPage },
     { path: '/myAccount', component: MyAccount, layout: LayoutPage },
