@@ -2,6 +2,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; //npm
 import { publicRoutes, privateRoutes } from '@/routes';
 import { Fragment } from 'react';
 import '@/assets/css/styles.css';
+// import '@/assets/css/_element.scss';
+
+// Import css files
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 function App() {
     return (

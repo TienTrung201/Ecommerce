@@ -90,9 +90,9 @@ function Header() {
                         <li className="level1">
                             <Link to="/commingSoon">Comming Soon</Link>
                         </li>
-                        <li className="level1">
+                        {/* <li className="level1">
                             <Link to="/blog">Blog</Link>
-                        </li>
+                        </li> */}
                     </ul>
                     <ul className="mobile-account">
                         <li>
