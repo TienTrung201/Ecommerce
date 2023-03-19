@@ -189,8 +189,8 @@
         font-size: 1.2rem !important;
         color: #2c2c2c;
     }
-    .product-item {
-    }
+    // .product-item {
+    // }
 }
 .product-related {
     .slick-slider {
@@ -198,4 +198,14 @@
             border: 8px #fff solid;
         }
     }
+}
+//Login
+.tab-content {
+    .row {
+        display: flex;
+        justify-content: center;
+    }
+}
+.displayNone {
+    display: none;
 }
