@@ -6106,6 +6106,14 @@ fieldset:disabled .btn {
 
 .collapse:not(.show) {
     display: none;
+    transition: all 0.2s ease;
+}
+
+.collapse.show {
+    display: block;
+    transition: all 0.2s ease;
+    animation: scaleVertical 0.2s ease;
+    transform-origin: 50% 0;
 }
 
 .collapsing {
@@ -15442,8 +15450,8 @@ code {
     font-weight: 500;
     padding: 5px 15px;
     border-radius: 2px;
-    -webkit-transition-duration: 0.7s;
-    transition-duration: 0.4s;
+    -webkit-transition-duration: 0.2s;
+    transition-duration: 0.2s;
     -webkit-transition-property: 'color';
     transition-property: 'color';
 }
@@ -18517,7 +18525,9 @@ dl li {
 
 /* Sidebar */
 .sidebar {
-    min-height: calc(100vh - 70px);
+    // min-height: calc(100vh - 70px);
+    height: 100%;
+    overflow-y: auto;
     background: #ffffff;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
@@ -18545,6 +18555,7 @@ dl li {
     transition-duration: 0.25s;
     transition-property: background;
     -webkit-transition-property: background;
+    transition: all 0.2s ease;
 }
 .sidebar .nav .nav-item .collapse {
     z-index: 999;
@@ -18886,7 +18897,8 @@ dl li {
 }
 
 .page-body-wrapper {
-    min-height: calc(100vh - 70px);
+    // min-height: calc(100vh - 70px);
+    height: 100vh;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -18906,7 +18918,9 @@ dl li {
     -webkit-transition: width 0.25s ease, margin 0.25s ease;
     transition: width 0.25s ease, margin 0.25s ease;
     width: calc(100% - 260px);
-    min-height: calc(100vh - 70px);
+    // min-height: calc(100vh - 70px);
+    height: 100%;
+    overflow-y: auto;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -18958,4 +18972,40 @@ dl li {
 
 th {
     text-transform: none !important;
+}
+
+td {
+    text-transform: none !important;
+}
+
+@keyframes scaleVertical {
+    from {
+        transform: scaleY(0);
+    }
+    to {
+        transform: scaleY(1);
+    }
+}
+
+// Custom scroll bar
+/* width */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #888;
 }

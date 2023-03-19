@@ -1,0 +1,7 @@
+.antd-status-mesage {
+    margin-top: 80px;
+}
+
+.antd-status-mesage + .antd-status-mesage {
+    margin-top: 16px;
+}
