@@ -18525,7 +18525,9 @@ dl li {
 
 /* Sidebar */
 .sidebar {
-    min-height: calc(100vh - 70px);
+    // min-height: calc(100vh - 70px);
+    height: 100%;
+    overflow-y: auto;
     background: #ffffff;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
@@ -18895,7 +18897,8 @@ dl li {
 }
 
 .page-body-wrapper {
-    min-height: calc(100vh - 70px);
+    // min-height: calc(100vh - 70px);
+    height: 100vh;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -18915,7 +18918,9 @@ dl li {
     -webkit-transition: width 0.25s ease, margin 0.25s ease;
     transition: width 0.25s ease, margin 0.25s ease;
     width: calc(100% - 260px);
-    min-height: calc(100vh - 70px);
+    // min-height: calc(100vh - 70px);
+    height: 100%;
+    overflow-y: auto;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -18980,4 +18985,27 @@ td {
     to {
         transform: scaleY(1);
     }
+}
+
+// Custom scroll bar
+/* width */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #888;
 }
