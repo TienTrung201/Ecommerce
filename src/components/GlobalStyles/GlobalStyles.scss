@@ -44,3 +44,11 @@ body {
     line-height: 1.5;
     text-rendering: optimizeSpeed;
 }
+a {
+    text-decoration: none !important;
+}
+.centerRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

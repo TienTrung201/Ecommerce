@@ -1,3 +1,4 @@
+//header
 .pushmenu-open,
 .pushmenu,
 .menu-home5 {
@@ -70,4 +71,141 @@
 
 .shopProducts {
     border-bottom: solid 1px rgba(0, 0, 0, 0.08);
+}
+//header
+//About
+.breadcrumb li .iconRight {
+    padding: 0 7px;
+    color: #888;
+}
+.owl-carousel.owl-theme.js-owl-team {
+    flex-wrap: wrap;
+}
+//About
+//contact
+.container {
+    .contact-form {
+        background: url('../../assets/image/contact_bg.png') top center/ cover no-repeat;
+    }
+}
+//cart
+.product-remove {
+    position: relative;
+    .btn-del {
+        font-size: 1.5rem !important;
+        position: absolute;
+        top: 40%;
+        // padding-bottom: 10px !important;
+    }
+}
+//slik
+.slide.v3 .slick-dots:after,
+.slide.v6 .slick-dots:after,
+.slide.v5 .slick-dots:after {
+    content: url('../image/retange.png');
+    position: absolute;
+    left: 12px;
+    bottom: -38px;
+}
+
+//shop
+.filter {
+    position: relative;
+    .zoa-icon-down {
+        position: absolute;
+        right: 0;
+    }
+    .zoa-icon-sort {
+        // bottom: 0;
+        color: #000;
+    }
+}
+
+.grid-icon.col2 div {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 20px;
+    &:hover i {
+        color: #dd2a2a !important;
+    }
+    i {
+        position: absolute;
+        padding: 0;
+        font-size: 1rem;
+        color: #000 !important;
+    }
+    .view-3-1 {
+        bottom: -1px;
+    }
+    .view-3-2 {
+        bottom: -9px;
+    }
+    .view-3-3 {
+        bottom: -17px;
+    }
+}
+.shop-element.right {
+    .active i {
+        color: #dd2a2a !important;
+    }
+}
+//prodct
+.product-img-slide {
+    flex-direction: column;
+}
+.slick-clone {
+    img {
+        cursor: pointer;
+    }
+    .slick-current img {
+        border: #888 solid 2px !important;
+    }
+}
+.single-product-info {
+    .flex.product-rating {
+        align-items: center;
+        .number-rating {
+            font-size: 1.4rem;
+            // position: absolute;
+            padding-top: 3px;
+        }
+    }
+    .size-group {
+        position: relative;
+        .iconDown {
+            position: absolute;
+            color: #888;
+            right: 10px;
+            top: 50%;
+            transform: translateY(50%);
+            font-size: 1.2rem;
+        }
+    }
+    .size-guide {
+        font-size: 1.4rem;
+    }
+    .btn-number {
+        font-size: 1.2rem !important;
+        color: #2c2c2c;
+    }
+    // .product-item {
+    // }
+}
+.product-related {
+    .slick-slider {
+        .slick-slide {
+            border: 8px #fff solid;
+        }
+    }
+}
+//Login
+.tab-content {
+    .row {
+        display: flex;
+        justify-content: center;
+    }
+}
+.displayNone {
+    display: none;
 }

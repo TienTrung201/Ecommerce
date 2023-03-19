@@ -7,13 +7,12 @@ import { faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useRef } from 'react';
 
 function Header() {
-    //ref
+    //event close open header
     const cart = useRef();
     const menuBar = useRef();
     const overlay = useRef();
     const searchProduct = useRef();
 
-    //handle
     const handleCloseSearch = () => {
         searchProduct.current.classList.remove('search--open');
     };
@@ -45,7 +44,7 @@ function Header() {
         cart.current.classList.remove('pushmenu-open');
         handleCloseOverlay();
     };
-    //handle
+    //event close open header
     return (
         <>
             {/* overlay */}
@@ -93,8 +92,11 @@ function Header() {
                             <Link to="/commingSoon">Comming Soon</Link>
                         </li>
                         <li className="level1">
-                            <Link to="/blog">Blog</Link>
+                            <Link to="/contact">Contact</Link>
                         </li>
+                        {/* <li className="level1">
+                            <Link to="/blog">Blog</Link>
+                        </li> */}
                     </ul>
                     <ul className="mobile-account">
                         <li>
@@ -439,7 +441,7 @@ function Header() {
                                             Shop
                                         </Link>
                                     </li>
-                                    <li className="level1 hassub dropdown">
+                                    {/* <li className="level1 hassub dropdown">
                                         <Link to="/collection" title="Collection">
                                             Collection
                                         </Link>
@@ -483,7 +485,7 @@ function Header() {
                                                 </div>
                                             </div>
                                         </div>
-                                    </li>
+                                    </li> */}
                                     <li className="level1 dropdown hassub">
                                         <Link to="#" title="Pages">
                                             Pages
@@ -495,15 +497,16 @@ function Header() {
                                                     {/* <Link to="#">Page Set 1</Link> */}
                                                     <ul className="menu-level-2">
                                                         <li className="level3">
+                                                            <Link to="/cart" title="Cart">
+                                                                Cart
+                                                            </Link>
+                                                        </li>
+                                                        <li className="level3">
                                                             <Link to="/aboutUs" title="About Us">
                                                                 About Us
                                                             </Link>
                                                         </li>
-                                                        <li className="level3">
-                                                            <Link to="/contact" title="Contact">
-                                                                Contact
-                                                            </Link>
-                                                        </li>
+
                                                         <li className="level3">
                                                             <Link to="myAccount" title="My Account">
                                                                 My Account
@@ -519,11 +522,6 @@ function Header() {
                                                 <li className="level2 col-6">
                                                     {/* <Link to="#">Page Set 2</Link> */}
                                                     <ul className="menu-level-2">
-                                                        <li className="level3">
-                                                            <Link to="/cart" title="Cart">
-                                                                Cart
-                                                            </Link>
-                                                        </li>
                                                         <li className="level3">
                                                             <Link to="/commingSoon" title="Coming Soon">
                                                                 Coming Soon
@@ -546,26 +544,9 @@ function Header() {
                                         </div>
                                     </li>
                                     <li className="level1 active dropdown">
-                                        <Link to="/blog" title="Blog">
-                                            Blog
+                                        <Link to="/contact" title="Contact">
+                                            Contact
                                         </Link>
-                                        <ul className="dropdown-menu menu-level-1">
-                                            <li>
-                                                <Link className="sm_title" to="/blog" title="Blogs">
-                                                    Blogs
-                                                </Link>
-                                            </li>
-                                            <li className="level2">
-                                                <Link to="/blog" title="Blog List">
-                                                    Blog List
-                                                </Link>
-                                            </li>
-                                            <li className="level2">
-                                                <Link to="/blog" title="Blog Single">
-                                                    Blog Single
-                                                </Link>
-                                            </li>
-                                        </ul>
                                     </li>
                                 </ul>
                                 <div className="topbar-left">
