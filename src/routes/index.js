@@ -17,7 +17,6 @@ import LayoutHome from '@/components/Layout/LayoutHome';
 
 // Admin
 import LayoutAdmin from '@/components/Admin/Layout/LayoutAdmin';
-<<<<<<< HEAD
 import Dashboard from '@/pages/Admin/Dashboard';
 import ProductCategories from '@/pages/Admin/ProductCategories';
 import ProductCategoriesCreate from '@/pages/Admin/ProductCategoriesCreate';
@@ -25,9 +24,7 @@ import Promotions from '@/pages/Admin/Promotions';
 import PromotionsCreate from '@/pages/Admin/PromotionsCreate';
 import Products from '@/pages/Admin/Products';
 import ProductsCreate from '@/pages/Admin/ProductsCreate';
-=======
 import Product from '@/pages/Product';
->>>>>>> Pages
 
 const publicRoutes = [
     { path: '/', component: Home, layout: LayoutHome },
