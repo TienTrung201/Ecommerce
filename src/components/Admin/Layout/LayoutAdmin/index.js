@@ -13,7 +13,7 @@ import {
     faTags,
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import { faBell, faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { faBell } from '@fortawesome/free-regular-svg-icons';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -314,40 +314,40 @@ function LayoutAdmin({ children }) {
                                             data-active="order-list"
                                             className={cx('nav-item')}
                                         >
-                                            <a
-                                                href="#"
+                                            <Link
+                                                to="/admin/orders"
                                                 className={cx('nav-link', { active: activeSubItem === 'order-list' })}
                                             >
                                                 Danh sách đơn hàng
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li
                                             onClick={handleActiveSubItem}
                                             data-active="order-pending"
                                             className={cx('nav-item')}
                                         >
-                                            <a
+                                            <Link
+                                                to=""
                                                 className={cx('nav-link', {
                                                     active: activeSubItem === 'order-pending',
                                                 })}
-                                                href="#"
                                             >
                                                 Đơn chưa hoàn tất
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li
                                             onClick={handleActiveSubItem}
                                             data-active="order-shipping"
                                             className={cx('nav-item')}
                                         >
-                                            <a
+                                            <Link
+                                                to="/admin/shipping-methods"
                                                 className={cx('nav-link', {
                                                     active: activeSubItem === 'order-shipping',
                                                 })}
-                                                href="#"
                                             >
                                                 Quản lý vận chuyển
-                                            </a>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -414,6 +414,56 @@ function LayoutAdmin({ children }) {
                                     </i>
                                 </Link>
                             </li>
+                            <li
+                                onClick={handleActiveItem}
+                                data-active="users-dropdown"
+                                className={cx('nav-item', { active: activeItem === 'users-dropdown' })}
+                            >
+                                <span className={cx('nav-link', 'pointer')}>
+                                    <span className={cx('menu-title')}>Người dùng</span>
+                                    <i className={cx('menu-arrow')}>
+                                        <FontAwesomeIcon icon={faAngleDown} />
+                                    </i>
+                                    <i className={cx('menu-icon')}>
+                                        <FontAwesomeIcon icon={faUser} />
+                                    </i>
+                                </span>
+                                <div
+                                    className={cx('collapse', { show: activeItem === 'users-dropdown' })}
+                                    id="ui-basic"
+                                >
+                                    <ul className={cx('nav', 'flex-column', 'sub-menu')}>
+                                        <li
+                                            onClick={handleActiveSubItem}
+                                            data-active="product-list"
+                                            className={cx('nav-item')}
+                                        >
+                                            <Link
+                                                to="/admin/manage-users"
+                                                className={cx('nav-link', { active: activeSubItem === 'product-list' })}
+                                                href="#"
+                                            >
+                                                Danh sách người dùng
+                                            </Link>
+                                        </li>
+                                        <li
+                                            onClick={handleActiveSubItem}
+                                            data-active="product-category"
+                                            className={cx('nav-item')}
+                                        >
+                                            <Link
+                                                to="/admin/manage-roles"
+                                                className={cx('nav-link', {
+                                                    active: activeSubItem === 'product-category',
+                                                })}
+                                                href="#"
+                                            >
+                                                Quản lý vai trò
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
                             <li className={cx('nav-item', 'sidebar-actions')}>
                                 <div className={cx('border-bottom')}>
                                     <h6 className={cx('font-weight-normal', 'mb-3')}>Website</h6>
@@ -421,15 +471,7 @@ function LayoutAdmin({ children }) {
                                 <button className={cx('btn', 'btn-lg', 'btn-gradient-primary', 'mt-4')}>
                                     Đến trang bán hàng
                                 </button>
-                                <div className={cx('mt-4')}>
-                                    <div className={cx('border-bottom')}>
-                                        <p className={cx('text-secondary')}>Categories</p>
-                                    </div>
-                                    <ul className={cx('gradient-bullet-list', 'mt-4')}>
-                                        <li>Free</li>
-                                        <li>Pro</li>
-                                    </ul>
-                                </div>
+                                <div className={cx('border-bottom', 'mt-4')}></div>
                             </li>
                         </ul>
                     </nav>
