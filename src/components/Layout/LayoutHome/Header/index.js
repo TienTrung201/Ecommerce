@@ -7,13 +7,12 @@ import { faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useRef } from 'react';
 
 function Header() {
-    //ref
+    //event close open header
     const cart = useRef();
     const menuBar = useRef();
     const overlay = useRef();
     const searchProduct = useRef();
 
-    //handle
     const handleCloseSearch = () => {
         searchProduct.current.classList.remove('search--open');
     };
@@ -45,7 +44,7 @@ function Header() {
         cart.current.classList.remove('pushmenu-open');
         handleCloseOverlay();
     };
-    //handle
+    //event close open header
     return (
         <>
             {/* overlay */}

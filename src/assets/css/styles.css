@@ -8646,10 +8646,10 @@ span.star:last-child {
     color: #999;
 }
 
-span.star:before {
+/* span.star:before {
     content: '\f005';
     font-family: FontAwesome;
-}
+} */
 
 .form-customer .form-group label {
     font-weight: 400;
@@ -17883,7 +17883,6 @@ i.fa.fa-plus {
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
     right: 15px;
-    content: '\e903';
     font-size: 5px;
     font-family: 'zoa';
 }
@@ -18611,7 +18610,7 @@ i.fa.fa-plus {
     align-items: center;
 }
 .zoa-qtt .quantity-left-minus:before {
-    content: '\f462';
+    /* content: '\f462'; */
 }
 .zoa-qtt .quantity-right-plus {
     right: 0;
@@ -18626,7 +18625,7 @@ i.fa.fa-plus {
     align-items: center;
 }
 .zoa-qtt .quantity-right-plus:before {
-    content: '\f489';
+    /* content: '\f489'; */
 }
 .zoa-qtt .btn {
     cursor: pointer;
