@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import '@/assets/css/fixStyleBase.scss';
 import { faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useRef } from 'react';
+import CartHeader from '@/pages/Cart/CartHeader';
 
 function Header() {
     //event close open header
@@ -132,143 +133,7 @@ function Header() {
             {/* pushmenu-open */}
             {/* Push cart */}
             <div ref={cart} className="pushmenu  pushmenu-left cart-box-container">
-                <div className="cart-list">
-                    <div className="cart-list-heading">
-                        <h3 className="cart-title">My cart</h3>
-                        <span onClick={handleCloseCart} className="close-left js-close">
-                            <i className="ion-ios-close-empty">
-                                <FontAwesomeIcon icon={faClose} />
-                            </i>
-                        </span>
-                    </div>
-                    <div className="cart-inside">
-                        <ul className="list">
-                            <li className="item-cart">
-                                <div className="product-img-wrap">
-                                    <Link href="#" title="Product">
-                                        <img
-                                            src={require('@/assets/image/product/cart_product_1.jpg')}
-                                            alt="Product"
-                                            className="img-responsive"
-                                        />
-                                    </Link>
-                                </div>
-                                <div className="product-details">
-                                    <div className="inner-left">
-                                        <div className="product-name">
-                                            <Link href="#">Grosgrain tie cotton top</Link>
-                                        </div>
-                                        <div className="product-price">
-                                            <span>$20.9</span>
-                                        </div>
-                                        <div className="cart-qtt">
-                                            <button
-                                                type="button"
-                                                className="quantity-left-minus btn btn-number js-minus"
-                                                data-type="minus"
-                                                data-field=""
-                                            >
-                                                <span className="minus-icon">
-                                                    <i className="ion-ios-minus-empty" />
-                                                </span>
-                                            </button>
-                                            <input
-                                                type="text"
-                                                name="number"
-                                                defaultValue={1}
-                                                className="product_quantity_number js-number"
-                                            />
-                                            <button
-                                                type="button"
-                                                className="quantity-right-plus btn btn-number js-plus"
-                                                data-type="plus"
-                                                data-field=""
-                                            >
-                                                <span className="plus-icon">
-                                                    <i className="ion-ios-plus-empty" />
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li className="item-cart">
-                                <div className="product-img-wrap">
-                                    <Link href="#" title="Product">
-                                        <img
-                                            src={require('@/assets/image/product/cart_product_1.jpg')}
-                                            alt="Product"
-                                            className="img-responsive"
-                                        />
-                                    </Link>
-                                </div>
-                                <div className="product-details">
-                                    <div className="inner-left">
-                                        <div className="product-name">
-                                            <Link href="#">Grosgrain tie cotton top</Link>
-                                        </div>
-                                        <div className="product-price">
-                                            <span>$20.9</span>
-                                        </div>
-                                        <div className="cart-qtt">
-                                            <button
-                                                type="button"
-                                                className="quantity-left-minus btn btn-number js-minus"
-                                                data-type="minus"
-                                                data-field=""
-                                            >
-                                                <span className="minus-icon">
-                                                    <i className="ion-ios-minus-empty" />
-                                                </span>
-                                            </button>
-                                            <input
-                                                type="text"
-                                                name="number"
-                                                defaultValue={1}
-                                                className="product_quantity_number js-number"
-                                            />
-                                            <button
-                                                type="button"
-                                                className="quantity-right-plus btn btn-number js-plus"
-                                                data-type="plus"
-                                                data-field=""
-                                            >
-                                                <span className="plus-icon">
-                                                    <i className="ion-ios-plus-empty" />
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                        <div className="cart-bottom">
-                            <div className="cart-form">
-                                <div className="cart-note-form">
-                                    <label
-                                        htmlFor="CartSpecialInstructions"
-                                        className="cart-note cart-note_text_label small--text-center"
-                                    >
-                                        Special Offer:
-                                    </label>
-                                    <textarea
-                                        rows={6}
-                                        name="note"
-                                        id="CartSpecialInstructions"
-                                        className="cart-note__input form-control note--input"
-                                        defaultValue={''}
-                                    />
-                                </div>
-                            </div>
-                            <div className="cart-button mg-top-30">
-                                <Link className="zoa-btn checkout" href="#" title="">
-                                    Check out
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                    {/* End cart bottom */}
-                </div>
+                <CartHeader onCloseCart={handleCloseCart} />
             </div>
             {/* Push cart */}
 

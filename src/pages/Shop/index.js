@@ -297,13 +297,13 @@ function Shop() {
                     <div className="shop-element right">
                         <span>Showing 1-15 of 69 products</span>
                         <div className="view-mode view-group">
-                            <Link ref={activeView} to="" onClick={handleView2Product} className="list-icon list active">
+                            <Link ref={activeView2} to="" onClick={handleViewProduct} className="list-icon list">
                                 <i className="fa fa-circle" aria-hidden="true">
                                     ●
                                 </i>
                             </Link>
 
-                            <Link ref={activeView2} to="" onClick={handleViewProduct} className="grid-icon col2 ">
+                            <Link ref={activeView} to="" onClick={handleView2Product} className="grid-icon col2 active">
                                 <div>
                                     <i className="zoa-icon-view-3 view-3-1">●●●●</i>
                                     <i className="zoa-icon-view-3 view-3-2">●●●●</i>
@@ -315,9 +315,9 @@ function Shop() {
                 </div>
                 <div ref={listProduct} className="product-collection-grid product-grid bd-bottom ">
                     <div className="row engoc-row-equal">
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_1.jpg')}
                                         alt=""
@@ -370,9 +370,9 @@ function Shop() {
                                 {/* đây là layout 2 */}
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_2.jpg')}
                                         alt=""
@@ -420,9 +420,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_3.jpg')}
                                         alt=""
@@ -470,9 +470,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_4.jpg')}
                                         alt=""
@@ -501,9 +501,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_5.jpg')}
                                         alt=""
@@ -532,9 +532,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_6.jpg')}
                                         alt=""
@@ -563,9 +563,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_7.jpg')}
                                         alt=""
@@ -597,9 +597,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_8.jpg')}
                                         alt=""
@@ -628,9 +628,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_9.jpg')}
                                         alt=""
@@ -659,9 +659,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_10.jpg')}
                                         alt=""
@@ -690,9 +690,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_11.jpg')}
                                         alt=""
@@ -721,9 +721,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_12.jpg')}
                                         alt=""
@@ -752,9 +752,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_13.jpg')}
                                         alt=""
@@ -786,9 +786,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_14.jpg')}
                                         alt=""
@@ -817,9 +817,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_15.jpg')}
                                         alt=""
@@ -848,9 +848,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_16.jpg')}
                                         alt=""
@@ -879,9 +879,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_17.jpg')}
                                         alt=""
@@ -910,9 +910,9 @@ function Shop() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-xs-6 col-sm-4 col-md-2 col-lg-2 product-item">
+                        <div className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item">
                             <div className="product-img">
-                                <Link to="">
+                                <Link to="/product">
                                     <img
                                         src={require('@/assets/image/product/product_19.jpg')}
                                         alt=""

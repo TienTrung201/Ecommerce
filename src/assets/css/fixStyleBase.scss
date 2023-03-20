@@ -72,6 +72,24 @@
 .shopProducts {
     border-bottom: solid 1px rgba(0, 0, 0, 0.08);
 }
+.product-details {
+    .cart-qtt {
+        color: #888;
+        button {
+            font-size: 1rem;
+            input {
+                // height: 30px !important;
+            }
+            &:active {
+                background-color: #f8f8f8;
+            }
+            &:hover {
+                background-color: #ccc;
+            }
+        }
+    }
+}
+
 //header
 //About
 .breadcrumb li .iconRight {
