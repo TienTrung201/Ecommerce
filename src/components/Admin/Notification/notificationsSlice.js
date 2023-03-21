@@ -19,7 +19,7 @@ export default createSlice({
       state.message = action.payload;
       state.type = 'error';
     },
-    destroy: (state, action) => {
+    destroy: (state) => {
       state.type = 'destroy';
     },
   },

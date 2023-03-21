@@ -57,7 +57,7 @@ const privateRoutes = [
     { path: '/admin/promotions', component: Promotions, layout: LayoutAdmin },
     { path: '/admin/promotions/create', component: PromotionsCreate, layout: LayoutAdmin },
     { path: '/admin/products', component: Products, layout: LayoutAdmin },
-    { path: '/admin/products/create', component: ProductsCreate, layout: LayoutAdmin },
+    { path: '/admin/products/:action/:id', component: ProductsCreate, layout: LayoutAdmin },
     { path: '/admin/manage-users', component: ManageUsers, layout: LayoutAdmin },
     { path: '/admin/manage-roles', component: ManageRoles, layout: LayoutAdmin },
     { path: '/admin/manage-users/edit-roles', component: EditUserRoles, layout: LayoutAdmin },

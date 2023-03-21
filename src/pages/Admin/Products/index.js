@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { api } from '@/api';
 import { useEffect, useState } from 'react';
 import { getData } from '@/api/service';
+import images from '@/assets/admin/images';
 
 const cx = classNames.bind(styles);
 
@@ -40,7 +41,7 @@ function Products() {
         <div className={cx('card-body')}>
           <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
             <h4 className={cx('card-title', 'mb-0')}>Tất cả sản phẩm</h4>
-            <Link to="/admin/products/create" className={cx('btn', 'btn-gradient-primary', 'btn-md')}>
+            <Link to="/admin/products/create/0" className={cx('btn', 'btn-gradient-primary', 'btn-md')}>
               Thêm sản phẩm
             </Link>
           </div>
@@ -60,7 +61,7 @@ function Products() {
                 {products.map((product) => (
                   <tr key={product.productId}>
                     <td className={cx('py-1')}>
-                      <img src={product.image} alt="" />
+                      <img src={product.image || images.placeholder} alt="" />
                     </td>
                     <td>{product.name}</td>
                     <td>
@@ -68,9 +69,12 @@ function Products() {
                       {product.items.length} loại
                     </td>
                     <td>
-                      {categories.map((c) => (product.categoriesId.includes(c.categoryId) ? c.name : '')).join(', ')}
+                      {categories
+                        .map((c) => (product.categoriesId.includes(c.categoryId) ? c.name : ''))
+                        .filter((c) => c !== '')
+                        .join(', ')}
                     </td>
-                    <td>{providers.find((p) => p.providerId === product.providerId).name}</td>
+                    <td>{providers.find((p) => p.providerId === product.providerId)?.name || 'N/A'}</td>
                   </tr>
                 ))}
               </tbody>
