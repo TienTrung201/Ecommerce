@@ -4,13 +4,57 @@ import { faPen, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Collapse, Divider, Image, Input, Select, Space } from 'antd';
 import classNames from 'classnames/bind';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getData } from '@/api/service';
+import { api } from '@/api';
 
 const { Panel } = Collapse;
 
 const cx = classNames.bind(styles);
 
 function ProductsCreate() {
+  const [providers, setProviders] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [productOptions, setProductOptions] = useState([]);
+
+  useEffect(() => {
+    // Get providers
+    getData(api.providers)
+      .then((data) => {
+        setProviders(data);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+
+    // Get categories
+    getData(api.categories)
+      .then((data) => {
+        setCategories(data);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+
+    // Get productOptions
+    getData(api.productOptions)
+      .then((data) => {
+        console.log(data);
+        setProductOptions(data);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  }, []);
+
+  const productOptionsPreview = useMemo(() => {
+    return productOptions.map((p) => ({
+      label: p.name,
+      options: p.options.map((o) => ({ label: o.name, value: o.productOptionId })),
+    }));
+  }, [productOptions]);
+
   return (
     <>
       {/* Page header */}
@@ -118,22 +162,7 @@ function ProductsCreate() {
                             mode="multiple"
                             placeholder="Chọn thuộc tính"
                             style={{ width: '100%' }}
-                            options={[
-                              {
-                                label: 'Màu sắc',
-                                options: [
-                                  { label: 'Hồng đất', value: '#565656' },
-                                  { label: 'Đỏ đô', value: '#343434' },
-                                ],
-                              },
-                              {
-                                label: 'Kích cỡ',
-                                options: [
-                                  { label: 'M', value: 'M' },
-                                  { label: 'L', value: 'L' },
-                                ],
-                              },
-                            ]}
+                            options={productOptionsPreview}
                           />
                         </div>
                         {/* End Select properties */}
@@ -273,6 +302,7 @@ function ProductsCreate() {
             <div className={cx('card-body')}>
               <h4 className={cx('card-title')}>Trạng thái hiển thị</h4>
               <p className={cx('card-description')}></p>
+
               <div className={cx('form-group')}>
                 <div className={cx('form-check')}>
                   <label className={cx('form-check-label')}>
@@ -321,7 +351,7 @@ function ProductsCreate() {
                       </Space>
                     </>
                   )}
-                  options={['Dior', 'Chanel'].map((item) => ({ label: item, value: item }))}
+                  options={providers.map((item) => ({ label: item.name, value: item.providerId }))}
                 />
               </div>
 
@@ -334,10 +364,9 @@ function ProductsCreate() {
                   allowClear
                   style={{ width: '100%' }}
                   placeholder="Chọn danh mục"
-                  defaultValue={['a10', 'c12']}
-                  options={['a10', 'a11', 'a12', 'c10', 'c11', 'c12'].map((item) => ({
-                    label: item,
-                    value: item,
+                  options={categories.map((item) => ({
+                    label: item.name,
+                    value: item.categoryId,
                   }))}
                 />
               </div>

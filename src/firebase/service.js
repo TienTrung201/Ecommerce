@@ -3,19 +3,20 @@ import { storage } from './config';
 import { v4 as uuidv4 } from 'uuid';
 
 // ============ STORAGE ============
-function uploadFile(fileUpload, folder, callback) {
-    if (!fileUpload || folder.length === 0) return;
-    const fileRef = ref(
-        storage,
-        `${folder}/${fileUpload.lastModified}_${fileUpload.size}_${uuidv4()}_${fileUpload.name}`,
-    );
+async function uploadFile(fileUpload, folder) {
+  if (!fileUpload || folder.length === 0) return;
+  const fileRef = ref(
+    storage,
+    `${folder}/${fileUpload.lastModified}_${fileUpload.size}_${uuidv4()}_${fileUpload.name}`,
+  );
 
-    uploadBytes(fileRef, fileUpload).then((snapshot) => {
-        // Get URL
-        getDownloadURL(snapshot.ref).then((url) => {
-            callback({ url, fullPath: snapshot.metadata.fullPath });
-        });
-    });
+  try {
+    const snapshot = await uploadBytes(fileRef, fileUpload);
+    const url = await getDownloadURL(snapshot.ref);
+    return { url, fullPath: snapshot.metadata.fullPath };
+  } catch (error) {
+    return error;
+  }
 }
 
 export { uploadFile };
