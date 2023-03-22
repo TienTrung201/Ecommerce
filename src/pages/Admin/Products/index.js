@@ -71,10 +71,12 @@ function Products() {
                       {product.items.length} loại
                     </td>
                     <td>
-                      {categories
-                        .map((c) => (product.categoriesId.includes(c.categoryId) ? c.name : ''))
-                        .filter((c) => c !== '')
-                        .join(', ')}
+                      {(categories.length &&
+                        categories
+                          .map((c) => (product.categoriesId.includes(c.categoryId) ? c.name : ''))
+                          .filter((c) => c !== '')
+                          .join(', ')) ||
+                        'N/A'}
                     </td>
                     <td>{providers.find((p) => p.providerId === product.providerId)?.name || 'N/A'}</td>
                   </tr>

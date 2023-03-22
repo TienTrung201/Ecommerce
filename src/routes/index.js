@@ -32,6 +32,7 @@ import EditRoles from '@/pages/Admin/EditRoles';
 import ShippingMethods from '@/pages/Admin/ShippingMethods';
 import ShippingMethodsCreate from '@/pages/Admin/ShippingMethodsCreate';
 import ShopOrders from '@/pages/Admin/ShopOrders';
+import ShopOrdersDetail from '@/pages/Admin/ShopOrdersDetail';
 
 const publicRoutes = [
     { path: '/', component: Home, layout: LayoutHome },
@@ -65,6 +66,7 @@ const privateRoutes = [
     { path: '/admin/shipping-methods', component: ShippingMethods, layout: LayoutAdmin },
     { path: '/admin/shipping-methods/:action/:id', component: ShippingMethodsCreate, layout: LayoutAdmin },
     { path: '/admin/orders', component: ShopOrders, layout: LayoutAdmin },
+    { path: '/admin/orders/:action/:id', component: ShopOrdersDetail, layout: LayoutAdmin },
 ];
 
 export { publicRoutes, privateRoutes };
