@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Badge } from 'antd';
 import { getData } from '@/api/service';
 import { api } from '@/api';
+import dayjs from 'dayjs';
 
 const cx = classNames.bind(styles);
 
@@ -32,7 +33,9 @@ function Promotions() {
       }
       return (
         <tr key={promotion.promotionId}>
-          <td className={cx('py-1')}>{promotion.name}</td>
+          <td className={cx('py-1')}>
+            <Link to={`/admin/promotions/update/${promotion.promotionId}`}>{promotion.name}</Link>
+          </td>
           <td>{promotion.discountRate}%</td>
           <td>
             {status === 'active' ? (
@@ -43,8 +46,8 @@ function Promotions() {
               <Badge count={true ? 'Chưa áp dụng' : 0} style={{ backgroundColor: '#fed713' }} />
             )}
           </td>
-          <td>{new Date(promotion.startDate).toDateString()}</td>
-          <td>{new Date(promotion.endDate).toDateString()}</td>
+          <td>{dayjs(promotion.startDate).format('YYYY/MM/DD')}</td>
+          <td>{dayjs(promotion.endDate).format('YYYY/MM/DD')}</td>
         </tr>
       );
     });
@@ -67,7 +70,7 @@ function Promotions() {
         <div className={cx('card-body')}>
           <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
             <h4 className={cx('card-title', 'mb-0')}>Tất cả khuyến mãi</h4>
-            <Link to="/admin/promotions/create" className={cx('btn', 'btn-gradient-primary', 'btn-md')}>
+            <Link to="/admin/promotions/create/0" className={cx('btn', 'btn-gradient-primary', 'btn-md')}>
               Tạo khuyến mãi
             </Link>
           </div>

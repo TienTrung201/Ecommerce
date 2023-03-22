@@ -1,12 +1,13 @@
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
-import { DatePicker } from 'antd';
-import { useState } from 'react';
-import { postData } from '@/api/service';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { DatePicker, Popconfirm } from 'antd';
+import { useEffect, useState } from 'react';
+import { deleteData, getData, postData, updateData } from '@/api/service';
 import { api } from '@/api';
 import { useDispatch } from 'react-redux';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
+import dayjs from 'dayjs';
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +19,34 @@ function PromotionsCreate() {
   const [endDateInput, setEndDateInput] = useState({});
   const dispatch = useDispatch();
 
+  const { action, id } = useParams();
+  const navigate = useNavigate();
+
+  // Get data for update
+  useEffect(() => {
+    if (action === 'update') {
+      getData(api.promotions + '/' + id)
+        .then((data) => {
+          console.log(data);
+          setNameInput(data.name);
+          setDescriptionInput(data.description);
+          setDiscountInput(data.discountRate);
+          setStartDateInput({
+            date: dayjs(data.startDate),
+            dateString: data.startDate,
+          });
+          setEndDateInput({
+            date: dayjs(data.endDate),
+            dateString: data.endDate,
+          });
+        })
+        .catch((error) => {
+          console.warn(error);
+        });
+    }
+  }, [action, id]);
+
+  // ------- Handle input change -------
   const handleNameInputChange = (e) => {
     setNameInput(e.target.value);
   };
@@ -43,17 +72,23 @@ function PromotionsCreate() {
       dateString: dateString,
     });
   };
+  // ------- End Handle input change -------
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const data = {
+  const generateData = () => {
+    return {
       name: nameInput,
       description: descriptionInput,
       discountRate: Number(discountInput),
       startDate: startDateInput.dateString,
       endDate: endDateInput.dateString,
     };
+  };
+
+  // ------- Handle submit -------
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const data = generateData();
 
     if (nameInput && discountInput && startDateInput.dateString && endDateInput.dateString) {
       dispatch(notificationsSlice.actions.showLoading('Đang tạo khuyến mãi'));
@@ -61,6 +96,7 @@ function PromotionsCreate() {
       postData(api.promotions, data)
         .then((response) => {
           console.log(response);
+
           setTimeout(() => {
             dispatch(notificationsSlice.actions.showSuccess('Tạo khuyến mãi thành công'));
             clearInput();
@@ -77,6 +113,61 @@ function PromotionsCreate() {
       }, 1000);
     }
   };
+  // ------- End Handle submit -------
+
+  // ------- Handle update -------
+  const handleUpdate = (e) => {
+    e.preventDefault();
+
+    const data = generateData();
+
+    if (nameInput && discountInput && startDateInput.dateString && endDateInput.dateString) {
+      dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
+
+      updateData(api.promotions + '/' + id, data)
+        .then((response) => {
+          console.log(response);
+
+          setTimeout(() => {
+            dispatch(notificationsSlice.actions.showSuccess('Cập nhật thành công'));
+          }, 1000);
+        })
+        .catch((error) => {
+          dispatch(notificationsSlice.actions.showError('Cập nhật không thành công'));
+          console.warn(error);
+        });
+    } else {
+      dispatch(notificationsSlice.actions.showError('Cập nhật không thành công'));
+      setTimeout(() => {
+        dispatch(notificationsSlice.actions.destroy());
+      }, 1000);
+    }
+  };
+  // ------- End Handle update -------
+
+  // ------- Handle delete -------
+  const handleDelete = (e) => {
+    e.preventDefault();
+    dispatch(notificationsSlice.actions.showLoading('Đang xóa'));
+
+    deleteData(api.promotions + '/' + id)
+      .then((response) => {
+        console.log(response);
+
+        setTimeout(() => {
+          dispatch(notificationsSlice.actions.showSuccess('Xóa thành công'));
+          navigate('/admin/promotions');
+        }, 1000);
+      })
+      .catch((error) => {
+        console.warn(error);
+        dispatch(notificationsSlice.actions.showError('Xóa không thành công'));
+        setTimeout(() => {
+          dispatch(notificationsSlice.actions.destroy());
+        }, 1000);
+      });
+  };
+  // ------- End Handle delete -------
 
   const clearInput = () => {
     setNameInput('');
@@ -87,14 +178,14 @@ function PromotionsCreate() {
   return (
     <>
       <div className={cx('page-header', 'align-middle')}>
-        <h3 className={cx('page-title', 'mt-0')}>Tạo khuyến mãi</h3>
+        <h3 className={cx('page-title', 'mt-0')}>{action === 'update' ? 'Cập nhật khuyến mãi' : 'Tạo khuyến mãi'}</h3>
         <nav aria-label="breadcrumb">
           <ol className={cx('breadcrumb')}>
             <li className={cx('breadcrumb-item')}>
               <Link to="/admin/promotions">Tất cả khuyến mãi</Link>
             </li>
             <li className={cx('breadcrumb-item', 'active')} aria-current="page">
-              Tạo khuyến mãi
+              {action === 'update' ? 'Cập nhật khuyến mãi' : 'Tạo khuyến mãi'}
             </li>
           </ol>
         </nav>
@@ -160,9 +251,34 @@ function PromotionsCreate() {
                     </div>
                   </div>
                 </div>
-                <button onClick={handleSubmit} type="submit" className={cx('btn', 'btn-gradient-primary', 'me-2')}>
-                  Tạo khuyến mãi
-                </button>
+                {action === 'update' ? (
+                  <>
+                    <button onClick={handleUpdate} type="submit" className={cx('btn', 'btn-gradient-primary', 'me-2')}>
+                      Cập nhật khuyến mãi
+                    </button>
+
+                    <Popconfirm
+                      title="Delete the task"
+                      description="Are you sure to delete this task?"
+                      onConfirm={handleDelete}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                        }}
+                        className={cx('btn', 'btn-inverse-danger', 'me-2')}
+                      >
+                        Xóa
+                      </button>
+                    </Popconfirm>
+                  </>
+                ) : (
+                  <button onClick={handleSubmit} type="submit" className={cx('btn', 'btn-gradient-primary', 'me-2')}>
+                    Tạo khuyến mãi
+                  </button>
+                )}
                 <Link to="/admin/promotions" className={cx('btn', 'btn-light')}>
                   Hủy
                 </Link>

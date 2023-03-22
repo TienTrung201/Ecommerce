@@ -34,3 +34,14 @@ export async function updateData(url = '', data = {}) {
 
   return response.json();
 }
+
+export async function deleteData(url = '') {
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  return response.json();
+}
