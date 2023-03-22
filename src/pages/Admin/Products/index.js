@@ -63,7 +63,9 @@ function Products() {
                     <td className={cx('py-1')}>
                       <img src={product.image || images.placeholder} alt="" />
                     </td>
-                    <td>{product.name}</td>
+                    <td>
+                      <Link to={`/admin/products/update/${product.productId}`}>{product.name}</Link>
+                    </td>
                     <td>
                       {product.items.reduce((total, current) => total + current.qtyInStock, 0)} của{' '}
                       {product.items.length} loại

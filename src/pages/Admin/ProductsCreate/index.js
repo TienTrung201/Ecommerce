@@ -6,17 +6,19 @@ import { Button, Collapse, Divider, Image, Input, Select, Space } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getData, postData } from '@/api/service';
+import { getData, postData, updateData } from '@/api/service';
 import { api } from '@/api';
 import { useDispatch } from 'react-redux';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { uploadFile } from '@/firebase/service';
+import ItemsTable from '@/components/Admin/Products/ItemsTable';
 
 const { Panel } = Collapse;
 
 const cx = classNames.bind(styles);
 
 function ProductsCreate() {
+  const [product, setProduct] = useState({});
   const [providers, setProviders] = useState([]);
   const [categories, setCategories] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
@@ -74,6 +76,29 @@ function ProductsCreate() {
       });
   }, []);
 
+  useEffect(() => {
+    if (action === 'update' && id) {
+      // Get productOptions
+      getData(api.products + '/' + id)
+        .then((data) => {
+          console.log(data);
+          // Product
+          setProduct(data);
+          setProductNameInput(data.name);
+          setProductDescInput(data.description);
+          setProductImageInput({ image: data.image, imagePreview: data.image });
+          setProductIsDisplay(data.isDisplay);
+          setProductProviderId(data.providerId);
+          setProductCategoriesId(data.categoriesId);
+          setProductItems(data.items);
+          // Product items
+        })
+        .catch((error) => {
+          console.warn(error);
+        });
+    }
+  }, [action, id]);
+
   const productOptionsPreview = useMemo(() => {
     return productOptions.map((p) => ({
       label: p.name,
@@ -100,6 +125,7 @@ function ProductsCreate() {
   };
 
   const handleProductIsDisplayChange = (value) => {
+    console.log(value);
     setProductIsDisplay(value);
   };
 
@@ -140,6 +166,7 @@ function ProductsCreate() {
   };
   // ------ End Handle input change ------
 
+  // ------ Handle submit  ------
   const handleAddProductItem = (e) => {
     e.preventDefault();
 
@@ -165,43 +192,53 @@ function ProductsCreate() {
     setProductItems(newItems);
   };
 
-  const handleSubmit = async (e) => {
+  // Generate data
+  const generateData = async () => {
+    const data = {
+      name: productNameInput,
+      description: productDescInput,
+      image: productImageInput.image,
+      isDisplay: productIsDisplay,
+      providerId: productProviderId,
+      categoriesId: productCategoriesId,
+      items: productItems,
+    };
+
+    // Upload product image
+    if (data.image && typeof data.image !== 'string') {
+      const UploadedProductImg = await uploadFile(data.image, 'images/products');
+      data.image = UploadedProductImg.url;
+    }
+
+    // Upload items image
+    const uploadedItemImages = await Promise.all(
+      data.items.map(async (item) => {
+        if (item.image && typeof item.image !== 'string') {
+          const uploadedItemImg = await uploadFile(item.image, 'images/product-items');
+          return uploadedItemImg.url;
+        } else if (typeof item.image === 'string') {
+          return item.image;
+        }
+        return null;
+      }),
+    );
+
+    data.items = data.items.map((item, index) => {
+      item.image = uploadedItemImages[index];
+      return item;
+    });
+
+    return data;
+  };
+
+  // Create product
+  const handleCreate = async (e) => {
     e.preventDefault();
 
-    if (productNameInput && productItems.length > 0) {
+    if (action === 'create' && productNameInput && productItems.length > 0) {
       dispatch(notificationsSlice.actions.showLoading('Đang tạo sản phẩm'));
 
-      const data = {
-        name: productNameInput,
-        description: productDescInput,
-        image: productImageInput.image,
-        isDisplay: productIsDisplay,
-        providerId: productProviderId,
-        categoriesId: productCategoriesId,
-        items: productItems,
-      };
-
-      // Upload product image
-      if (data.image) {
-        const UploadedProductImg = await uploadFile(data.image, 'images/products');
-        data.image = UploadedProductImg.url;
-      }
-
-      // Upload items image
-      const uploadedItemImages = await Promise.all(
-        data.items.map(async (item) => {
-          if (item.image) {
-            const uploadedItemImg = await uploadFile(item.image, 'images/product-items');
-            return uploadedItemImg.url;
-          }
-          return null;
-        }),
-      );
-
-      data.items = data.items.map((item, index) => {
-        item.image = uploadedItemImages[index];
-        return item;
-      });
+      const data = await generateData();
 
       postData(api.products, data)
         .then((response) => {
@@ -220,7 +257,38 @@ function ProductsCreate() {
         });
     }
   };
+  // ------ End Handle submit ------
 
+  // ------ Handle update ------
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (action === 'update' && productNameInput && productItems.length > 0) {
+      dispatch(notificationsSlice.actions.showLoading('Đang cập nhật sản phẩm'));
+
+      const data = await generateData();
+
+      console.log('update data: ', data);
+
+      updateData(api.products + '/' + id, data)
+        .then((response) => {
+          console.log(response);
+
+          setTimeout(() => {
+            dispatch(notificationsSlice.actions.showSuccess('Cập nhật sản phẩm thành công'));
+          }, 1000);
+        })
+        .catch((error) => {
+          console.warn(error);
+          dispatch(notificationsSlice.actions.showError('Cập nhật sản phẩm thất bại'));
+          setTimeout(() => {
+            dispatch(notificationsSlice.actions.destroy());
+          }, 1000);
+        });
+    }
+  };
+  // ------End Handle update ------
+
+  // ------ Handle clear input ------
   const clearItemInput = () => {
     setItemSku('');
     setItemQty('');
@@ -228,19 +296,20 @@ function ProductsCreate() {
     setItemPrice('');
     setItemCostPrice('');
   };
+  // ------ End Handle clear input ------
 
   return (
     <>
       {/* Page header */}
       <div className={cx('page-header', 'align-middle')}>
-        <h3 className={cx('page-title', 'mt-0')}> Thêm mới sản phẩm </h3>
+        <h3 className={cx('page-title', 'mt-0')}>{action === 'update' ? 'Cập nhật sản phẩm' : 'Thêm mới sản phẩm'}</h3>
         <nav aria-label="breadcrumb">
           <ol className={cx('breadcrumb')}>
             <li className={cx('breadcrumb-item')}>
               <Link to="/admin/products">Danh sách sản phẩm</Link>
             </li>
             <li className={cx('breadcrumb-item', 'active')} aria-current="page">
-              Thêm sản phẩm
+              {action === 'update' ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm'}
             </li>
           </ol>
         </nav>
@@ -252,7 +321,7 @@ function ProductsCreate() {
         <div className={cx('col-md-8', 'grid-margin', 'stretch-card')}>
           <div className={cx('card')}>
             <div className={cx('card-body')}>
-              <h4 className={cx('card-title')}>Thêm sản phẩm</h4>
+              <h4 className={cx('card-title')}>Sản phẩm</h4>
               <p className={cx('card-description')}></p>
 
               {/* Form */}
@@ -452,58 +521,11 @@ function ProductsCreate() {
 
                     {/* Options table */}
                     <div className={cx('col-md-12', 'overflow-x-auto')}>
-                      <table className={cx('table', 'table-responsive', 'table-striped')}>
-                        <thead>
-                          <tr>
-                            <th> Ảnh </th>
-                            <th> Thuộc tính </th>
-                            <th> SKU </th>
-                            <th> Số lượng </th>
-                            <th> Giá bán </th>
-                            <th> Giá gốc </th>
-                            <th> Hành động </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {productItems.map((item, index) => (
-                            <tr key={index} className={cx('pointer')}>
-                              <td className={cx('py-1')}>
-                                <img src={images.faces.face2} alt="" />
-                              </td>
-
-                              <td>
-                                {productOptions
-                                  .reduce((result, po) => {
-                                    const options = po.options.filter((o) =>
-                                      item.optionsId.includes(o.productOptionId),
-                                    );
-                                    result = [...result, options.map((i) => i.name)];
-                                    return result;
-                                  }, [])
-                                  .join(', ')}
-                              </td>
-                              <td>{item.sku}</td>
-                              <td>{item.qtyInStock}</td>
-                              <td>{item.price}</td>
-                              <td>{item.costPrice}</td>
-                              <td className={cx('text-center')}>
-                                <button className={cx('btn', 'btn-gradient-info', 'btn-rounded', 'btn-icon')}>
-                                  <FontAwesomeIcon icon={faPen} />
-                                </button>
-                                <button
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    handleRemoveProductItem(index);
-                                  }}
-                                  className={cx('btn', 'btn-gradient-danger', 'btn-rounded', 'btn-icon', 'ms-2')}
-                                >
-                                  <FontAwesomeIcon icon={faTrash} />
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                      <ItemsTable
+                        items={productItems}
+                        productOptions={productOptions}
+                        handleRemoveItem={handleRemoveProductItem}
+                      />
                     </div>
                     {/* End Options table */}
                   </div>
@@ -514,7 +536,7 @@ function ProductsCreate() {
                 <div>
                   {action === 'create' ? (
                     <button
-                      onClick={handleSubmit}
+                      onClick={handleCreate}
                       type="submit"
                       className={cx('btn', 'btn-lg', 'btn-gradient-primary', 'me-2')}
                     >
@@ -522,7 +544,7 @@ function ProductsCreate() {
                     </button>
                   ) : (
                     <button
-                      onClick={handleSubmit}
+                      onClick={handleUpdate}
                       type="submit"
                       className={cx('btn', 'btn-lg', 'btn-gradient-primary', 'me-2')}
                     >
@@ -588,6 +610,7 @@ function ProductsCreate() {
                   onChange={handleProductProviderIdChange}
                   style={{ width: '100%' }}
                   allowClear
+                  value={productProviderId}
                   placeholder="Nhập hãng sản xuất"
                   dropdownRender={(menu) => (
                     <>
@@ -611,6 +634,7 @@ function ProductsCreate() {
                 <label htmlFor="">Danh mục</label>
                 <Select
                   onChange={handleProductCategoriesIdChange}
+                  value={productCategoriesId}
                   mode="multiple"
                   allowClear
                   style={{ width: '100%' }}
