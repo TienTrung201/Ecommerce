@@ -63,7 +63,7 @@ const privateRoutes = [
     { path: '/admin/manage-users/edit-roles', component: EditUserRoles, layout: LayoutAdmin },
     { path: '/admin/manage-roles/edit-roles', component: EditRoles, layout: LayoutAdmin },
     { path: '/admin/shipping-methods', component: ShippingMethods, layout: LayoutAdmin },
-    { path: '/admin/shipping-methods/create', component: ShippingMethodsCreate, layout: LayoutAdmin },
+    { path: '/admin/shipping-methods/:action/:id', component: ShippingMethodsCreate, layout: LayoutAdmin },
     { path: '/admin/orders', component: ShopOrders, layout: LayoutAdmin },
 ];
 
