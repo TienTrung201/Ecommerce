@@ -53,7 +53,7 @@ const publicRoutes = [
 const privateRoutes = [
     { path: '/admin', component: Dashboard, layout: LayoutAdmin },
     { path: '/admin/products/categories', component: ProductCategories, layout: LayoutAdmin },
-    { path: '/admin/products/categories/create', component: ProductCategoriesCreate, layout: LayoutAdmin },
+    { path: '/admin/products/categories/:action/:id', component: ProductCategoriesCreate, layout: LayoutAdmin },
     { path: '/admin/promotions', component: Promotions, layout: LayoutAdmin },
     { path: '/admin/promotions/:action/:id', component: PromotionsCreate, layout: LayoutAdmin },
     { path: '/admin/products', component: Products, layout: LayoutAdmin },

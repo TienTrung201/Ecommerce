@@ -88,10 +88,10 @@ function PromotionsCreate() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const data = generateData();
-
     if (nameInput && discountInput && startDateInput.dateString && endDateInput.dateString) {
       dispatch(notificationsSlice.actions.showLoading('Đang tạo khuyến mãi'));
+
+      const data = generateData();
 
       postData(api.promotions, data)
         .then((response) => {
@@ -119,10 +119,10 @@ function PromotionsCreate() {
   const handleUpdate = (e) => {
     e.preventDefault();
 
-    const data = generateData();
-
     if (nameInput && discountInput && startDateInput.dateString && endDateInput.dateString) {
       dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
+
+      const data = generateData();
 
       updateData(api.promotions + '/' + id, data)
         .then((response) => {
@@ -146,8 +146,7 @@ function PromotionsCreate() {
   // ------- End Handle update -------
 
   // ------- Handle delete -------
-  const handleDelete = (e) => {
-    e.preventDefault();
+  const handleDelete = () => {
     dispatch(notificationsSlice.actions.showLoading('Đang xóa'));
 
     deleteData(api.promotions + '/' + id)
@@ -161,7 +160,7 @@ function PromotionsCreate() {
       })
       .catch((error) => {
         console.warn(error);
-        dispatch(notificationsSlice.actions.showError('Xóa không thành công'));
+        dispatch(notificationsSlice.actions.showError('Xóa thất bại'));
         setTimeout(() => {
           dispatch(notificationsSlice.actions.destroy());
         }, 1000);
