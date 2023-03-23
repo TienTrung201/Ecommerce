@@ -72,7 +72,6 @@ function ProductsCreate() {
     // Get productOptions
     getData(api.productOptions)
       .then((data) => {
-        console.log(data);
         setProductOptions(data);
       })
       .catch((error) => {
@@ -94,8 +93,9 @@ function ProductsCreate() {
           setProductIsDisplay(data.isDisplay);
           setProductProviderId(data.providerId);
           setProductCategoriesId(data.categoriesId);
-          setProductItems(data.items);
+
           // Product items
+          setProductItems(data.items);
         })
         .catch((error) => {
           console.warn(error);
@@ -129,7 +129,6 @@ function ProductsCreate() {
   };
 
   const handleProductIsDisplayChange = (value) => {
-    console.log(value);
     setProductIsDisplay(value);
   };
 

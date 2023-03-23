@@ -6,6 +6,10 @@ export async function getData(url = '') {
     },
   });
 
+  if (response.status !== 200) {
+    throw new Error(response.json());
+  }
+
   return response.json();
 }
 
@@ -18,6 +22,10 @@ export async function postData(url = '', data = {}) {
 
     body: JSON.stringify(data),
   });
+
+  if (response.status !== 201) {
+    throw new Error(response.json());
+  }
 
   return response.json();
 }
@@ -32,6 +40,10 @@ export async function updateData(url = '', data = {}) {
     body: JSON.stringify(data),
   });
 
+  if (response.status !== 200) {
+    throw new Error(response.json());
+  }
+
   return response.json();
 }
 
@@ -42,6 +54,10 @@ export async function deleteData(url = '') {
       'Content-Type': 'application/json',
     },
   });
+
+  if (response.status !== 200) {
+    throw new Error(response.json());
+  }
 
   return response.json();
 }

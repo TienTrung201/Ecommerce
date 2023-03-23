@@ -109,7 +109,7 @@ function LayoutAdmin({ children }) {
                     <span className={cx('availability-status', 'online')}></span>
                   </div>
                   <div className={cx('nav-profile-text')}>
-                    <p className={cx('mb-1', 'text-black', 'select-none')}>Xuan Phuccc</p>
+                    <p className={cx('mb-0', 'text-black', 'select-none')}>Xuan Phuccc</p>
                   </div>
                 </span>
                 <div
