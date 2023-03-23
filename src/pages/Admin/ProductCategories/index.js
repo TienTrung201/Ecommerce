@@ -43,7 +43,7 @@ function ProductCategories() {
         <div className={cx('card-body')}>
           <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
             <h4 className={cx('card-title', 'mb-0')}>Tất cả danh mục</h4>
-            <Link to="/admin/products/categories/create/0" className={cx('btn', 'btn-gradient-primary', 'btn-md')}>
+            <Link to="/admin/categories/create/0" className={cx('btn', 'btn-gradient-primary', 'btn-md')}>
               Tạo danh mục
             </Link>
           </div>
@@ -63,7 +63,7 @@ function ProductCategories() {
                     <img src={category.image || images.placeholder} alt="" />
                   </td>
                   <td>
-                    <Link to={`/admin/products/categories/update/${category.categoryId}`}>{category.name}</Link>
+                    <Link to={`/admin/categories/update/${category.categoryId}`}>{category.name}</Link>
                   </td>
                   <td>{promotions.find((p) => p.promotionId === category.promotionId)?.name || 'N/A'}</td>
                 </tr>

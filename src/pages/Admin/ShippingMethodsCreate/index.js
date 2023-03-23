@@ -65,6 +65,7 @@ function ShippingMethodsCreate() {
           setTimeout(() => {
             dispatch(notificationsSlice.actions.showSuccess('Thêm thành công'));
             clearInputs();
+            navigate('/admin/shipping-methods');
           }, 1000);
         })
         .catch((error) => {

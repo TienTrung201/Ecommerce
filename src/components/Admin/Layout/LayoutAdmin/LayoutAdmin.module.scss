@@ -6112,7 +6112,6 @@ fieldset:disabled .btn {
 .collapse.show {
   display: block;
   transition: all 0.2s ease;
-  animation: scaleVertical 0.2s ease;
   transform-origin: 50% 0;
 }
 
@@ -18650,7 +18649,7 @@ dl li {
   color: #29323d;
 }
 .sidebar .nav.sub-menu {
-  margin-bottom: 20px;
+  margin-bottom: 0;
   margin-top: 0;
   list-style: none;
 }

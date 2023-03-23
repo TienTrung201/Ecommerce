@@ -99,6 +99,7 @@ function PromotionsCreate() {
 
           setTimeout(() => {
             dispatch(notificationsSlice.actions.showSuccess('Tạo khuyến mãi thành công'));
+            navigate('/admin/promotions');
             clearInput();
           }, 1000);
         })

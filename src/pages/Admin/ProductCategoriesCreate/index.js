@@ -104,12 +104,13 @@ function ProductCategoriesCreate() {
 
           setTimeout(() => {
             dispatch(notificationsSlice.actions.showSuccess('Tạo danh mục thành công'));
+            clearInputs();
+            navigate('/admin/categories');
           }, 1000);
         })
         .catch((error) => {
           console.warn(error);
           dispatch(notificationsSlice.actions.showError('Tạo danh mục thất bại'));
-          clearInputs();
         });
     } else {
       dispatch(notificationsSlice.actions.showError('Tạo danh mục thất bại'));
@@ -160,7 +161,7 @@ function ProductCategoriesCreate() {
 
         setTimeout(() => {
           dispatch(notificationsSlice.actions.showSuccess('Xóa thành công'));
-          navigate('/admin/products/categories');
+          navigate('/admin/categories');
         }, 1000);
       })
       .catch((error) => {
@@ -190,7 +191,7 @@ function ProductCategoriesCreate() {
         <nav aria-label="breadcrumb">
           <ol className={cx('breadcrumb')}>
             <li className={cx('breadcrumb-item')}>
-              <Link to="/admin/products/categories">Tất cả danh mục</Link>
+              <Link to="/admin/categories">Tất cả danh mục</Link>
             </li>
             <li className={cx('breadcrumb-item', 'active')} aria-current="page">
               {action === 'update' ? 'Cập nhật danh mục' : 'Tạo danh mục'}
@@ -294,7 +295,7 @@ function ProductCategoriesCreate() {
                     Tạo danh mục
                   </button>
                 )}
-                <Link to="/admin/products/categories" className={cx('btn', 'btn-light')}>
+                <Link to="/admin/categories" className={cx('btn', 'btn-light')}>
                   Hủy
                 </Link>
               </form>
@@ -310,7 +311,7 @@ function ProductCategoriesCreate() {
               <h4 className={cx('card-title')}>Ảnh danh mục</h4>
               {/* <p className={cx('card-description')}> Basic form elements </p> */}
               <div className={cx('card-img-wrap')}>
-                <Image src={imageUpload.imagePreview || images.placeholder} />
+                <Image className={cx('rounded')} src={imageUpload.imagePreview || images.placeholder} />
               </div>
             </div>
           </div>

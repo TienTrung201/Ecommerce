@@ -14,14 +14,23 @@ import { Link, useParams } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function ShopOrdersDetail() {
-  const [shopOders, setShopOrder] = useState({});
+  const [shopOrder, setShopOrder] = useState({});
+  const [orderAddress, setOrderAddress] = useState({});
+  const [orderItems, setOrderItems] = useState([]);
+  const [shippingMethods, setShippingMethods] = useState([]);
   const { action, id } = useParams();
 
   useEffect(() => {
-    Promise.all([getData(api.shopOrders + '/' + id)])
+    Promise.all([getData(api.shopOrders + '/' + id), getData(api.shippingMethods)])
       .then((response) => {
-        console.log(response);
+        console.log(response[0]);
         setShopOrder(response[0]);
+        setOrderAddress(response[0].address);
+        setOrderItems(response[0].items);
+
+        // Shipping method
+        setShippingMethods(response[1]);
+        console.log('shipping: ', response[1]);
       })
       .catch((error) => {
         console.warn(error);
@@ -31,7 +40,7 @@ function ShopOrdersDetail() {
   return (
     <>
       <div className={cx('page-header', 'align-middle', 'mb-0')}>
-        <h3 className={cx('page-title', 'mt-0')}>Chi tiết đơn hàng #{shopOders.orderId}</h3>
+        <h3 className={cx('page-title', 'mt-0')}>Chi tiết đơn hàng #{shopOrder.orderId}</h3>
         <nav aria-label="breadcrumb">
           <ol className={cx('breadcrumb')}>
             <li className={cx('breadcrumb-item')}>
@@ -44,7 +53,7 @@ function ShopOrdersDetail() {
         </nav>
       </div>
       <div className={cx('page-header', 'align-middle')}>
-        <p>{dayjs(shopOders.orderDate).format('YYYY/MM/DD HH:MM')}</p>
+        <p>{dayjs(shopOrder.orderDate).format('YYYY/MM/DD HH:MM')}</p>
       </div>
       <div className={cx('row', 'gx-4', 'gy-4')}>
         <div className={cx('col-md-8')}>
@@ -69,37 +78,41 @@ function ShopOrdersDetail() {
                 <table className={cx('table')}>
                   <tbody>
                     {/* Order items */}
-                    <tr>
-                      <td className={cx('py-1', 'ps-0', 'vertical-align-top')}>
-                        <img
-                          style={{ width: 42, height: 42 }}
-                          className={cx('rounded')}
-                          src={images.faces.face1}
-                          alt=""
-                        />
-                      </td>
-                      <td className={cx('py-1')}>
-                        <p className={cx('mb-0', 'small')}>Gấu bông Teddy cute</p>
-                        <p className={cx('mb-0', 'small')}>25cm / Xanh</p>
-                        <p className={cx('mb-0', 'small')}>SKU: SP001</p>
-                      </td>
-                      <td className={cx('py-1')}>500.000đ x 1</td>
-                      <td className={cx('py-1', 'pe-0', 'text-end')}>500.000đ</td>
-                    </tr>
+                    {orderItems.map((item) => (
+                      <tr>
+                        <td className={cx('py-1', 'ps-0', 'vertical-align-top')}>
+                          <img
+                            style={{ width: 42, height: 42 }}
+                            className={cx('rounded')}
+                            src={item?.product?.image || images.placeholder}
+                            alt=""
+                          />
+                        </td>
+                        <td className={cx('py-1')}>
+                          <p className={cx('mb-0', 'small')}>{item.product.name}</p>
+                          <p className={cx('mb-0', 'small')}>25cm / Xanh</p>
+                          <p className={cx('mb-0', 'small')}>SKU: SP001</p>
+                        </td>
+                        <td className={cx('py-1')}>
+                          {item.price}đ x {item.qty}
+                        </td>
+                        <td className={cx('py-1', 'pe-0', 'text-end')}>{item.price * item.qty}đ</td>
+                      </tr>
+                    ))}
                     {/* End order items */}
 
-                    {/* Total price */}
+                    {/* Order total */}
                     <tr>
                       <td className={cx('py-1', 'ps-0', 'border-hide', 'vertical-align-top')}></td>
                       <td className={cx('py-1', 'border-hide')}></td>
                       <td className={cx('py-1', 'border-hide')}>Giá</td>
-                      <td className={cx('py-1', 'pe-0', 'border-hide', 'text-end')}>500.000đ</td>
+                      <td className={cx('py-1', 'pe-0', 'border-hide', 'text-end')}>0đ</td>
                     </tr>
                     <tr>
                       <td className={cx('py-1', 'ps-0', 'border-hide', 'vertical-align-top')}></td>
                       <td className={cx('py-1', 'border-hide')}></td>
                       <td className={cx('py-1', 'border-hide')}>Khuyến mãi</td>
-                      <td className={cx('py-1', 'pe-0', 'border-hide', 'text-end')}>500.000đ</td>
+                      <td className={cx('py-1', 'pe-0', 'border-hide', 'text-end')}>0đ</td>
                     </tr>
                     <tr>
                       <td className={cx('py-1', 'ps-0', 'border-hide', 'vertical-align-top')}></td>
@@ -108,15 +121,19 @@ function ShopOrdersDetail() {
                         <p className={cx('mb-0', 'small')}>Vận chuyển</p>
                         <p className={cx('mb-0', 'small', 'text-secondary')}>Shopee Express</p>
                       </td>
-                      <td className={cx('py-1', 'pe-0', 'border-hide', 'text-end')}>500.000đ</td>
+                      <td className={cx('py-1', 'pe-0', 'border-hide', 'text-end')}>
+                        {shippingMethods.find((s) => s.shippingMethodId === shopOrder.shippingMethodId)?.price}đ
+                      </td>
                     </tr>
                     <tr>
                       <td className={cx('py-1', 'border-hide')}></td>
                       <td className={cx('py-1', 'border-hide')}></td>
                       <td className={cx('py-1', 'border-hide', 'fw-semibold')}>Tổng cộng</td>
-                      <td className={cx('py-1', 'pe-0', 'border-hide', 'text-end', 'fw-semibold')}>500.000đ</td>
+                      <td className={cx('py-1', 'pe-0', 'border-hide', 'text-end', 'fw-semibold')}>
+                        {shopOrder.orderTotal}đ
+                      </td>
                     </tr>
-                    {/* End total price */}
+                    {/* End Order total */}
                   </tbody>
                 </table>
               </div>
@@ -189,13 +206,13 @@ function ShopOrdersDetail() {
               <div>
                 <p className={cx('h6')}>Địa chỉ giao hàng</p>
                 <div>
-                  <p className={cx('text-secondary', 'small', 'mb-0')}>Trần Xuân Phúc</p>
-                  <p className={cx('text-secondary', 'small', 'mb-0')}>09334683579</p>
-                  <p className={cx('text-secondary', 'small', 'mb-0')}>79, Dương Quảng Hàm, Hà nội</p>
-                  <p className={cx('text-secondary', 'small', 'mb-0')}>Phường Quan Hoa</p>
-                  <p className={cx('text-secondary', 'small', 'mb-0')}>Quận Cầu Giấy</p>
-                  <p className={cx('text-secondary', 'small', 'mb-0')}>Hà Nội</p>
-                  <p className={cx('text-secondary', 'small', 'mb-0')}>Việt Nam</p>
+                  <p className={cx('text-secondary', 'small', 'mb-0')}>{orderAddress?.fullName || 'N/A'}</p>
+                  <p className={cx('text-secondary', 'small', 'mb-0')}>{orderAddress?.phoneNumber || 'N/A'}</p>
+                  <p className={cx('text-secondary', 'small', 'mb-0')}>{orderAddress?.addressLine || 'N/A'}</p>
+                  <p className={cx('text-secondary', 'small', 'mb-0')}>{orderAddress?.ward || 'N/A'}</p>
+                  <p className={cx('text-secondary', 'small', 'mb-0')}>{orderAddress?.district || 'N/A'}</p>
+                  <p className={cx('text-secondary', 'small', 'mb-0')}>{orderAddress?.city || 'N/A'}</p>
+                  <p className={cx('text-secondary', 'small', 'mb-0')}>Vietnam</p>
                 </div>
               </div>
 

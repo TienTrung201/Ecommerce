@@ -3,11 +3,9 @@ import styles from './LayoutAdmin.module.scss';
 import images from '@/assets/admin/images';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faAngleDown,
   faArrowRightFromBracket,
   faBars,
   faBox,
-  faFileInvoiceDollar,
   faHouse,
   faMagnifyingGlass,
   faTags,
@@ -15,8 +13,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Notification from '../../Notification';
+import Collapse from '../../Collapse';
 
 const cx = classNames.bind(styles);
 
@@ -26,24 +25,13 @@ function LayoutAdmin({ children }) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [adminDropdown, setAdminDropdown] = useState(false);
 
-  const [activeItem, setActiveItem] = useState('dashboard');
-  const [activeSubItem, setActiveSubItem] = useState('');
+  const location = useLocation();
 
-  const handleActiveItem = (e) => {
-    e.stopPropagation();
-    if (activeItem.includes('dropdown') && activeItem === e.currentTarget.dataset.active) {
-      setActiveItem('');
-    } else {
-      setActiveItem(e.currentTarget.dataset.active);
-    }
-    setActiveSubItem('');
-  };
-
-  const handleActiveSubItem = (e) => {
+  const handleStopBubble = (e) => {
     // e.currentTarget.getAttribute('data-active')
     // e.currentTarget.dataset.active
     e.stopPropagation();
-    setActiveSubItem(e.currentTarget.dataset.active);
+    // setActiveSubItem(e.currentTarget.dataset.active);
   };
 
   return (
@@ -243,6 +231,7 @@ function LayoutAdmin({ children }) {
             </button>
           </div>
         </nav>
+
         {/* <!-- partial --> */}
         <div className={cx('container-fluid', 'page-body-wrapper')}>
           {/* <!-- partial:../../partials/_sidebar.html --> */}
@@ -262,11 +251,8 @@ function LayoutAdmin({ children }) {
                   <i className={cx('mdi', 'mdi-bookmark-check', 'text-success', 'nav-profile-badge')}></i>
                 </span>
               </li>
-              <li
-                onClick={handleActiveItem}
-                data-active="dashboard"
-                className={cx('nav-item', { active: activeItem === 'dashboard' })}
-              >
+
+              <li data-active="dashboard" className={cx('nav-item', { active: location.pathname === '/admin' })}>
                 <Link to="/admin" className={cx('nav-link')} href="../../index.html">
                   <span className={cx('menu-title')}>Tổng quan</span>
                   <i className={cx('menu-icon')}>
@@ -274,94 +260,66 @@ function LayoutAdmin({ children }) {
                   </i>
                 </Link>
               </li>
-              <li
-                onClick={handleActiveItem}
-                data-active="orders-dropdown"
-                className={cx('nav-item', { active: activeItem === 'orders-dropdown' })}
-              >
-                <span className={cx('nav-link', 'pointer')}>
-                  <span className={cx('menu-title')}>Đơn hàng</span>
-                  <i className={cx('menu-arrow')}>
-                    <FontAwesomeIcon icon={faAngleDown} />
-                  </i>
-                  <i className={cx('menu-icon')}>
-                    <FontAwesomeIcon icon={faFileInvoiceDollar} />
-                  </i>
-                </span>
-                <div className={cx('collapse', { show: activeItem === 'orders-dropdown' })} id="ui-basic">
-                  <ul className={cx('nav', 'flex-column', 'sub-menu')}>
-                    <li onClick={handleActiveSubItem} data-active="order-list" className={cx('nav-item')}>
-                      <Link to="/admin/orders" className={cx('nav-link', { active: activeSubItem === 'order-list' })}>
-                        Danh sách đơn hàng
-                      </Link>
-                    </li>
-                    <li onClick={handleActiveSubItem} data-active="order-pending" className={cx('nav-item')}>
-                      <Link
-                        to=""
-                        className={cx('nav-link', {
-                          active: activeSubItem === 'order-pending',
-                        })}
-                      >
-                        Đơn chưa hoàn tất
-                      </Link>
-                    </li>
-                    <li onClick={handleActiveSubItem} data-active="order-shipping" className={cx('nav-item')}>
-                      <Link
-                        to="/admin/shipping-methods"
-                        className={cx('nav-link', {
-                          active: activeSubItem === 'order-shipping',
-                        })}
-                      >
-                        Quản lý vận chuyển
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li
-                onClick={handleActiveItem}
-                data-active="products-dropdown"
-                className={cx('nav-item', { active: activeItem === 'products-dropdown' })}
-              >
-                <span className={cx('nav-link', 'pointer')}>
-                  <span className={cx('menu-title')}>Sản phẩm</span>
-                  <i className={cx('menu-arrow')}>
-                    <FontAwesomeIcon icon={faAngleDown} />
-                  </i>
-                  <i className={cx('menu-icon')}>
-                    <FontAwesomeIcon icon={faBox} />
-                  </i>
-                </span>
-                <div className={cx('collapse', { show: activeItem === 'products-dropdown' })} id="ui-basic">
-                  <ul className={cx('nav', 'flex-column', 'sub-menu')}>
-                    <li onClick={handleActiveSubItem} data-active="product-list" className={cx('nav-item')}>
-                      <Link
-                        to="/admin/products"
-                        className={cx('nav-link', { active: activeSubItem === 'product-list' })}
-                        href="#"
-                      >
-                        Danh sách sản phẩm
-                      </Link>
-                    </li>
-                    <li onClick={handleActiveSubItem} data-active="product-category" className={cx('nav-item')}>
-                      <Link
-                        to="/admin/products/categories"
-                        className={cx('nav-link', {
-                          active: activeSubItem === 'product-category',
-                        })}
-                        href="#"
-                      >
-                        Danh mục sản phẩm
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li
-                onClick={handleActiveItem}
-                data-active="discounts"
-                className={cx('nav-item', { active: activeItem === 'discounts' })}
-              >
+
+              <Collapse title="Đơn hàng">
+                <ul className={cx('nav', 'flex-column', 'sub-menu')}>
+                  <li onClick={handleStopBubble} className={cx('nav-item')}>
+                    <Link
+                      to="/admin/orders"
+                      className={cx('nav-link', { active: location.pathname === '/admin/orders' })}
+                    >
+                      Danh sách đơn hàng
+                    </Link>
+                  </li>
+                  <li onClick={handleStopBubble} className={cx('nav-item')}>
+                    <Link
+                      to=""
+                      className={cx('nav-link', {
+                        active: false,
+                      })}
+                    >
+                      Đơn chưa hoàn tất
+                    </Link>
+                  </li>
+                  <li onClick={handleStopBubble} className={cx('nav-item')}>
+                    <Link
+                      to="/admin/shipping-methods"
+                      className={cx('nav-link', {
+                        active: location.pathname === '/admin/shipping-methods',
+                      })}
+                    >
+                      Quản lý vận chuyển
+                    </Link>
+                  </li>
+                </ul>
+              </Collapse>
+
+              <Collapse title="Sản phẩm" icon={faBox}>
+                <ul className={cx('nav', 'flex-column', 'sub-menu')}>
+                  <li onClick={handleStopBubble} className={cx('nav-item')}>
+                    <Link
+                      to="/admin/products"
+                      className={cx('nav-link', { active: location.pathname === '/admin/products' })}
+                      href="#"
+                    >
+                      Danh sách sản phẩm
+                    </Link>
+                  </li>
+                  <li onClick={handleStopBubble} className={cx('nav-item')}>
+                    <Link
+                      to="/admin/categories"
+                      className={cx('nav-link', {
+                        active: location.pathname === '/admin/categories',
+                      })}
+                      href="#"
+                    >
+                      Danh mục sản phẩm
+                    </Link>
+                  </li>
+                </ul>
+              </Collapse>
+
+              <li className={cx('nav-item', { active: location.pathname === '/admin/promotions' })}>
                 <Link to="/admin/promotions" className={cx('nav-link')} href="#">
                   <span className={cx('menu-title')}>Khuyến mãi</span>
                   <i className={cx('menu-icon')}>
@@ -369,45 +327,32 @@ function LayoutAdmin({ children }) {
                   </i>
                 </Link>
               </li>
-              <li
-                onClick={handleActiveItem}
-                data-active="users-dropdown"
-                className={cx('nav-item', { active: activeItem === 'users-dropdown' })}
-              >
-                <span className={cx('nav-link', 'pointer')}>
-                  <span className={cx('menu-title')}>Người dùng</span>
-                  <i className={cx('menu-arrow')}>
-                    <FontAwesomeIcon icon={faAngleDown} />
-                  </i>
-                  <i className={cx('menu-icon')}>
-                    <FontAwesomeIcon icon={faUser} />
-                  </i>
-                </span>
-                <div className={cx('collapse', { show: activeItem === 'users-dropdown' })} id="ui-basic">
-                  <ul className={cx('nav', 'flex-column', 'sub-menu')}>
-                    <li onClick={handleActiveSubItem} data-active="product-list" className={cx('nav-item')}>
-                      <Link
-                        to="/admin/manage-users"
-                        className={cx('nav-link', { active: activeSubItem === 'product-list' })}
-                        href="#"
-                      >
-                        Danh sách người dùng
-                      </Link>
-                    </li>
-                    <li onClick={handleActiveSubItem} data-active="product-category" className={cx('nav-item')}>
-                      <Link
-                        to="/admin/manage-roles"
-                        className={cx('nav-link', {
-                          active: activeSubItem === 'product-category',
-                        })}
-                        href="#"
-                      >
-                        Quản lý vai trò
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </li>
+
+              <Collapse title="Người dùng" icon={faUser}>
+                <ul className={cx('nav', 'flex-column', 'sub-menu')}>
+                  <li onClick={handleStopBubble} data-active="product-list" className={cx('nav-item')}>
+                    <Link
+                      to="/admin/manage-users"
+                      className={cx('nav-link', { active: location.pathname === '/admin/manage-users' })}
+                      href="#"
+                    >
+                      Danh sách người dùng
+                    </Link>
+                  </li>
+                  <li onClick={handleStopBubble} data-active="product-category" className={cx('nav-item')}>
+                    <Link
+                      to="/admin/manage-roles"
+                      className={cx('nav-link', {
+                        active: location.pathname === '/admin/manage-roles',
+                      })}
+                      href="#"
+                    >
+                      Quản lý vai trò
+                    </Link>
+                  </li>
+                </ul>
+              </Collapse>
+
               <li className={cx('nav-item', 'sidebar-actions')}>
                 <div className={cx('border-bottom')}>
                   <h6 className={cx('font-weight-normal', 'mb-3')}>Website</h6>
@@ -417,6 +362,7 @@ function LayoutAdmin({ children }) {
               </li>
             </ul>
           </nav>
+
           {/* <!-- partial --> */}
           <div className={cx('main-panel')}>
             <div className={cx('content-wrapper')}>{children}</div>
