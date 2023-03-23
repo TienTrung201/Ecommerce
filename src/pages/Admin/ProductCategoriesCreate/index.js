@@ -277,7 +277,7 @@ function ProductCategoriesCreate() {
                       title="Xóa danh mục"
                       description="Bạn có chắc chắn muốn xóa danh mục?"
                       onConfirm={handleDelete}
-                      okText="Xóa danh mục"
+                      okText="Xóa"
                       cancelText="Hủy"
                     >
                       <button

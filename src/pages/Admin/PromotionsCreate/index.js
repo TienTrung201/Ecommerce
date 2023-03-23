@@ -258,11 +258,11 @@ function PromotionsCreate() {
                     </button>
 
                     <Popconfirm
-                      title="Delete the task"
-                      description="Are you sure to delete this task?"
+                      title="Xóa khuyến mãi"
+                      description="Bạn có chắc chắn muốn xóa khuyến mãi?"
                       onConfirm={handleDelete}
-                      okText="Yes"
-                      cancelText="No"
+                      okText="Xóa"
+                      cancelText="Hủy"
                     >
                       <button
                         onClick={(e) => {

@@ -2,10 +2,11 @@ import images from '@/assets/admin/images';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Popconfirm } from 'antd';
 import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
-function ItemsTable({ items, productOptions, handleRemoveItem }) {
+function ItemsTable({ items, productOptions, handleRemoveItem, handleSelectItem }) {
   return (
     <>
       <table className={cx('table', 'table-responsive', 'table-striped')}>
@@ -47,18 +48,38 @@ function ItemsTable({ items, productOptions, handleRemoveItem }) {
               <td>{item.price}</td>
               <td>{item.costPrice}</td>
               <td className={cx('text-center')}>
-                <button className={cx('btn', 'btn-gradient-info', 'btn-rounded', 'btn-icon')}>
-                  <FontAwesomeIcon icon={faPen} />
-                </button>
+                {/* Edit button */}
                 <button
                   onClick={(e) => {
                     e.preventDefault();
+                    handleSelectItem(item);
+                  }}
+                  className={cx('btn', 'btn-gradient-info', 'btn-rounded', 'btn-icon')}
+                >
+                  <FontAwesomeIcon icon={faPen} />
+                </button>
+                {/* End Edit button */}
+
+                {/* Delete button */}
+                <Popconfirm
+                  title="Xóa cấu hình sản phẩm"
+                  description="Bạn có chắc chắn muốn xóa cấu hình này?"
+                  onConfirm={() => {
                     handleRemoveItem(index);
                   }}
-                  className={cx('btn', 'btn-gradient-danger', 'btn-rounded', 'btn-icon', 'ms-2')}
+                  okText="Xóa"
+                  cancelText="Hủy"
                 >
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                    className={cx('btn', 'btn-gradient-danger', 'btn-rounded', 'btn-icon', 'ms-2')}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </Popconfirm>
+                {/* End Delete button */}
               </td>
             </tr>
           ))}
