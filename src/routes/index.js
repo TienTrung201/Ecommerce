@@ -38,6 +38,7 @@ const publicRoutes = [
     { path: '/', component: Home, layout: LayoutHome },
     { path: '/aboutUs', component: AboutUs, layout: LayoutPage },
     { path: '/product', component: Product, layout: LayoutPage },
+    { path: '/product/:name/:id', component: Product, layout: LayoutPage },
     // { path: '/blog', component: Blog, layout: LayoutPage },
     { path: '/Cart', component: Cart, layout: LayoutPage },
     { path: '/checkOut', component: CheckOut, layout: LayoutPage },

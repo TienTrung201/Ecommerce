@@ -107,13 +107,14 @@ function Home() {
                                         if (index >= 5) {
                                             return false;
                                         }
+
                                         return (
                                             <div
                                                 key={products.productId}
                                                 className="col-xs-6 col-sm-6 col-md-4 col-lg-4 product-item"
                                             >
                                                 <div className="product-img">
-                                                    <Link href="">
+                                                    <Link to={`/product/${product.name}/${product.productId}`}>
                                                         <img src={product.image} alt="" className="img-responsive" />
                                                     </Link>
                                                     <div className="ribbon zoa-sale">
@@ -134,7 +135,9 @@ function Home() {
                                                 </div>
                                                 <div className="product-info text-center">
                                                     <h3 className="product-title">
-                                                        <Link href="">{product.name}</Link>
+                                                        <Link to={`/product/${product.name}/${product.productId}`}>
+                                                            {product.name}
+                                                        </Link>
                                                     </h3>
                                                     <div className="product-price">
                                                         <span className="old">${product.items[0].price}</span>

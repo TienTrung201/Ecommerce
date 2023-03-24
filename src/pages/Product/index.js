@@ -1,11 +1,28 @@
+import { api } from '@/api';
+import { getData } from '@/api/service';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faCartPlus, faChevronDown, faChevronRight, faMinus, faPlus, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 
 function Product() {
+    //get Product
+    const [product, setProduct] = useState({});
+    const { name, id } = useParams();
+    useEffect(() => {
+        getData(api.products + `/${id}`)
+            .then((data) => {
+                console.log(data.items);
+                setProduct(data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [id]);
+    //get Product
+
     //Change Description and Review
     const [tabs, setTabs] = useState('Reviews');
     const handleChangeTab = (e) => {
@@ -117,41 +134,14 @@ function Product() {
                                         {...settings}
                                         className="main-img js-product-slider"
                                     >
-                                        <Link to="#" className="hover-images effect">
-                                            <img
-                                                src={require('@/assets/image/product/single_1a.jpg')}
-                                                alt=""
-                                                className="img-responsive"
-                                            />
-                                        </Link>
-                                        <Link to="#" className="hover-images effect">
-                                            <img
-                                                src={require('@/assets/image/product/single_2a.jpg')}
-                                                alt=""
-                                                className="img-responsive"
-                                            />
-                                        </Link>
-                                        <Link to="#" className="hover-images effect">
-                                            <img
-                                                src={require('@/assets/image/product/single_3a.jpg')}
-                                                alt=""
-                                                className="img-responsive"
-                                            />
-                                        </Link>
-                                        <Link to="#" className="hover-images effect">
-                                            <img
-                                                src={require('@/assets/image/product/single_4a.jpg')}
-                                                alt=""
-                                                className="img-responsive"
-                                            />
-                                        </Link>
-                                        <Link to="#" className="hover-images effect">
-                                            <img
-                                                src={require('@/assets/image/product/single_5a.jpg')}
-                                                alt=""
-                                                className="img-responsive"
-                                            />
-                                        </Link>
+                                        {product.items &&
+                                            product.items.map((p) => {
+                                                return (
+                                                    <Link key={p.productItemId} to="#" className="hover-images effect">
+                                                        <img src={p.image} alt="" className="img-responsive" />
+                                                    </Link>
+                                                );
+                                            })}
                                     </Slider>
                                 </div>
                                 <Slider
@@ -160,51 +150,16 @@ function Product() {
                                     {...settingsListImage}
                                     className="multiple-img-list-ver2 js-click-product slick-vertical slick-clone"
                                 >
-                                    <div className="product-col">
-                                        <div className="img active">
-                                            <img
-                                                src={require('@/assets/image/product/single_1.jpg')}
-                                                alt=""
-                                                className="img-responsive"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="product-col">
-                                        <div className="img">
-                                            <img
-                                                src={require('@/assets/image/product/single_2.jpg')}
-                                                alt="images"
-                                                className="img-responsive"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="product-col">
-                                        <div className="img">
-                                            <img
-                                                src={require('@/assets/image/product/single_3.jpg')}
-                                                alt="images"
-                                                className="img-responsive"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="product-col">
-                                        <div className="img">
-                                            <img
-                                                src={require('@/assets/image/product/single_4.jpg')}
-                                                alt="images"
-                                                className="img-responsive"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="product-col">
-                                        <div className="img">
-                                            <img
-                                                src={require('@/assets/image/product/single_5.jpg')}
-                                                alt="images"
-                                                className="img-responsive"
-                                            />
-                                        </div>
-                                    </div>
+                                    {product.items &&
+                                        product.items.map((p) => {
+                                            return (
+                                                <div className="product-col">
+                                                    <div className="img active">
+                                                        <img src={p.image} alt="" className="img-responsive" />
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
                                 </Slider>
                             </div>
                         </div>
