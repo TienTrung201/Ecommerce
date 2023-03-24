@@ -2,11 +2,11 @@ import images from '@/assets/admin/images';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Collapse, Divider, Image, Input, Select, Space } from 'antd';
+import { Button, Collapse, Divider, Image, Input, Popconfirm, Select, Space } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { getData, postData, updateData } from '@/api/service';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { deleteData, getData, postData, updateData } from '@/api/service';
 import { api } from '@/api';
 import { useDispatch } from 'react-redux';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
@@ -29,7 +29,9 @@ function ProductsCreate() {
   const [productIsDisplay, setProductIsDisplay] = useState(true);
   const [productProviderId, setProductProviderId] = useState(null);
   const [productCategoriesId, setProductCategoriesId] = useState([]);
+
   const [productItems, setProductItems] = useState([]);
+  const [selectedItem, setSelectedItem] = useState({});
 
   const [itemSku, setItemSku] = useState('');
   const [itemQty, setItemQty] = useState('');
@@ -44,6 +46,8 @@ function ProductsCreate() {
   const dispatch = useDispatch();
 
   const { action, id } = useParams();
+
+  const navigate = useNavigate();
 
   // ------ Get dependen data ------
   useEffect(() => {
@@ -192,6 +196,32 @@ function ProductsCreate() {
     setProductItems(newItems);
   };
 
+  const handleSetSelectProductItem = (item) => {
+    setSelectedItem(item);
+    console.log('selected: ', item);
+    setItemSku(item.sku);
+    setItemQty(item.qtyInStock);
+    setItemProperties(item.optionsId);
+    setItemPrice(item.price);
+    setItemCostPrice(item.costPrice);
+    setItemImage({
+      image: item.image,
+      imagePreview: item.image,
+    });
+  };
+
+  const handleUpdateProductItem = (e) => {
+    e.preventDefault();
+
+    selectedItem.sku = itemSku;
+    selectedItem.qtyInStock = itemQty;
+    selectedItem.optionsId = itemProperties;
+    selectedItem.price = itemPrice;
+    selectedItem.costPrice = itemCostPrice;
+    selectedItem.image = itemImage.image;
+    clearItemInput();
+  };
+
   // Generate data
   const generateData = async () => {
     const data = {
@@ -232,7 +262,7 @@ function ProductsCreate() {
   };
 
   // Create product
-  const handleCreate = async (e) => {
+  const handleCreateProduct = async (e) => {
     e.preventDefault();
 
     if (action === 'create' && productNameInput && productItems.length > 0) {
@@ -246,6 +276,7 @@ function ProductsCreate() {
 
           setTimeout(() => {
             dispatch(notificationsSlice.actions.showSuccess('Tạo sản phẩm thành công'));
+            navigate('/admin/products');
           }, 1000);
         })
         .catch((error) => {
@@ -260,7 +291,7 @@ function ProductsCreate() {
   // ------ End Handle submit ------
 
   // ------ Handle update ------
-  const handleUpdate = async (e) => {
+  const handleUpdateProduct = async (e) => {
     e.preventDefault();
     if (action === 'update' && productNameInput && productItems.length > 0) {
       dispatch(notificationsSlice.actions.showLoading('Đang cập nhật sản phẩm'));
@@ -286,7 +317,30 @@ function ProductsCreate() {
         });
     }
   };
-  // ------End Handle update ------
+  // ------ End Handle update ------
+
+  // ------ Handle delete product ------
+  const handleDeleteProduct = () => {
+    dispatch(notificationsSlice.actions.showLoading('Đang xóa'));
+
+    deleteData(api.products + '/' + id)
+      .then((response) => {
+        console.log(response);
+
+        setTimeout(() => {
+          dispatch(notificationsSlice.actions.showSuccess('Xóa thành công'));
+          navigate('/admin/products');
+        }, 1000);
+      })
+      .catch((error) => {
+        console.warn(error);
+        dispatch(notificationsSlice.actions.showError('Xóa thất bại'));
+        setTimeout(() => {
+          dispatch(notificationsSlice.actions.destroy());
+        }, 1000);
+      });
+  };
+  // ------ End Handle delete product ------
 
   // ------ Handle clear input ------
   const clearItemInput = () => {
@@ -295,6 +349,7 @@ function ProductsCreate() {
     setItemProperties([]);
     setItemPrice('');
     setItemCostPrice('');
+    setSelectedItem({});
   };
   // ------ End Handle clear input ------
 
@@ -472,15 +527,25 @@ function ProductsCreate() {
                         </div>
                         {/* End Cost price input */}
 
-                        {/* Submit */}
+                        {/* Add or edit item */}
                         <div className={cx('col-md-12')}>
-                          <button
-                            onClick={handleAddProductItem}
-                            type="submit"
-                            className={cx('btn', 'btn-sm', 'btn-gradient-info', 'me-2')}
-                          >
-                            Thêm thuộc tính
-                          </button>
+                          {Object.keys(selectedItem).length > 0 ? (
+                            <button
+                              onClick={handleUpdateProductItem}
+                              type="submit"
+                              className={cx('btn', 'btn-sm', 'btn-gradient-info', 'me-2')}
+                            >
+                              Cập nhật
+                            </button>
+                          ) : (
+                            <button
+                              onClick={handleAddProductItem}
+                              type="submit"
+                              className={cx('btn', 'btn-sm', 'btn-gradient-info', 'me-2')}
+                            >
+                              Thêm thuộc tính
+                            </button>
+                          )}
                           <button
                             onClick={(e) => {
                               e.preventDefault();
@@ -491,7 +556,7 @@ function ProductsCreate() {
                             Hủy
                           </button>
                         </div>
-                        {/* Submit */}
+                        {/* End Add or edit item */}
                       </div>
                     </div>
                     {/* End Options information */}
@@ -511,7 +576,7 @@ function ProductsCreate() {
                             e.preventDefault();
                             itemImageInputRef.current && itemImageInputRef.current.click();
                           }}
-                          className={cx('btn', 'btn-sm', 'btn-inverse-info', 'mt-2')}
+                          className={cx('btn', 'btn-sm', 'btn-inverse-info', 'mt-4')}
                         >
                           Tải lên
                         </button>
@@ -525,6 +590,7 @@ function ProductsCreate() {
                         items={productItems}
                         productOptions={productOptions}
                         handleRemoveItem={handleRemoveProductItem}
+                        handleSelectItem={handleSetSelectProductItem}
                       />
                     </div>
                     {/* End Options table */}
@@ -536,20 +602,38 @@ function ProductsCreate() {
                 <div>
                   {action === 'create' ? (
                     <button
-                      onClick={handleCreate}
+                      onClick={handleCreateProduct}
                       type="submit"
                       className={cx('btn', 'btn-lg', 'btn-gradient-primary', 'me-2')}
                     >
-                      Thêm sản phẩm
+                      Tạo sản phẩm
                     </button>
                   ) : (
-                    <button
-                      onClick={handleUpdate}
-                      type="submit"
-                      className={cx('btn', 'btn-lg', 'btn-gradient-primary', 'me-2')}
-                    >
-                      Cập nhật
-                    </button>
+                    <>
+                      <button
+                        onClick={handleUpdateProduct}
+                        type="submit"
+                        className={cx('btn', 'btn-lg', 'btn-gradient-primary', 'me-2')}
+                      >
+                        Cập nhật
+                      </button>
+                      <Popconfirm
+                        title="Xóa sản phẩm"
+                        description="Bạn có chắc chắn muốn xóa sản phẩm này?"
+                        onConfirm={handleDeleteProduct}
+                        okText="Xóa"
+                        cancelText="Hủy"
+                      >
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                          }}
+                          className={cx('btn', 'btn-inverse-danger', 'me-2')}
+                        >
+                          Xóa
+                        </button>
+                      </Popconfirm>
+                    </>
                   )}
                   <Link to="/admin/products" className={cx('btn', 'btn-lg', 'btn-light')}>
                     Hủy

@@ -266,7 +266,7 @@ function LayoutAdmin({ children }) {
                   <li onClick={handleStopBubble} className={cx('nav-item')}>
                     <Link
                       to="/admin/orders"
-                      className={cx('nav-link', { active: location.pathname === '/admin/orders' })}
+                      className={cx('nav-link', { active: location.pathname.includes('/admin/orders') })}
                     >
                       Danh sách đơn hàng
                     </Link>
@@ -285,7 +285,7 @@ function LayoutAdmin({ children }) {
                     <Link
                       to="/admin/shipping-methods"
                       className={cx('nav-link', {
-                        active: location.pathname === '/admin/shipping-methods',
+                        active: location.pathname.includes('/admin/shipping-methods'),
                       })}
                     >
                       Quản lý vận chuyển
@@ -299,7 +299,7 @@ function LayoutAdmin({ children }) {
                   <li onClick={handleStopBubble} className={cx('nav-item')}>
                     <Link
                       to="/admin/products"
-                      className={cx('nav-link', { active: location.pathname === '/admin/products' })}
+                      className={cx('nav-link', { active: location.pathname.includes('/admin/products') })}
                       href="#"
                     >
                       Danh sách sản phẩm
@@ -309,7 +309,7 @@ function LayoutAdmin({ children }) {
                     <Link
                       to="/admin/categories"
                       className={cx('nav-link', {
-                        active: location.pathname === '/admin/categories',
+                        active: location.pathname.includes('/admin/categories'),
                       })}
                       href="#"
                     >
@@ -319,7 +319,7 @@ function LayoutAdmin({ children }) {
                 </ul>
               </Collapse>
 
-              <li className={cx('nav-item', { active: location.pathname === '/admin/promotions' })}>
+              <li className={cx('nav-item', { active: location.pathname.includes('/admin/promotions') })}>
                 <Link to="/admin/promotions" className={cx('nav-link')} href="#">
                   <span className={cx('menu-title')}>Khuyến mãi</span>
                   <i className={cx('menu-icon')}>
@@ -333,7 +333,7 @@ function LayoutAdmin({ children }) {
                   <li onClick={handleStopBubble} data-active="product-list" className={cx('nav-item')}>
                     <Link
                       to="/admin/manage-users"
-                      className={cx('nav-link', { active: location.pathname === '/admin/manage-users' })}
+                      className={cx('nav-link', { active: location.pathname.includes('/admin/manage-users') })}
                       href="#"
                     >
                       Danh sách người dùng
@@ -343,7 +343,7 @@ function LayoutAdmin({ children }) {
                     <Link
                       to="/admin/manage-roles"
                       className={cx('nav-link', {
-                        active: location.pathname === '/admin/manage-roles',
+                        active: location.pathname.includes('/admin/manage-roles'),
                       })}
                       href="#"
                     >

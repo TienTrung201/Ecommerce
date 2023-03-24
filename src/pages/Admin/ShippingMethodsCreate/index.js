@@ -195,7 +195,7 @@ function ShippingMethodsCreate() {
                       title="Xóa đơn vị vận chuyển"
                       description="Bạn có chắc chắn muốn xóa đơn vị vận chuyển?"
                       onConfirm={handleDelete}
-                      okText="Xóa vận chuyển"
+                      okText="Xóa"
                       cancelText="Hủy"
                     >
                       <button
