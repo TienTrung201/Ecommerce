@@ -1,12 +1,57 @@
+import { api } from '@/api';
+import { getData } from '@/api/service';
 import sliderImg1 from '@/assets/image/slide/slider-1-home-1.png';
 import sliderImg2 from '@/assets/image/slide/slider-2-home-1.png';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 
 function Home() {
+    const [products, setProducts] = useState([]);
+    // const [categories, setCategories] = useState([]);
+    // const [promotions, setPromotions] = useState([]);
+    // const [discounts,setDiscounts] = useState([]);
+    useEffect(() => {
+        Promise.all([getData(api.products), getData(api.categories), getData(api.promotions)])
+            .then((values) => {
+                const categories = values[1]
+                    .map((categorie) => {
+                        const result = values[2].find((promotion) => promotion.promotionId === categorie.promotionId);
+
+                        return result !== undefined
+                            ? {
+                                  name: result.name,
+                                  promotionId: result.promotionId,
+                                  discountRate: result.discountRate,
+                                  categoriesId: categorie.categoryId,
+                              }
+                            : undefined;
+                    })
+                    .filter((category) => category !== undefined);
+
+                const allProduct = values[0].reduce((acc, item) => {
+                    const discount = categories
+                        .filter((c) =>
+                            item.categoriesId.find((item) => {
+                                return c.categoriesId === item;
+                            }),
+                        )
+                        .sort((a, b) => b.discountRate - a.discountRate)[0];
+
+                    acc.push({ ...item, discountRate: discount.discountRate, categoriesId: discount.categoriesId });
+
+                    return acc;
+                }, []);
+                setProducts(allProduct);
+            })
+            .catch((error) => {
+                console.warn(error);
+            });
+    }, []);
+    //setting slider
     var settings = {
         dots: true,
         infinite: true,
@@ -14,6 +59,8 @@ function Home() {
         slidesToShow: 1,
         slidesToScroll: 1,
     };
+    //setting slider
+
     return (
         <>
             <div className="slide v3">
@@ -56,210 +103,49 @@ function Home() {
                             </div>
                             <div className="col-md-7 col-sm-6 col-xs-12">
                                 <div className="row engoc-row-equal">
-                                    <div className="col-xs-6 col-sm-6 col-md-4 col-lg-4 product-item">
-                                        <div className="product-img">
-                                            <Link href="">
-                                                <img
-                                                    src={require('@/assets/image/home1/product_1b.jpg')}
-                                                    alt=""
-                                                    className="img-responsive"
-                                                />
-                                            </Link>
-                                            <div className="ribbon zoa-sale">
-                                                <span>-15%</span>
+                                    {products.map((product, index) => {
+                                        if (index >= 5) {
+                                            return false;
+                                        }
+                                        return (
+                                            <div
+                                                key={products.productId}
+                                                className="col-xs-6 col-sm-6 col-md-4 col-lg-4 product-item"
+                                            >
+                                                <div className="product-img">
+                                                    <Link href="">
+                                                        <img src={product.image} alt="" className="img-responsive" />
+                                                    </Link>
+                                                    <div className="ribbon zoa-sale">
+                                                        <span>-{product.discountRate}%</span>
+                                                    </div>
+                                                    <div className="product-button-group">
+                                                        <Link href="#" className="zoa-btn zoa-wishlist">
+                                                            <span className="zoa-icon-heart">
+                                                                <FontAwesomeIcon icon={faHeart} />
+                                                            </span>
+                                                        </Link>
+                                                        <Link href="#" className="zoa-btn zoa-addcart">
+                                                            <span className="zoa-icon-cart">
+                                                                <FontAwesomeIcon icon={faCartPlus} />
+                                                            </span>
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                                <div className="product-info text-center">
+                                                    <h3 className="product-title">
+                                                        <Link href="">{product.name}</Link>
+                                                    </h3>
+                                                    <div className="product-price">
+                                                        <span className="old">${product.items[0].price}</span>
+                                                        <span>
+                                                            ${(product.items[0].price * product.discountRate) / 100}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="product-button-group">
-                                                <Link href="#" className="zoa-btn zoa-wishlist">
-                                                    <span className="zoa-icon-heart">
-                                                        <FontAwesomeIcon icon={faHeart} />
-                                                    </span>
-                                                </Link>
-                                                <Link href="#" className="zoa-btn zoa-addcart">
-                                                    <span className="zoa-icon-cart">
-                                                        <FontAwesomeIcon icon={faCartPlus} />
-                                                    </span>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                        <div className="product-info text-center">
-                                            <h3 className="product-title">
-                                                <Link href="">Grosgrain tie cotton top</Link>
-                                            </h3>
-                                            <div className="product-price">
-                                                <span className="old">$25.5</span>
-                                                <span>$20.9</span>
-                                            </div>
-                                            <div className="color-group">
-                                                <Link href="#" className="circle gray" />
-                                                <Link href="#" className="circle yellow active" />
-                                                <Link href="#" className="circle white" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-xs-6 col-sm-6 col-md-4 col-lg-4 product-item">
-                                        <div className="product-img">
-                                            <Link href="">
-                                                <img
-                                                    src={require('@/assets/image/home1/product_2.jpg')}
-                                                    alt=""
-                                                    className="img-responsive"
-                                                />
-                                            </Link>
-                                            <div className="ribbon zoa-hot">
-                                                <span>Hot</span>
-                                            </div>
-                                            <div className="product-button-group">
-                                                <Link href="#" className="zoa-btn zoa-wishlist">
-                                                    <span className="zoa-icon-heart">
-                                                        <FontAwesomeIcon icon={faHeart} />
-                                                    </span>
-                                                </Link>
-                                                <Link href="#" className="zoa-btn zoa-addcart">
-                                                    <span className="zoa-icon-cart">
-                                                        <FontAwesomeIcon icon={faCartPlus} />
-                                                    </span>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                        <div className="product-info text-center">
-                                            <h3 className="product-title">
-                                                <Link href="">Grosgrain tie cotton top</Link>
-                                            </h3>
-                                            <div className="product-price">
-                                                <span>$20.9</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-xs-6 col-sm-6 col-md-4 col-lg-4 product-item">
-                                        <div className="product-img">
-                                            <Link href="">
-                                                <img
-                                                    src={require('@/assets/image/home1/product_3.jpg')}
-                                                    alt=""
-                                                    className="img-responsive"
-                                                />
-                                            </Link>
-                                            <div className="ribbon zoa-new">
-                                                <span>New</span>
-                                            </div>
-                                            <div className="product-button-group">
-                                                <Link href="#" className="zoa-btn zoa-wishlist">
-                                                    <span className="zoa-icon-heart">
-                                                        <FontAwesomeIcon icon={faHeart} />
-                                                    </span>
-                                                </Link>
-                                                <Link href="#" className="zoa-btn zoa-addcart">
-                                                    <span className="zoa-icon-cart">
-                                                        <FontAwesomeIcon icon={faCartPlus} />
-                                                    </span>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                        <div className="product-info text-center">
-                                            <h3 className="product-title">
-                                                <Link href="">Grosgrain tie cotton top</Link>
-                                            </h3>
-                                            <div className="product-price">
-                                                <span>$20.9</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-xs-6 col-sm-6 col-md-4 col-lg-4 product-item">
-                                        <div className="product-img">
-                                            <Link href="">
-                                                <img
-                                                    src={require('@/assets/image/home1/product_4.jpg')}
-                                                    alt=""
-                                                    className="img-responsive"
-                                                />
-                                            </Link>
-                                            <div className="product-button-group">
-                                                <Link href="#" className="zoa-btn zoa-wishlist">
-                                                    <span className="zoa-icon-heart">
-                                                        <FontAwesomeIcon icon={faHeart} />
-                                                    </span>
-                                                </Link>
-                                                <Link href="#" className="zoa-btn zoa-addcart">
-                                                    <span className="zoa-icon-cart">
-                                                        <FontAwesomeIcon icon={faCartPlus} />
-                                                    </span>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                        <div className="product-info text-center">
-                                            <h3 className="product-title">
-                                                <Link href="">Grosgrain tie cotton top</Link>
-                                            </h3>
-                                            <div className="product-price">
-                                                <span>$20.9</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-xs-6 col-sm-6 col-md-4 col-lg-4 product-item">
-                                        <div className="product-img">
-                                            <Link href="">
-                                                <img
-                                                    src={require('@/assets/image/home1/product_5.jpg')}
-                                                    alt=""
-                                                    className="img-responsive"
-                                                />
-                                            </Link>
-                                            <div className="product-button-group">
-                                                <Link href="#" className="zoa-btn zoa-wishlist">
-                                                    <span className="zoa-icon-heart">
-                                                        <FontAwesomeIcon icon={faHeart} />
-                                                    </span>
-                                                </Link>
-                                                <Link href="#" className="zoa-btn zoa-addcart">
-                                                    <span className="zoa-icon-cart">
-                                                        <FontAwesomeIcon icon={faCartPlus} />
-                                                    </span>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                        <div className="product-info text-center">
-                                            <h3 className="product-title">
-                                                <Link href="">Grosgrain tie cotton top</Link>
-                                            </h3>
-                                            <div className="product-price">
-                                                <span>$20.9</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-xs-6 col-sm-6 col-md-4 col-lg-4 product-item">
-                                        <div className="product-img">
-                                            <Link href="">
-                                                <img
-                                                    src={require('@/assets/image/home1/product_6.jpg')}
-                                                    alt=""
-                                                    className="img-responsive"
-                                                />
-                                            </Link>
-                                            <div className="ribbon zoa-new">
-                                                <span>trend</span>
-                                            </div>
-                                            <div className="product-button-group">
-                                                <Link href="#" className="zoa-btn zoa-wishlist">
-                                                    <span className="zoa-icon-heart">
-                                                        <FontAwesomeIcon icon={faHeart} />
-                                                    </span>
-                                                </Link>
-                                                <Link href="#" className="zoa-btn zoa-addcart">
-                                                    <span className="zoa-icon-cart">
-                                                        <FontAwesomeIcon icon={faCartPlus} />
-                                                    </span>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                        <div className="product-info text-center">
-                                            <h3 className="product-title">
-                                                <Link href="">Grosgrain tie cotton top</Link>
-                                            </h3>
-                                            <div className="product-price">
-                                                <span>$20.9</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>
