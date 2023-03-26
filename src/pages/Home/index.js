@@ -114,7 +114,11 @@ function Home() {
                                                 className="col-xs-6 col-sm-6 col-md-4 col-lg-4 product-item"
                                             >
                                                 <div className="product-img">
-                                                    <Link to={`/product/${product.name}/${product.productId}`}>
+                                                    <Link
+                                                        to={`/product/${product.name.replace(/ /g, '-')}/${
+                                                            product.productId
+                                                        }`}
+                                                    >
                                                         <img src={product.image} alt="" className="img-responsive" />
                                                     </Link>
                                                     <div className="ribbon zoa-sale">
@@ -134,11 +138,7 @@ function Home() {
                                                     </div>
                                                 </div>
                                                 <div className="product-info text-center">
-                                                    <h3 className="product-title">
-                                                        <Link to={`/product/${product.name}/${product.productId}`}>
-                                                            {product.name}
-                                                        </Link>
-                                                    </h3>
+                                                    <h3 className="product-title">{product.name}</h3>
                                                     <div className="product-price">
                                                         <span className="old">${product.items[0].price}</span>
                                                         <span>

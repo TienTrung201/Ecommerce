@@ -1,21 +1,124 @@
 import { api } from '@/api';
 import { getData } from '@/api/service';
+import { optionsSelector } from '@/redux/selector';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
-import { faCartPlus, faChevronDown, faChevronRight, faMinus, faPlus, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faCartPlus, faChevronRight, faMinus, faPlus, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 
 function Product() {
-    //get Product
-    const [product, setProduct] = useState({});
-    const { name, id } = useParams();
+    //filter product
+    const maxProductPrice = useRef();
+    const [productItem, setProductItem] = useState(null);
+    const options = useSelector(optionsSelector);
+    const [sizeOprion, setSizeOption] = useState(null);
+    const [colorOption, setColorOption] = useState(null);
+    const [ItemsProduct, setItemsProduct] = useState([{ optionsId: [] }]);
+    const [message, setMessage] = useState(null);
+
     useEffect(() => {
-        getData(api.products + `/${id}`)
-            .then((data) => {
-                console.log(data.items);
-                setProduct(data);
+        if (ItemsProduct[0].optionsId.length === 2) {
+            if (sizeOprion !== null && colorOption !== null) {
+                // const optionItem=[sizeOprion,colorOption]
+
+                const findItem = ItemsProduct.find(
+                    (item) =>
+                        item.optionsId.find((o) => o === sizeOprion) && item.optionsId.find((o) => o === colorOption),
+                );
+                if (findItem) {
+                    setProductItem(findItem);
+                } else {
+                    setProductItem(null);
+                }
+            }
+        }
+        // console.log(ItemsProduct[0].optionsId.length);
+        if (ItemsProduct[0].optionsId.length === 1) {
+            if (sizeOprion !== null || colorOption !== null) {
+                const findItem = ItemsProduct.find(
+                    (item) =>
+                        item.optionsId.find((o) => o === sizeOprion) || item.optionsId.find((o) => o === colorOption),
+                );
+                if (findItem) {
+                    setProductItem(findItem);
+                } else {
+                    setProductItem(null);
+                }
+            }
+        }
+    }, [ItemsProduct, sizeOprion, colorOption]);
+
+    useEffect(() => {
+        if (productItem === null) {
+            if (sizeOprion === null || colorOption === null) {
+                setMessage('Chọn sản phẩm!');
+            } else {
+                setMessage('Lựa chọn này không còn!');
+            }
+        }
+        console.log(productItem);
+    }, [productItem, sizeOprion, colorOption]);
+
+    //filter product
+
+    //productItem
+    const [optionItem, setOptionItem] = useState([]);
+
+    // productItem
+
+    //get Product
+    const { id } = useParams();
+    const [product, setProduct] = useState({});
+    const [priceRangeProduct, setPriceRangeProduct] = useState([]);
+
+    useEffect(() => {
+        Promise.all([getData(api.products + `/${id}`), getData(api.categories), getData(api.promotions)])
+            .then((values) => {
+                // console.log(values[0]);
+                const categoriesProduct = values[2]
+                    .map((categorie) => {
+                        const result = values[1].find((promotion) => promotion.promotionId === categorie.promotionId);
+                        // console.log(result);
+                        return result !== undefined
+                            ? {
+                                  name: result.name,
+                                  promotionId: result.promotionId,
+                                  discountRate: categorie.discountRate,
+                                  categoryId: result.categoryId,
+                              }
+                            : {
+                                  name: categorie.name,
+                                  promotionId: categorie.promotionId,
+                                  discountRate: 0,
+                                  categoryId: result.categoryId,
+                              };
+                    })
+                    .filter((category) => category !== undefined);
+                // console.log(categoriesProduct);
+                const discount = categoriesProduct
+                    .filter((c) =>
+                        values[0].categoriesId.find((p) => {
+                            return c.categoryId === p;
+                        }),
+                    )
+                    .sort((a, b) => b.discountRate - a.discountRate)[0];
+                values[0].items.forEach((element) => {
+                    const a = [...element.optionsId];
+
+                    setOptionItem((prev) =>
+                        [...prev, ...a].filter((value, index, self) => {
+                            return self.indexOf(value) === index;
+                        }),
+                    );
+                });
+                setItemsProduct(values[0].items);
+                maxProductPrice.current = values[0].items.sort((a, b) => b.price - a.price)[0].price;
+                setPriceRangeProduct(values[0].items.sort((a, b) => b.price - a.price));
+                setProduct({ ...values[0], discountRate: discount.discountRate });
+                // setProductItem(values[0].items.sort((a, b) => b.price - a.price)[0]);
             })
             .catch((error) => {
                 console.log(error);
@@ -32,9 +135,22 @@ function Product() {
     //Change Description and Review
     //set quantity product
     const [productQuantity, setProductQuantity] = useState(1);
+    useEffect(() => {
+        if (productItem !== null) {
+            if (productItem.qtyInStock < productQuantity) {
+                setMessage(`còn ${productItem.qtyInStock} sản phẩm trong kho!`);
+            } else {
+                setMessage(null);
+            }
+        }
+    }, [productItem, productQuantity]);
     const handleChangeQuantityProduct = (e) => {
         if (!isNaN(e.target.value)) {
-            setProductQuantity(e.target.value === '' ? 1 : parseInt(e.target.value));
+            if (e.target.value === '0') {
+                setProductQuantity(1);
+            } else {
+                setProductQuantity(e.target.value === '' ? 1 : parseInt(e.target.value));
+            }
         }
     };
     const handlePlus = () => {
@@ -126,7 +242,7 @@ function Product() {
                             <div className="flex product-img-slide">
                                 <div className="product-images">
                                     <div className="ribbon zoa-sale">
-                                        <span>-15%</span>
+                                        <span>-{product.discountRate}%</span>
                                     </div>
                                     <Slider
                                         asNavFor={nav2}
@@ -134,8 +250,14 @@ function Product() {
                                         {...settings}
                                         className="main-img js-product-slider"
                                     >
+                                        <Link to="#" className="hover-images effect">
+                                            <img src={product.image} alt="" className="img-responsive" />
+                                        </Link>
                                         {product.items &&
-                                            product.items.map((p) => {
+                                            product.items.map((p, index) => {
+                                                if (index >= 4) {
+                                                    return false;
+                                                }
                                                 return (
                                                     <Link key={p.productItemId} to="#" className="hover-images effect">
                                                         <img src={p.image} alt="" className="img-responsive" />
@@ -150,11 +272,19 @@ function Product() {
                                     {...settingsListImage}
                                     className="multiple-img-list-ver2 js-click-product slick-vertical slick-clone"
                                 >
+                                    <div className="product-col">
+                                        <div className="img active">
+                                            <img src={product.image} alt="" className="img-responsive" />
+                                        </div>
+                                    </div>
                                     {product.items &&
-                                        product.items.map((p) => {
+                                        product.items.map((p, index) => {
+                                            if (index >= 4) {
+                                                return false;
+                                            }
                                             return (
-                                                <div className="product-col">
-                                                    <div className="img active">
+                                                <div key={p.productItemId} className="product-col">
+                                                    <div className="img ">
                                                         <img src={p.image} alt="" className="img-responsive" />
                                                     </div>
                                                 </div>
@@ -166,11 +296,23 @@ function Product() {
                         <div className="col-xs-12 col-sm-6 col-md-6">
                             <div className="single-product-info product-info product-grid-v2">
                                 <h3 className="product-title">
-                                    <Link to="#">T-shirt Smooth</Link>
+                                    <Link to="#">{product.name}</Link>
                                 </h3>
                                 <div className="product-price">
-                                    <span className="old thin">$59.00</span>
-                                    <span>$29.00</span>
+                                    <span className="old thin">${maxProductPrice.current}</span>
+                                    <span>
+                                        {productItem !== null
+                                            ? (productItem.price * product.discountRate) / 100 + '$'
+                                            : priceRangeProduct.length !== 0
+                                            ? `$${
+                                                  (priceRangeProduct.slice(-1)[0].price * product.discountRate) / 100
+                                              } - $${
+                                                  (priceRangeProduct.slice(0, 1)[0].price * product.discountRate) / 100
+                                              }`
+                                            : priceRangeProduct.length === 1
+                                            ? `$${(priceRangeProduct.slice(-1)[0].price * product.discountRate) / 100}`
+                                            : ''}
+                                    </span>
                                 </div>
                                 <div className="flex product-rating">
                                     <div className="group-star">
@@ -193,37 +335,74 @@ function Product() {
                                     <div className="number-rating">( 02 reviews )</div>
                                 </div>
                                 <div className="short-desc">
-                                    <p className="product-desc">
-                                        Round neck sweater with long sleeves. Features a knotted opening in the <br />{' '}
-                                        front. Phasellus gravida dolor in sem placerat sodales lullam feugiat non <br />
-                                        dolor id commodo.
-                                    </p>
+                                    <p className="product-desc">{product.description}</p>
                                 </div>
+                                {message !== null ? <p className="notification">{message}</p> : false}
+
                                 <div className="color-group">
-                                    <label>Color :</label>
-                                    <Link to="#" className="circle gray" />
-                                    <Link to="#" className="circle active yellow" />
-                                    <Link to="#" className="circle white" />
+                                    {/* <label>Color :</label> */}
+                                    {optionItem.map((o) => {
+                                        let activeOption;
+                                        const optionValue = options.find((value) => {
+                                            if (value.productOptionId === o && value.value.startsWith('#')) {
+                                                activeOption = value.productOptionId;
+                                            }
+                                            return value.productOptionId === o && value.value.startsWith('#');
+                                        });
+                                        if (optionValue) {
+                                            return (
+                                                <Link
+                                                    onClick={() => {
+                                                        setColorOption(activeOption);
+                                                    }}
+                                                    key={optionValue.productOptionId}
+                                                    to="#"
+                                                    style={{ background: optionValue.value }}
+                                                    className={
+                                                        colorOption === activeOption ? 'circle active' : 'circle'
+                                                    }
+                                                ></Link>
+                                            );
+                                        } else {
+                                            return false;
+                                        }
+                                    })}
                                 </div>
                                 <div className="product-size">
                                     <div className="size-group">
-                                        <label>Size :</label>
-                                        <select
-                                            className="single-option-selector"
-                                            data-option="option1"
-                                            id="productSelect-option-0"
-                                        >
-                                            <option value="S">S</option>
-                                            <option value="L">L</option>
-                                            <option value="XL">XL</option>
-                                        </select>
-                                        <i className="iconDown">
-                                            <FontAwesomeIcon icon={faChevronDown} />
-                                        </i>{' '}
+                                        {/* <label>Size :</label> */}
+                                        <div className="size-option">
+                                            {optionItem.map((o) => {
+                                                let activeOption;
+                                                const optionValue = options.find((value) => {
+                                                    if (value.productOptionId === o && !value.value.startsWith('#')) {
+                                                        activeOption = value.productOptionId;
+                                                    }
+                                                    return value.productOptionId === o && !value.value.startsWith('#');
+                                                });
+                                                if (optionValue) {
+                                                    return (
+                                                        <button
+                                                            onClick={() => {
+                                                                setSizeOption(activeOption);
+                                                            }}
+                                                            key={optionValue.productOptionId}
+                                                            type="button"
+                                                            className={
+                                                                activeOption === sizeOprion
+                                                                    ? 'size-button active'
+                                                                    : 'size-button'
+                                                            }
+                                                        >
+                                                            {optionValue.value}ml
+                                                        </button>
+                                                    );
+                                                } else {
+                                                    return false;
+                                                }
+                                            })}
+                                        </div>
                                     </div>
-                                    <Link to="" className="size-guide">
-                                        Size guide
-                                    </Link>
                                 </div>
                                 <div className="single-product-button-group">
                                     <div className="flex align-items-center element-button">
@@ -254,7 +433,14 @@ function Product() {
                                                 <FontAwesomeIcon icon={faPlus} />
                                             </button>
                                         </div>
-                                        <Link to="" className="zoa-btn zoa-addcart">
+                                        <Link
+                                            to=""
+                                            className={
+                                                message !== null
+                                                    ? 'button-unauthorized zoa-btn zoa-addcart'
+                                                    : 'zoa-btn zoa-addcart'
+                                            }
+                                        >
                                             <i className="zoa-icon-cart" />
                                             add to cart
                                         </Link>
@@ -443,7 +629,7 @@ function Product() {
                                             />
                                         </Link>
                                         <div className="ribbon zoa-sale">
-                                            <span>-15%</span>
+                                            <span>-{product.discountRate}</span>
                                         </div>
                                         <div className="product-button-group">
                                             <Link to="#" className="zoa-btn zoa-wishlist">
@@ -509,7 +695,7 @@ function Product() {
                                             />
                                         </Link>
                                         <div className="ribbon zoa-sale">
-                                            <span>-15%</span>
+                                            <span>-{product.discountRate}%</span>
                                         </div>
                                         <div className="product-button-group">
                                             <Link to="#" className="zoa-btn zoa-wishlist">
