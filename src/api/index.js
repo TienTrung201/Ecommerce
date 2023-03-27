@@ -14,6 +14,9 @@ const api = {
   wishLists: domain + '/api/wishlists',
   shopOrders: domain + '/api/shoporders',
   providers: domain + '/api/providers',
+  registerAdmin: domain + '/api/adminusers/register',
+  loginAdmin: domain + '/api/adminusers/login',
+  adminAccount: domain + '/api/adminusers/account',
 };
 
 export { api };

@@ -2928,7 +2928,7 @@ progress {
 }
 
 .row {
-  --bs-gutter-x: 40px;
+  --bs-gutter-x: 0;
   --bs-gutter-y: 0;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -4591,6 +4591,9 @@ progress {
     transition: none;
   }
 }
+.form-control:hover:not(:disabled):not([readonly]) {
+  border-color: #86b7fe !important;
+}
 .form-control:hover:not(:disabled):not([readonly])::file-selector-button {
   background-color: #dde0e3;
 }
@@ -6065,11 +6068,10 @@ fieldset:disabled .btn {
 
 .btn-link {
   font-weight: 400;
-  color: #0d6efd;
-  text-decoration: underline;
+  color: #b66dff;
 }
 .btn-link:hover {
-  color: #0a58ca;
+  color: #9c3bfd;
 }
 .btn-link:disabled,
 .btn-link.disabled {
@@ -10837,7 +10839,7 @@ fieldset:disabled .btn {
 }
 
 .fs-6 {
-  font-size: 1rem !important;
+  font-size: 1.3rem !important;
 }
 
 .fst-italic {
@@ -14500,7 +14502,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif !important;
   font-weight: 500;
 }
 
@@ -16421,7 +16423,7 @@ code {
   background: linear-gradient(to right, #da8cff, #9a55ff);
   border: 0;
   -webkit-transition: opacity 0.3s ease;
-  transition: opacity 0.3s ease;
+  transition: all 0.15s ease-in-out;
 }
 .btn-gradient-primary:not([disabled]):not(.disabled):active,
 .btn-gradient-primary:not([disabled]):not(.disabled).active,
@@ -16431,6 +16433,9 @@ code {
 }
 .btn-gradient-primary:hover {
   opacity: 0.8;
+}
+.btn-gradient-primary:active:focus {
+  box-shadow: 0 0 0 0.25rem rgba(155, 93, 217, 0.5);
 }
 .btn-gradient-primary:not(.btn-gradient-light) {
   color: #ffffff;
@@ -17411,7 +17416,7 @@ code {
 
 /* Forms */
 .form-group {
-  margin-bottom: 2.4rem;
+  margin-bottom: 1.6rem;
 }
 
 .input-group-append,
@@ -17437,6 +17442,7 @@ code {
 .form-control:focus {
   background-color: #ffffff;
   border-color: #86b7fe !important;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
   color: #000000;
   outline: none;
 }
@@ -18262,11 +18268,11 @@ dl li {
   background: #fed713;
 }
 .navbar .navbar-menu-wrapper .navbar-nav .nav-item.nav-profile .nav-link .nav-profile-text {
-  margin-left: 2rem;
+  margin-left: 1.2rem;
 }
 .rtl .navbar .navbar-menu-wrapper .navbar-nav .nav-item.nav-profile .nav-link .nav-profile-text {
   margin-left: 0;
-  margin-right: 2rem;
+  margin-right: 1.2rem;
 }
 .navbar .navbar-menu-wrapper .navbar-nav .nav-item.nav-profile .nav-link .nav-profile-text p {
   line-height: 1;
@@ -18944,6 +18950,31 @@ dl li {
 
 .border-hide {
   border: 1px solid #fff !important;
+}
+
+.object-fit-cover {
+  object-fit: cover;
+}
+
+.rounded-12 {
+  border-radius: 1.2rem;
+}
+.rounded-6 {
+  border-radius: 0.6rem !important;
+}
+
+.ff-roboto {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.text-hight-light {
+  color: #b66dff;
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 th {

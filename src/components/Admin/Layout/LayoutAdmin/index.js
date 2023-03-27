@@ -12,10 +12,15 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Notification from '../../Notification';
 import Collapse from '../../Collapse';
+import { getData } from '@/api/service';
+import { api } from '@/api';
+import { useDispatch, useSelector } from 'react-redux';
+import adminUserSlice from '@/pages/Admin/AdminLogin/adminUserSlice';
+import { adminUserSelector } from '@/redux/selector';
 
 const cx = classNames.bind(styles);
 
@@ -25,13 +30,39 @@ function LayoutAdmin({ children }) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [adminDropdown, setAdminDropdown] = useState(false);
 
+  const dispatch = useDispatch();
+  const adminUser = useSelector(adminUserSelector);
+
+  const navigate = useNavigate();
+
   const location = useLocation();
 
   const handleStopBubble = (e) => {
-    // e.currentTarget.getAttribute('data-active')
-    // e.currentTarget.dataset.active
     e.stopPropagation();
-    // setActiveSubItem(e.currentTarget.dataset.active);
+  };
+
+  // Get current admin information
+  useEffect(() => {
+    getData(api.adminAccount)
+      .then((response) => {
+        dispatch(adminUserSlice.actions.setAdminUser(response.data));
+      })
+      .catch((error) => {
+        if (error.message === 'unauthorized') {
+          navigate('/admin/login');
+        } else {
+          const payload = JSON.parse(error.message);
+          console.warn(payload);
+        }
+      });
+  }, [navigate, dispatch]);
+
+  // Handle sign out
+  const handleSignOut = (e) => {
+    e.preventDefault();
+
+    localStorage.setItem('token', '');
+    window.location.reload();
   };
 
   return (
@@ -105,26 +136,32 @@ function LayoutAdmin({ children }) {
                   className={cx('nav-link', 'dropdown-toggle', 'pointer', 'select-none')}
                 >
                   <div className={cx('nav-profile-img')}>
-                    <img src={images.faces.face1} alt="" />
+                    <img
+                      style={{ border: '1px solid #bba8bff5' }}
+                      src={adminUser.avatar || images.placeholder}
+                      alt=""
+                    />
                     <span className={cx('availability-status', 'online')}></span>
                   </div>
                   <div className={cx('nav-profile-text')}>
-                    <p className={cx('mb-1', 'text-black', 'select-none')}>Xuan Phuccc</p>
+                    <p style={{ width: '120px' }} className={cx('mb-0', 'text-black', 'select-none', 'text-ellipsis')}>
+                      {adminUser.fullName}
+                    </p>
                   </div>
                 </span>
                 <div
-                  className={cx('dropdown-menu', 'navbar-dropdown', { show: adminDropdown })}
-                  aria-labelledby="profileDropdown"
+                  style={{ overflow: 'hidden' }}
+                  className={cx('dropdown-menu', 'navbar-dropdown', 'rounded-6', { show: adminDropdown })}
                 >
                   <span className={cx('dropdown-item', 'pointer')}>
-                    <i className={cx('mdi', 'me-2', 'text-primary')}>
+                    <i className={cx('mdi', 'me-2')}>
                       <FontAwesomeIcon icon={faUser} />
                     </i>
                     Quản lý tài khoản
                   </span>
                   <div className={cx('dropdown-divider')}></div>
-                  <span className={cx('dropdown-item', 'pointer')} href="#">
-                    <i className={cx('mdi', 'me-2', 'text-danger')}>
+                  <span onClick={handleSignOut} className={cx('dropdown-item', 'pointer')} href="#">
+                    <i className={cx('mdi', 'me-2')}>
                       <FontAwesomeIcon icon={faArrowRightFromBracket} />
                     </i>
                     Đăng xuất
@@ -240,13 +277,21 @@ function LayoutAdmin({ children }) {
               <li className={cx('nav-item', 'nav-profile')}>
                 <span href="#" className={cx('nav-link', 'pointer')}>
                   <div className={cx('nav-profile-image')}>
-                    <img src={images.faces.face1} alt="profile" />
+                    <img
+                      style={{ border: '1px solid #bba8bff5' }}
+                      src={adminUser.avatar || images.placeholder}
+                      alt="profile"
+                    />
                     <span className={cx('login-status', 'online')}></span>
                     {/* <!--change to offline or busy as needed--> */}
                   </div>
                   <div className={cx('nav-profile-text', 'd-flex', 'flex-column')}>
-                    <span className={cx('font-weight-bold', 'mb-2')}>Xuan Phuccc</span>
-                    <span className={cx('text-secondary', 'text-small')}>Project Manager</span>
+                    <span style={{ width: '150px' }} className={cx('font-weight-bold', 'mb-2', 'text-ellipsis')}>
+                      {adminUser.fullName}
+                    </span>
+                    <span style={{ width: '150px' }} className={cx('text-secondary', 'text-small', 'text-ellipsis')}>
+                      {adminUser.email}
+                    </span>
                   </div>
                   <i className={cx('mdi', 'mdi-bookmark-check', 'text-success', 'nav-profile-badge')}></i>
                 </span>
