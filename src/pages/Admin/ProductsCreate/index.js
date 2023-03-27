@@ -49,7 +49,7 @@ function ProductsCreate() {
 
   const navigate = useNavigate();
 
-  // ------ Get dependen data ------
+  // ------ Get dependen data -------
   useEffect(() => {
     // Get providers
     getData(api.providers)
