@@ -1,24 +1,24 @@
-import images from '@/assets/admin/images';
+import classNames from 'classnames/bind';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
+import images from '@/assets/admin/images';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Collapse, Divider, Image, Input, Popconfirm, Select, Space } from 'antd';
-import classNames from 'classnames/bind';
+import { Button, Divider, Image, Input, Popconfirm, Select, Space } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { deleteData, getData, postData, updateData } from '@/api/service';
-import { api } from '@/api';
 import { useDispatch } from 'react-redux';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { uploadFile } from '@/firebase/service';
 import ItemsTable from '@/components/Admin/Products/ItemsTable';
 
-const { Panel } = Collapse;
+import { deleteData, getData, postData, updateData } from '@/api/service';
+import { api } from '@/api';
+
+import TextEditor from '@/components/Admin/TextEditor';
 
 const cx = classNames.bind(styles);
 
 function ProductsCreate() {
-  const [product, setProduct] = useState({});
   const [providers, setProviders] = useState([]);
   const [categories, setCategories] = useState([]);
   const [productOptions, setProductOptions] = useState([]);
@@ -86,7 +86,6 @@ function ProductsCreate() {
         .then((data) => {
           console.log(data);
           // Product
-          setProduct(data);
           setProductNameInput(data.name);
           setProductDescInput(data.description);
           setProductImageInput({ image: data.image, imagePreview: data.image });
@@ -117,8 +116,8 @@ function ProductsCreate() {
     setProductNameInput(e.target.value);
   };
 
-  const handleProducDescChange = (e) => {
-    setProductDescInput(e.target.value);
+  const handleProductDescChange = (value) => {
+    setProductDescInput(value);
   };
 
   const handleProductImageChange = (e) => {
@@ -397,13 +396,7 @@ function ProductsCreate() {
                 {/* Product description */}
                 <div className={cx('form-group')}>
                   <label htmlFor="exampleTextarea1">Nội dung</label>
-                  <textarea
-                    onChange={handleProducDescChange}
-                    value={productDescInput}
-                    className={cx('form-control', 'border-secondary')}
-                    id="exampleTextarea1"
-                    rows="10"
-                  ></textarea>
+                  <TextEditor onChange={handleProductDescChange} editorState={productDescInput} />
                 </div>
                 {/* End Product description */}
 
@@ -446,37 +439,9 @@ function ProductsCreate() {
                     {/* Options information */}
                     <div className={cx('col-md-9')}>
                       <div className={cx('row', 'g-4')}>
-                        {/* SKU input */}
-                        <div className={cx('col-md-6')}>
-                          <label htmlFor="exampleInputName1">SKU *</label>
-                          <input
-                            onChange={handleItemSkuChange}
-                            value={itemSku}
-                            type="text"
-                            className={cx('form-control', 'form-control-sm', 'border-secondary')}
-                            id="exampleInputName1"
-                            placeholder="Nhập mã SKU"
-                          />
-                        </div>
-                        {/* End SKU input */}
-
-                        {/* Quantity input */}
-                        <div className={cx('col-md-6')}>
-                          <label htmlFor="exampleInputName1">Số lượng *</label>
-                          <input
-                            onChange={handleItemQtyChange}
-                            value={itemQty}
-                            type="number"
-                            className={cx('form-control', 'form-control-sm', 'border-secondary')}
-                            id="exampleInputName1"
-                            placeholder="Nhập số lượng"
-                          />
-                        </div>
-                        {/* End Quantity input */}
-
                         {/* Select properties */}
                         <div className={cx('col-md-12')}>
-                          <label htmlFor="exampleInputName1">Thuộc tính</label>
+                          <label htmlFor="inputProperties">Thuộc tính</label>
                           <Select
                             onChange={handleItemPropertiesChange}
                             value={itemProperties}
@@ -484,29 +449,48 @@ function ProductsCreate() {
                             placeholder="Chọn thuộc tính"
                             style={{ width: '100%' }}
                             options={productOptionsPreview}
+                            id="inputProperties"
                           />
                         </div>
                         {/* End Select properties */}
 
-                        {/* Add more properties */}
-                        <div className={cx('col-md-12')}>
-                          <Collapse ghost>
-                            <Panel header="Thêm thuộc tính">
-                              <p>This is panel header 1</p>
-                            </Panel>
-                          </Collapse>
+                        {/* SKU input */}
+                        <div className={cx('col-md-6')}>
+                          <label htmlFor="intputSku">SKU *</label>
+                          <input
+                            onChange={handleItemSkuChange}
+                            value={itemSku}
+                            type="text"
+                            className={cx('form-control', 'form-control-sm', 'border-secondary')}
+                            id="intputSku"
+                            placeholder="Nhập mã SKU"
+                          />
                         </div>
-                        {/* End Add more properties */}
+                        {/* End SKU input */}
+
+                        {/* Quantity input */}
+                        <div className={cx('col-md-6')}>
+                          <label htmlFor="inputQty">Số lượng *</label>
+                          <input
+                            onChange={handleItemQtyChange}
+                            value={itemQty}
+                            type="number"
+                            className={cx('form-control', 'form-control-sm', 'border-secondary')}
+                            id="inputQty"
+                            placeholder="Nhập số lượng"
+                          />
+                        </div>
+                        {/* End Quantity input */}
 
                         {/* Price input */}
                         <div className={cx('col-md-6')}>
-                          <label htmlFor="exampleInputName1">Giá bán</label>
+                          <label htmlFor="inputPrice">Giá bán</label>
                           <input
                             onChange={handleItemPriceChange}
                             value={itemPrice}
                             type="number"
                             className={cx('form-control', 'form-control-sm', 'border-secondary')}
-                            id="exampleInputName1"
+                            id="inputPrice"
                             placeholder="Nhập giá bán"
                           />
                         </div>
@@ -514,13 +498,13 @@ function ProductsCreate() {
 
                         {/* Cost price input */}
                         <div className={cx('col-md-6')}>
-                          <label htmlFor="exampleInputName1">Giá gốc</label>
+                          <label htmlFor="inputCostPrice">Giá gốc</label>
                           <input
                             onChange={handleItemCostPriceChange}
                             value={itemCostPrice}
                             type="number"
                             className={cx('form-control', 'form-control-sm', 'border-secondary')}
-                            id="exampleInputName1"
+                            id="inputCostPrice"
                             placeholder="Nhập giá gốc"
                           />
                         </div>
@@ -562,7 +546,7 @@ function ProductsCreate() {
 
                     {/* Options image */}
                     <div className={cx('col-md-3')}>
-                      <label htmlFor="exampleInputName1">Ảnh</label>
+                      <label htmlFor="">Ảnh</label>
                       <input ref={itemImageInputRef} onChange={handleItemImageChange} hidden type="file" />
                       <div className={cx('d-flex', 'flex-column')}>
                         <Image
@@ -688,13 +672,14 @@ function ProductsCreate() {
               <Divider />
               <h4 className={cx('card-title')}>Phân loại</h4>
               <div className={cx('form-group')}>
-                <label htmlFor="">Hãng sản xuất</label>
+                <label htmlFor="inputProvider">Hãng sản xuất</label>
                 <Select
                   onChange={handleProductProviderIdChange}
                   style={{ width: '100%' }}
                   allowClear
                   value={productProviderId}
                   placeholder="Nhập hãng sản xuất"
+                  id="inputProvider"
                   dropdownRender={(menu) => (
                     <>
                       {menu}
@@ -714,7 +699,7 @@ function ProductsCreate() {
               <Divider />
 
               <div className={cx('form-group')}>
-                <label htmlFor="">Danh mục</label>
+                <label htmlFor="inputCategories">Danh mục</label>
                 <Select
                   onChange={handleProductCategoriesIdChange}
                   value={productCategoriesId}
@@ -722,6 +707,7 @@ function ProductsCreate() {
                   allowClear
                   style={{ width: '100%' }}
                   placeholder="Chọn danh mục"
+                  id="inputCategories"
                   options={categories.map((item) => ({
                     label: item.name,
                     value: item.categoryId,

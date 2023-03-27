@@ -1,16 +1,31 @@
+function getToken() {
+  return localStorage.getItem('token');
+}
+
+async function checkedResponse(response) {
+  switch (response.status) {
+    case 401:
+      throw new Error('unauthorized');
+    case 403:
+      throw new Error('forbidden');
+    case 200:
+      return await response.json();
+    default:
+      const error = await response.json();
+      throw new Error(JSON.stringify(error));
+  }
+}
+
 export async function getData(url = '') {
   const response = await fetch(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${getToken()}`,
     },
   });
 
-  if (response.status !== 200) {
-    throw new Error(response.json());
-  }
-
-  return response.json();
+  return await checkedResponse(response);
 }
 
 export async function postData(url = '', data = {}) {
@@ -23,11 +38,7 @@ export async function postData(url = '', data = {}) {
     body: JSON.stringify(data),
   });
 
-  if (response.status !== 201) {
-    throw new Error(response.json());
-  }
-
-  return response.json();
+  return await checkedResponse(response);
 }
 
 export async function updateData(url = '', data = {}) {
@@ -40,11 +51,7 @@ export async function updateData(url = '', data = {}) {
     body: JSON.stringify(data),
   });
 
-  if (response.status !== 200) {
-    throw new Error(response.json());
-  }
-
-  return response.json();
+  return await checkedResponse(response);
 }
 
 export async function deleteData(url = '') {
@@ -55,9 +62,5 @@ export async function deleteData(url = '') {
     },
   });
 
-  if (response.status !== 200) {
-    throw new Error(response.json());
-  }
-
-  return response.json();
+  return await checkedResponse(response);
 }
