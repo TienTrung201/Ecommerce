@@ -1,0 +1,13 @@
+.wrapper-class {
+  border: 1px solid #d9d9d9;
+  border-radius: 0.6rem;
+  padding: 6px;
+}
+.editor-class {
+  background-color: #fff;
+  padding: 8px;
+  border-radius: 0.6rem;
+}
+.toolbar-class {
+  border-radius: 0.6rem;
+}
