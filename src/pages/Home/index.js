@@ -32,7 +32,7 @@ function Home() {
                     })
                     .filter((category) => category !== undefined);
 
-                const allProduct = values[0].reduce((acc, item) => {
+                const allProduct = values[0].data.reduce((acc, item) => {
                     const discount = categories
                         .filter((c) =>
                             item.categoriesId.find((item) => {
@@ -40,8 +40,11 @@ function Home() {
                             }),
                         )
                         .sort((a, b) => b.discountRate - a.discountRate)[0];
-
-                    acc.push({ ...item, discountRate: discount.discountRate, categoriesId: discount.categoriesId });
+                    acc.push({
+                        ...item,
+                        discountRate: discount === undefined ? 0 : discount.discountRate,
+                        categoriesId: discount === undefined ? 0 : discount.categoriesId,
+                    });
 
                     return acc;
                 }, []);
@@ -121,9 +124,14 @@ function Home() {
                                                     >
                                                         <img src={product.image} alt="" className="img-responsive" />
                                                     </Link>
-                                                    <div className="ribbon zoa-sale">
-                                                        <span>-{product.discountRate}%</span>
-                                                    </div>
+                                                    {product.discountRate === 0 ? (
+                                                        false
+                                                    ) : (
+                                                        <div className="ribbon zoa-sale">
+                                                            <span>-{product.discountRate}%</span>
+                                                        </div>
+                                                    )}
+
                                                     <div className="product-button-group">
                                                         <Link href="#" className="zoa-btn zoa-wishlist">
                                                             <span className="zoa-icon-heart">
@@ -141,9 +149,13 @@ function Home() {
                                                     <h3 className="product-title">{product.name}</h3>
                                                     <div className="product-price">
                                                         <span className="old">${product.items[0].price}</span>
-                                                        <span>
-                                                            ${(product.items[0].price * product.discountRate) / 100}
-                                                        </span>
+                                                        {product.discountRate === 0 ? (
+                                                            <span>${product.items[0].price}</span>
+                                                        ) : (
+                                                            <span>
+                                                                ${(product.items[0].price * product.discountRate) / 100}
+                                                            </span>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>

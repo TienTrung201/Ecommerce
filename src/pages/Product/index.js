@@ -81,7 +81,6 @@ function Product() {
                 const categoriesProduct = values[2]
                     .map((categorie) => {
                         const result = values[1].find((promotion) => promotion.promotionId === categorie.promotionId);
-                        // console.log(result);
                         return result !== undefined
                             ? {
                                   name: result.name,
@@ -105,6 +104,7 @@ function Product() {
                         }),
                     )
                     .sort((a, b) => b.discountRate - a.discountRate)[0];
+
                 values[0].items.forEach((element) => {
                     const a = [...element.optionsId];
 
@@ -117,7 +117,8 @@ function Product() {
                 setItemsProduct(values[0].items);
                 maxProductPrice.current = values[0].items.sort((a, b) => b.price - a.price)[0].price;
                 setPriceRangeProduct(values[0].items.sort((a, b) => b.price - a.price));
-                setProduct({ ...values[0], discountRate: discount.discountRate });
+                setProduct({ ...values[0], discountRate: discount === undefined ? 0 : discount.discountRate });
+
                 // setProductItem(values[0].items.sort((a, b) => b.price - a.price)[0]);
             })
             .catch((error) => {
@@ -242,7 +243,7 @@ function Product() {
                             <div className="flex product-img-slide">
                                 <div className="product-images">
                                     <div className="ribbon zoa-sale">
-                                        <span>-{product.discountRate}%</span>
+                                        {product.discountRate === 0 ? false : <span>-{product.discountRate}%</span>}
                                     </div>
                                     <Slider
                                         asNavFor={nav2}
@@ -302,15 +303,28 @@ function Product() {
                                     <span className="old thin">${maxProductPrice.current}</span>
                                     <span>
                                         {productItem !== null
-                                            ? (productItem.price * product.discountRate) / 100 + '$'
-                                            : priceRangeProduct.length !== 0
-                                            ? `$${
-                                                  (priceRangeProduct.slice(-1)[0].price * product.discountRate) / 100
-                                              } - $${
-                                                  (priceRangeProduct.slice(0, 1)[0].price * product.discountRate) / 100
-                                              }`
+                                            ? product.discountRate === 0
+                                                ? productItem.price + '$'
+                                                : (productItem.price * product.discountRate) / 100 + '$'
+                                            : priceRangeProduct.length > 1
+                                            ? product.discountRate === 0
+                                                ? `$${priceRangeProduct.slice(-1)[0].price} - $${
+                                                      priceRangeProduct.slice(0, 1)[0].price
+                                                  }`
+                                                : `$${
+                                                      (priceRangeProduct.slice(-1)[0].price * product.discountRate) /
+                                                      100
+                                                  } - $${
+                                                      (priceRangeProduct.slice(0, 1)[0].price * product.discountRate) /
+                                                      100
+                                                  }`
                                             : priceRangeProduct.length === 1
-                                            ? `$${(priceRangeProduct.slice(-1)[0].price * product.discountRate) / 100}`
+                                            ? product.discountRate === 0
+                                                ? priceRangeProduct.slice(-1)[0].price + '$'
+                                                : `$${
+                                                      (priceRangeProduct.slice(-1)[0].price * product.discountRate) /
+                                                      100
+                                                  }`
                                             : ''}
                                     </span>
                                 </div>

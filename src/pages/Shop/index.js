@@ -35,7 +35,7 @@ function Shop() {
                     })
                     .filter((category) => category !== undefined);
 
-                const allProduct = values[0].reduce((acc, item) => {
+                const allProduct = values[0].data.reduce((acc, item) => {
                     const discount = categories
                         .filter((c) =>
                             item.categoriesId.find((item) => {
@@ -44,7 +44,11 @@ function Shop() {
                         )
                         .sort((a, b) => b.discountRate - a.discountRate)[0];
 
-                    acc.push({ ...item, discountRate: discount.discountRate, categoriesId: discount.categoriesId });
+                    acc.push({
+                        ...item,
+                        discountRate: discount === undefined ? 0 : discount.discountRate,
+                        categoriesId: discount === undefined ? 0 : discount.categoriesId,
+                    });
 
                     return acc;
                 }, []);
@@ -57,7 +61,23 @@ function Shop() {
             });
     }, []);
     //Products
+    //FilterProduct and Paging
+    const [filterCategory, setFilterCategory] = useState('');
+    const [filterPrice, setFilterPrice] = useState('');
+    const [filterProvider, setFilterProvider] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const handleChangePrice = (setPrice, e) => {
+        if (!isNaN(e.target.value) && !e.target.value.startsWith('0')) {
+            console.log(e.target.value);
+            setPrice(e.target.value);
+        }
+    };
+    //FilterProduct and Paging
 
+    useEffect(() => {
+        console.log(products);
+    }, [filterCategory, filterPrice, filterProvider]);
     //ViewProduct
     const listProduct = useRef();
     const activeView = useRef();
@@ -96,66 +116,6 @@ function Shop() {
                 </ul>
             </div>
             <div className="container container-content">
-                {/* <div className="filter-collection-left hidden-lg hidden-md">
-                    <Link className="btn">
-                        <i style={{ color: '#8888' }} className="zoa-icon-filter">
-                            <FontAwesomeIcon icon={faFilter} />
-                        </i>
-                        Filter
-                    </Link>
-                </div> */}
-                {/* <div className="col-xs-12 hidden-md hidden-lg col-left collection-sidebar" id="filter-sidebar">
-                    <div className="close-sidebar-collection hidden-lg hidden-md">
-                        <span>Filter</span>
-                        <i className="icon_close ion-close" />
-                    </div>
-                    <div className="widget-filter filter-cate no-pd-top">
-                        <h3>Categories</h3>
-                        <ul>
-                            {categories.map((category) => {
-                                return (
-                                    <li key={category.categoriesId}>
-                                        <Link className="active" to="">
-                                            {category.name}
-                                        </Link>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </div>
-
-                    <div className="widget-filter filter-cate filter-size">
-                        <h3>Filter by price</h3>
-                        <ul>
-                            <li>
-                                <Link className="" to="">
-                                    0 - $29
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="">$30 - $59</Link>
-                            </li>
-                            <li>
-                                <Link to="">$60 - $89 </Link>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="widget-filter filter-cate filter-size">
-                        <h3>Filter by brand</h3>
-                        <ul>
-                            {proviers.map((provider) => {
-                                return (
-                                    <li key={provider.providerId}>
-                                        <Link className="" to="">
-                                            {provider.name}
-                                        </Link>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </div>
-                    <Link className="zoa-btn btn-filter">Filter</Link>
-                </div> */}
                 <div className="shop-top">
                     <div className="shop-element left">
                         <ul className="js-filter">
@@ -175,8 +135,18 @@ function Shop() {
                                         <ul>
                                             {categories.map((category) => {
                                                 return (
-                                                    <li key={category.categoriesId}>
-                                                        <Link className="active" to="">
+                                                    <li
+                                                        onClick={() => setFilterCategory('category=' + category.name)}
+                                                        key={category.categoryId}
+                                                    >
+                                                        <Link
+                                                            className={
+                                                                'category=' + category.name === filterCategory
+                                                                    ? 'active'
+                                                                    : ''
+                                                            }
+                                                            to=""
+                                                        >
                                                             {category.name}
                                                         </Link>
                                                     </li>
@@ -188,17 +158,31 @@ function Shop() {
                                     <div className=" widget-filter filter-cate filter-size">
                                         <h3>Filter by price</h3>
                                         <ul>
-                                            <li>
+                                            {/* <li onClick={() => setFilterPrice('0-250')}>
                                                 <Link className="" to="">
-                                                    0 - $29
+                                                    0 - $250
                                                 </Link>
                                             </li>
-                                            <li>
-                                                <Link to="">$30 - $59</Link>
+                                            <li onClick={() => setFilterPrice('250-400')}>
+                                                <Link to="">$250 - $400</Link>
                                             </li>
-                                            <li>
-                                                <Link to="">$60 - $89 </Link>
-                                            </li>
+                                            <li onClick={() => setFilterPrice('400-1000')}>
+                                                <Link to="">$400 - $1000 </Link>
+                                            </li> */}
+                                            <input
+                                                className="filterPrice"
+                                                onChange={(e) => handleChangePrice(setMinPrice, e)}
+                                                value={minPrice}
+                                                type="text"
+                                                placeholder="min"
+                                            />
+                                            <input
+                                                className="filterPrice"
+                                                onChange={(e) => handleChangePrice(setMaxPrice, e)}
+                                                value={maxPrice}
+                                                type="text"
+                                                placeholder="max"
+                                            />
                                         </ul>
                                     </div>
                                     <div className=" widget-filter filter-cate filter-size">
@@ -206,8 +190,18 @@ function Shop() {
                                         <ul>
                                             {proviers.map((provider) => {
                                                 return (
-                                                    <li key={provider.providerId}>
-                                                        <Link className="" to="">
+                                                    <li
+                                                        onClick={() => setFilterProvider('provider=' + provider.name)}
+                                                        key={provider.providerId}
+                                                    >
+                                                        <Link
+                                                            className={
+                                                                'provider=' + provider.name === filterProvider
+                                                                    ? 'active'
+                                                                    : ''
+                                                            }
+                                                            to=""
+                                                        >
                                                             {provider.name}
                                                         </Link>
                                                     </li>
@@ -285,12 +279,17 @@ function Shop() {
                                     className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item"
                                 >
                                     <div className="product-img">
-                                        <Link to="/product">
+                                        <Link to={`/product/${product.name.replace(/ /g, '-')}/${product.productId}`}>
                                             <img src={product.image} alt="" className="img-responsive" />
                                         </Link>
-                                        <div className="ribbon zoa-sale">
-                                            <span>-{product.discountRate}%</span>
-                                        </div>
+                                        {product.discountRate === 0 ? (
+                                            false
+                                        ) : (
+                                            <div className="ribbon zoa-sale">
+                                                <span>-{product.discountRate}%</span>
+                                            </div>
+                                        )}
+
                                         <div className="product-button-group">
                                             <Link to="#" className="zoa-btn zoa-wishlist">
                                                 <span className="zoa-icon-heart">
@@ -307,13 +306,21 @@ function Shop() {
                                     <div className="product-info text-center">
                                         {/* đây là layout 2 */}
                                         <h3 className="product-title">
-                                            <Link to="">{product.name}</Link>
+                                            <Link
+                                                to={`/product/${product.name.replace(/ /g, '-')}/${product.productId}`}
+                                            >
+                                                {product.name}
+                                            </Link>
                                         </h3>
                                         <div className="short-desc">
                                             <p className="product-desc">{product.description}</p>
                                         </div>
                                         <div className="product-price">
-                                            <span>${(product.items[0].price * product.discountRate) / 100}</span>
+                                            {product.discountRate === 0 ? (
+                                                <span>${product.items[0].price}</span>
+                                            ) : (
+                                                <span>${(product.items[0].price * product.discountRate) / 100}</span>
+                                            )}
                                         </div>
                                         <div className="product-bottom-group">
                                             <Link to="#" className="zoa-btn zoa-wishlist">
