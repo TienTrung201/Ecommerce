@@ -10,15 +10,32 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Shop() {
-    //Products
+    //Products  FilterProduct and Paging
+    const navigate = useNavigate();
+    const [filterCategory, setFilterCategory] = useState('');
+    const [filterProvider, setFilterProvider] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const [pageNumber, setPageNumber] = useState(1);
+    const [totalPages, setTotalPages] = useState([]);
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [proviers, setProviders] = useState([]);
     useEffect(() => {
-        Promise.all([getData(api.products), getData(api.categories), getData(api.promotions), getData(api.providers)])
+        const dataQuery = `?${'page=' + pageNumber}${filterCategory !== '' ? '&category=' + filterCategory : ''}${
+            filterProvider !== '' ? '&provider=' + filterProvider : ''
+        }${minPrice !== '' ? '&min=' + minPrice : ''}${maxPrice !== '' ? '&max=' + maxPrice : ''}`;
+        navigate(`/shop${dataQuery}`);
+        console.log(dataQuery);
+        Promise.all([
+            getData(api.products + dataQuery),
+            getData(api.categories),
+            getData(api.promotions),
+            getData(api.providers),
+        ])
             .then((values) => {
                 const categories = values[1]
                     .map((categorie) => {
@@ -55,29 +72,54 @@ function Shop() {
                 setProviders(values[3]);
                 setCategories(values[1]);
                 setProducts(allProduct);
+                const pageSize = [];
+                for (let i = 1; i <= values[0].totalPages; i++) {
+                    pageSize.push(i);
+                }
+                setTotalPages(pageSize);
             })
             .catch((error) => {
                 console.warn(error);
             });
-    }, []);
-    //Products
-    //FilterProduct and Paging
-    const [filterCategory, setFilterCategory] = useState('');
-    const [filterPrice, setFilterPrice] = useState('');
-    const [filterProvider, setFilterProvider] = useState('');
-    const [minPrice, setMinPrice] = useState('');
-    const [maxPrice, setMaxPrice] = useState('');
+    }, [filterCategory, filterProvider, minPrice, maxPrice, navigate, pageNumber]);
+    const handleFilterCategory = (name) => {
+        if (name !== filterCategory) {
+            setFilterCategory(name);
+        } else {
+            setFilterCategory('');
+        }
+        setPageNumber(1);
+    };
+    const handleFilterProvider = (name) => {
+        if (name !== filterProvider) {
+            setFilterProvider(name);
+        } else {
+            setFilterProvider('');
+        }
+
+        setPageNumber(1);
+    };
     const handleChangePrice = (setPrice, e) => {
         if (!isNaN(e.target.value) && !e.target.value.startsWith('0')) {
             console.log(e.target.value);
             setPrice(e.target.value);
+            setPageNumber(1);
         }
     };
-    //FilterProduct and Paging
+    const handleNextPage = () => {
+        if (pageNumber < totalPages.length) {
+            setPageNumber((prev) => prev + 1);
+        }
+    };
+    const handlePrevPage = () => {
+        if (pageNumber > 1) {
+            setPageNumber((prev) => prev - 1);
+        }
+    };
 
-    useEffect(() => {
-        console.log(products);
-    }, [filterCategory, filterPrice, filterProvider]);
+    //Products  FilterProduct and Paging
+
+    useEffect(() => {}, [filterCategory, filterProvider, minPrice, maxPrice]);
     //ViewProduct
     const listProduct = useRef();
     const activeView = useRef();
@@ -94,16 +136,9 @@ function Shop() {
     };
     //ViewProduct
 
-    //show filter tablet mobile
-    const filterView = useRef();
-    const handleShowFilter = () => {
-        filterView.current.classList.add('filter-sidebar');
-    };
-    //show filter tablet mobile
-
     return (
         <>
-            <div ref={filterView} className="shop-heading text-center">
+            <div className="shop-heading text-center">
                 <h1>All Clothing</h1>
                 <ul className="breadcrumb">
                     <li>
@@ -136,15 +171,11 @@ function Shop() {
                                             {categories.map((category) => {
                                                 return (
                                                     <li
-                                                        onClick={() => setFilterCategory('category=' + category.name)}
+                                                        onClick={() => handleFilterCategory(category.name)}
                                                         key={category.categoryId}
                                                     >
                                                         <Link
-                                                            className={
-                                                                'category=' + category.name === filterCategory
-                                                                    ? 'active'
-                                                                    : ''
-                                                            }
+                                                            className={category.name === filterCategory ? 'active' : ''}
                                                             to=""
                                                         >
                                                             {category.name}
@@ -158,27 +189,16 @@ function Shop() {
                                     <div className=" widget-filter filter-cate filter-size">
                                         <h3>Filter by price</h3>
                                         <ul>
-                                            {/* <li onClick={() => setFilterPrice('0-250')}>
-                                                <Link className="" to="">
-                                                    0 - $250
-                                                </Link>
-                                            </li>
-                                            <li onClick={() => setFilterPrice('250-400')}>
-                                                <Link to="">$250 - $400</Link>
-                                            </li>
-                                            <li onClick={() => setFilterPrice('400-1000')}>
-                                                <Link to="">$400 - $1000 </Link>
-                                            </li> */}
                                             <input
                                                 className="filterPrice"
-                                                onChange={(e) => handleChangePrice(setMinPrice, e)}
+                                                onChange={(e) => handleChangePrice(setMinPrice, e, 'min')}
                                                 value={minPrice}
                                                 type="text"
                                                 placeholder="min"
                                             />
                                             <input
                                                 className="filterPrice"
-                                                onChange={(e) => handleChangePrice(setMaxPrice, e)}
+                                                onChange={(e) => handleChangePrice(setMaxPrice, e, 'max')}
                                                 value={maxPrice}
                                                 type="text"
                                                 placeholder="max"
@@ -191,15 +211,11 @@ function Shop() {
                                             {proviers.map((provider) => {
                                                 return (
                                                     <li
-                                                        onClick={() => setFilterProvider('provider=' + provider.name)}
+                                                        onClick={() => handleFilterProvider()}
                                                         key={provider.providerId}
                                                     >
                                                         <Link
-                                                            className={
-                                                                'provider=' + provider.name === filterProvider
-                                                                    ? 'active'
-                                                                    : ''
-                                                            }
+                                                            className={provider.name === filterProvider ? 'active' : ''}
                                                             to=""
                                                         >
                                                             {provider.name}
@@ -341,9 +357,40 @@ function Shop() {
                         })}
                     </div>
                     <div className="text-center">
-                        <Link to="" className="zoa-btn btn-loadmore">
-                            Load more
-                        </Link>
+                        <div className="pagination">
+                            <Link
+                                onClick={() => {
+                                    handlePrevPage();
+                                }}
+                            >
+                                &laquo;
+                            </Link>
+                            {totalPages.map((p, i) => {
+                                return (
+                                    <Link
+                                        key={i}
+                                        onClick={(e) => {
+                                            if (pageNumber === 1) {
+                                                e.preventDefault();
+                                            }
+                                            setPageNumber(p);
+                                        }}
+                                        className={p === pageNumber ? 'active' : ''}
+                                        to="#"
+                                    >
+                                        {p}
+                                    </Link>
+                                );
+                            })}
+
+                            <Link
+                                onClick={() => {
+                                    handleNextPage();
+                                }}
+                            >
+                                &raquo;
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>
