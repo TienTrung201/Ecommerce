@@ -145,6 +145,26 @@
         position: relative;
     }
 }
+.pagination {
+    display: inline-block;
+    margin: 20px 0;
+}
+
+.pagination a {
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #464545;
+}
+
+.pagination a.active {
+    background-color: #7e7e7e;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
+}
 // @media (max-width: 1025px) {
 // .shop-top .shop-element.left > ul > li:hover .dropdown-menu,
 // .shop-bottom .shop-element.left > ul > li:hover .dropdown-menu {
