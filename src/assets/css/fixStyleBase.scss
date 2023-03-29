@@ -207,7 +207,7 @@
     }
 
     .shop-element.right {
-        @media (max-width: 1024px) {
+        @media (max-width: 750px) {
             display: none !important;
         }
 
@@ -220,7 +220,7 @@
         .js-filter {
             @media (max-width: 1024px) {
                 width: 100%;
-                justify-content: space-evenly !important;
+                // justify-content: space-evenly !important;
             }
         }
     }
