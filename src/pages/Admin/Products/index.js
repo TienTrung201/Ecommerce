@@ -16,7 +16,7 @@ function Products() {
     useEffect(() => {
         Promise.all([getData(api.products), getData(api.categories), getData(api.providers)])
             .then((values) => {
-                setProducts(values[0]);
+                setProducts(values[0].data);
                 setCategories(values[1]);
                 setProviders(values[2]);
             })
