@@ -35,6 +35,7 @@ import ShopOrders from '@/pages/Admin/ShopOrders';
 import ShopOrdersDetail from '@/pages/Admin/ShopOrdersDetail';
 import AdminLogin from '@/pages/Admin/AdminLogin';
 import AdminRegister from '@/pages/Admin/AdminRegister';
+import Profile from '@/pages/Admin/Profile';
 
 const publicRoutes = [
     { path: '/', component: Home, layout: LayoutHome },
@@ -72,6 +73,7 @@ const privateRoutes = [
     { path: '/admin/orders/:action/:id', component: ShopOrdersDetail, layout: LayoutAdmin },
     { path: '/admin/login', component: AdminLogin, layout: null },
     { path: '/admin/register', component: AdminRegister, layout: null },
+    { path: '/admin/profile', component: Profile, layout: LayoutAdmin },
 ];
 
 export { publicRoutes, privateRoutes };
