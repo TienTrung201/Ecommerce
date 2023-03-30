@@ -1,3 +1,16 @@
+.btn-app-primary {
+    background-color: #bb9b7c !important;
+    color: #fff !important;
+    &:hover {
+        background-color: #ecc9a6 !important;
+    }
+}
+.text-color-app {
+    color: #bb9b7c !important;
+    &:hover {
+        color: #ecc9a6 !important;
+    }
+}
 //header
 .pushmenu-open,
 .pushmenu,
@@ -89,7 +102,16 @@
         }
     }
 }
-
+.user-account {
+    padding-left: 14px !important;
+    a {
+        width: 30px;
+        img {
+            width: 30px;
+            border-radius: 50%;
+        }
+    }
+}
 //header
 //About
 .breadcrumb li .iconRight {
@@ -370,4 +392,14 @@
 }
 .displayNone {
     display: none;
+}
+.form-customer .form-group label {
+    margin-bottom: 2px !important;
+}
+.form-customer .form-group input {
+    height: 40px !important;
+}
+.account-tab li a,
+.zoa-product-tabs .tabs li a {
+    font-size: 25px !important;
 }

@@ -9,7 +9,6 @@ import FAQs from '@/pages/FAQs';
 import MyAccount from '@/pages/MyAccount';
 import Page404 from '@/pages/Page404';
 import Shop from '@/pages/Shop';
-import Login from '@/pages/Login';
 
 import LayoutPage from '@/components/Layout/LayoutPage';
 import LayoutHome from '@/components/Layout/LayoutHome';
@@ -35,6 +34,9 @@ import ShopOrders from '@/pages/Admin/ShopOrders';
 import ShopOrdersDetail from '@/pages/Admin/ShopOrdersDetail';
 import AdminLogin from '@/pages/Admin/AdminLogin';
 import AdminRegister from '@/pages/Admin/AdminRegister';
+import SignUp from '@/pages/Login/SignUp';
+import SignIn from '@/pages/Login/SignIn';
+import ForgotPassword from '@/pages/Login/ForgotPasswprd';
 
 const publicRoutes = [
     { path: '/', component: Home, layout: LayoutHome },
@@ -51,7 +53,9 @@ const publicRoutes = [
     { path: '/page404', component: Page404, layout: LayoutPage },
     { path: '/shop', component: Shop, layout: LayoutPage },
     // { path: '/collection', component: Collection, layout: LayoutPage },
-    { path: '/login', component: Login, layout: null },
+    { path: '/user/signup', component: SignUp, layout: null },
+    { path: '/user/signin', component: SignIn, layout: null },
+    { path: '/user/forgotpassword', component: ForgotPassword, layout: null },
 ];
 
 const privateRoutes = [

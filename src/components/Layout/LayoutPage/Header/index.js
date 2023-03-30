@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useRef } from 'react';
 import CartHeader from '@/pages/Cart/CartHeader';
+import UserAccount from '@/components/Admin/Layout/User';
 function Header() {
     //event close open header
     const cart = useRef();
@@ -251,25 +252,7 @@ function Header() {
                                 </Link>
                             </div>
                             <div className="col-md-4 col flex justify-content-end">
-                                <div className="topbar-left">
-                                    <div className="element element-search hidden-xs hidden-sm">
-                                        <Link onClick={handleOpenSearch} className="zoa-icon search-toggle">
-                                            <img src={images.search} alt="menubar" />
-                                        </Link>
-                                    </div>
-                                    <div className="element element-user hidden-xs hidden-sm">
-                                        <Link to="/login" className="zoa-icon js-user">
-                                            <img src={images.user} alt="menubar" />
-                                        </Link>
-                                    </div>
-                                    <div className="element element-cart">
-                                        <Link onClick={handleOpenCart} className="zoa-icon icon-cart">
-                                            <img src={images.cart} alt="menubar" />
-
-                                            <span className="count cart-count">0</span>
-                                        </Link>
-                                    </div>
-                                </div>
+                                <UserAccount onOpenSearch={handleOpenSearch} onOpenCart={handleOpenCart} />
                             </div>
                         </div>
                     </div>

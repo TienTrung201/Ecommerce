@@ -1,8 +1,17 @@
+import { userSelector } from '@/redux/selector';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function MyAccount() {
+    const user = useSelector(userSelector);
+    const [name, setName] = useState(user.fullName);
+    const [phone, setPhone] = useState(user.phoneNumber);
+    const [email, setEmail] = useState(user.email);
+    const [address, setAddress] = useState(user.address);
+    const [avatar, setAvatar] = useState(null);
     return (
         <>
             <div className="container container-content">
@@ -36,12 +45,7 @@ function MyAccount() {
                                                 Account detail
                                             </Link>
                                         </li>
-                                        <li>
-                                            <Link href="#">
-                                                <img src={require('@/assets/image/Icon_Add.jpg')} alt="Icon_User.jpg" />{' '}
-                                                Adderesses
-                                            </Link>
-                                        </li>
+
                                         <li>
                                             <Link href="#">
                                                 <img
@@ -51,28 +55,10 @@ function MyAccount() {
                                                 My orders
                                             </Link>
                                         </li>
-                                        <li>
-                                            <Link href="#">
-                                                <img
-                                                    src={require('@/assets/image/Icon_Upload.jpg')}
-                                                    alt="Icon_User.jpg"
-                                                />{' '}
-                                                Download
-                                            </Link>
-                                        </li>
                                     </ul>
                                 </div>
                                 <div className="login">
                                     <ul className="nav ">
-                                        <li>
-                                            <Link href="#">
-                                                <img
-                                                    src={require('@/assets/image/Icon_Lock.jpg')}
-                                                    alt="Icon_User.jpg"
-                                                />{' '}
-                                                change password
-                                            </Link>
-                                        </li>
                                         <li>
                                             <Link href="#">
                                                 <img src={require('@/assets/image/Icon_Off.jpg')} alt="Icon_User.jpg" />{' '}
@@ -84,39 +70,40 @@ function MyAccount() {
                             </div>
                         </div>
                         <div className="col-md-8 col-sm-8 porfolio">
-                            <ul className="nav nav-tabs">
+                            {/* <ul className="nav nav-tabs">
                                 <li className="active">
                                     <Link href="#home">Billing Adress</Link>
                                 </li>
                                 <li>
                                     <Link href="#menu1">Shipping Address</Link>
                                 </li>
-                            </ul>
+                            </ul> */}
                             <div className="tab-content">
                                 <div id="home" className="tab-pane fade in active">
                                     <div className="form">
                                         <form action="#" method="post">
                                             <div className="row">
                                                 <div className="col-md-6 col-sm-6">
-                                                    <label>Country</label>
+                                                    <label>Name</label>
                                                     <br />
                                                     <input
                                                         type="text"
-                                                        name="country"
-                                                        placeholder="Việt Nam"
+                                                        name="name"
+                                                        placeholder="Name"
                                                         required=""
-                                                        className="country"
+                                                        className="city"
                                                     />
                                                 </div>
+
                                                 <div className="col-md-6 col-sm-6">
-                                                    <label>City /state</label>
+                                                    <label>phone</label>
                                                     <br />
                                                     <input
                                                         type="text"
                                                         name="city"
-                                                        placeholder="Hà nội"
+                                                        placeholder="+84 0123456789"
                                                         required=""
-                                                        className="city"
+                                                        className="phone"
                                                     />
                                                 </div>
                                             </div>
@@ -130,25 +117,25 @@ function MyAccount() {
                                             />
                                             <div className="row">
                                                 <div className="col-md-6 col-sm-6">
-                                                    <label>ZIP</label>
+                                                    <label>Password</label>
                                                     <br />
                                                     <input
                                                         type="text"
-                                                        name="country"
-                                                        placeholder={12345}
+                                                        name="password"
+                                                        placeholder={'******'}
                                                         required=""
                                                         className="zipcode"
                                                     />
                                                 </div>
                                                 <div className="col-md-6 col-sm-6">
-                                                    <label>phone</label>
+                                                    <label>Country</label>
                                                     <br />
                                                     <input
                                                         type="text"
-                                                        name="city"
-                                                        placeholder="+84 0123456789"
+                                                        name="country"
+                                                        placeholder="Việt Nam"
                                                         required=""
-                                                        className="phone"
+                                                        className="country"
                                                     />
                                                 </div>
                                             </div>
