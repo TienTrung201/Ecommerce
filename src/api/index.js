@@ -16,7 +16,9 @@ const api = {
   providers: domain + '/api/providers',
   registerAdmin: domain + '/api/adminusers/register',
   loginAdmin: domain + '/api/adminusers/login',
+  adminUsers: domain + '/api/adminusers',
   adminAccount: domain + '/api/adminusers/account',
+  roles: domain + '/api/roles',
 };
 
 export { api };

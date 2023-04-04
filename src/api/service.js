@@ -9,6 +9,7 @@ async function checkedResponse(response) {
         case 403:
             throw new Error('forbidden');
         case 200:
+        case 201:
             return await response.json();
         default:
             const error = await response.json();
