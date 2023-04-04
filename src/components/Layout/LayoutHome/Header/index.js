@@ -83,7 +83,11 @@ function Header({ isUser }) {
                                 Shop
                             </Link>
                         </li>
-
+                        <li className="level1 active dropdown">
+                            <Link to="/myAccount" title="Shop">
+                                My Account
+                            </Link>
+                        </li>
                         <li className="level1">
                             <Link to="/aboutUs">About Us</Link>
                         </li>

@@ -43,7 +43,11 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                 <div className="user-account element element-user hidden-xs hidden-sm">
                     <Link to="/myaccount">
                         <img
-                            src="https://th.bing.com/th/id/OIP.C57kALwK2NycHXOWwd_0wwHaF6?pid=ImgDet&rs=1"
+                            src={
+                                user.avatar === ''
+                                    ? 'https://allenandclarke.com.au/wp-content/uploads/2020/08/Blank-Man_White-1343x1385px.jpg'
+                                    : user.avatar
+                            }
                             alt="menubar"
                         />
                     </Link>

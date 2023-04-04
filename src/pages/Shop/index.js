@@ -44,7 +44,6 @@ function Shop() {
             filterProvider !== '' ? '&provider=' + filterProvider : ''
         }${minPrice !== '' ? '&min=' + minPrice : ''}${maxPrice !== '' ? '&max=' + maxPrice : ''}`;
         navigate(`/shop${dataQuery}`);
-        console.log(dataQuery);
         Promise.all([
             getData(api.products + dataQuery),
             getData(api.categories),
@@ -123,7 +122,7 @@ function Shop() {
     };
     const handleNextPage = () => {
         if (pageNumber < totalPages.length) {
-            setPageNumber((prev) => prev + 1);
+            setPageNumber((prev) => parseInt(prev) + 1);
         }
     };
     const handlePrevPage = () => {
@@ -374,17 +373,18 @@ function Shop() {
                     {totalPages.length > 1 ? (
                         <div className="text-center">
                             <div className="pagination">
-                                <Link
-                                    onClick={(e) => {
-                                        if (pageNumber === 1) {
-                                            e.preventDefault();
-                                        } else {
+                                {pageNumber === `1` ? (
+                                    false
+                                ) : (
+                                    <Link
+                                        onClick={() => {
                                             handlePrevPage();
-                                        }
-                                    }}
-                                >
-                                    &laquo;
-                                </Link>
+                                        }}
+                                    >
+                                        &laquo;
+                                    </Link>
+                                )}
+
                                 {totalPages.map((p, i) => {
                                     return (
                                         <Link
@@ -402,18 +402,17 @@ function Shop() {
                                         </Link>
                                     );
                                 })}
-
-                                <Link
-                                    onClick={(e) => {
-                                        if (pageNumber === `${totalPages.length}`) {
-                                            e.preventDefault();
-                                        } else {
+                                {pageNumber === `${totalPages.length}` ? (
+                                    false
+                                ) : (
+                                    <Link
+                                        onClick={() => {
                                             handleNextPage();
-                                        }
-                                    }}
-                                >
-                                    &raquo;
-                                </Link>
+                                        }}
+                                    >
+                                        &raquo;
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     ) : (

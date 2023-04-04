@@ -13,12 +13,12 @@ import PaymentMethods from './PaymentMethods';
 function MyAccount() {
     const { infoManagerment } = useParams();
 
-    const user = useSelector(userSelector);
-    const [name, setName] = useState(user.fullName);
-    const [phone, setPhone] = useState(user.phoneNumber);
-    const [email, setEmail] = useState(user.email);
-    const [address, setAddress] = useState(user.address);
-    const [avatar, setAvatar] = useState(null);
+    const handleSignOut = (e) => {
+        e.preventDefault();
+
+        localStorage.setItem('token', '');
+        window.location.reload();
+    };
     return (
         <>
             <div className="container container-content">
@@ -48,7 +48,7 @@ function MyAccount() {
                                                 <i className="icon-menu-user">
                                                     <FontAwesomeIcon icon={faUser} />
                                                 </i>
-                                                Account detail
+                                                Tài khoản
                                             </Link>
                                         </li>
 
@@ -57,7 +57,7 @@ function MyAccount() {
                                                 <i className="icon-menu-user">
                                                     <FontAwesomeIcon icon={faListUl} />
                                                 </i>
-                                                My orders
+                                                Đơn hàng
                                             </Link>
                                         </li>
                                         <li className={infoManagerment === 'address' ? 'active' : ''}>
@@ -65,7 +65,7 @@ function MyAccount() {
                                                 <i className="icon-menu-user">
                                                     <FontAwesomeIcon icon={faAddressCard} />
                                                 </i>
-                                                My Addresses
+                                                Địa chỉ
                                             </Link>
                                         </li>
                                         <li className={infoManagerment === 'paymentMethods' ? 'active' : ''}>
@@ -73,17 +73,17 @@ function MyAccount() {
                                                 <i className="icon-menu-user">
                                                     <FontAwesomeIcon icon={faMoneyBill1} />
                                                 </i>
-                                                My PaymentMethods
+                                                Phương thức thanh toán
                                             </Link>
                                         </li>
                                     </ul>
                                 </div>
                                 <div className="login">
                                     <ul className="nav ">
-                                        <li>
+                                        <li onClick={handleSignOut}>
                                             <Link to="#">
                                                 <img src={require('@/assets/image/Icon_Off.jpg')} alt="Icon_User.jpg" />{' '}
-                                                log out
+                                                Đăng xuất
                                             </Link>
                                         </li>
                                     </ul>

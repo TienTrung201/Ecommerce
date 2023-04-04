@@ -1,6 +1,5 @@
 import { api } from '@/api';
 import { updateData } from '@/api/service';
-import Modal from '@/components/Layout/Modal';
 import { uploadFile } from '@/firebase/service';
 import { userSelector } from '@/redux/selector';
 import { faCameraRetro } from '@fortawesome/free-solid-svg-icons';
@@ -23,9 +22,7 @@ function Account() {
         userName: '',
     });
     const [imgFile, setImgFile] = useState(null);
-    const [imgUrl, setImgUrl] = useState(
-        'https://thuthuatnhanh.com/wp-content/uploads/2019/08/avatar-pikachu-de-thuong.jpg',
-    );
+    const [imgUrl, setImgUrl] = useState('');
     const handleChangeImg = (fileimg) => {
         setImgFile(fileimg);
         setImgUrl(URL.createObjectURL(fileimg));
@@ -39,11 +36,13 @@ function Account() {
         const { fullName, phoneNumber, gender, birthDate, password, avatar, email, userName } = user;
 
         setFormData({ fullName, phoneNumber, gender, birthDate, password, avatar, email, userName });
+        setImgUrl(avatar);
     }, [user]);
     const handleSendForm = async () => {
         if (imgFile) {
             const uploadedItemImg = await uploadFile(imgFile, 'images/avatar-users');
-            const data = { ...formData, avatar: uploadedItemImg.url };
+            const data = { ...formData, password: '123456', avatar: uploadedItemImg.url };
+            console.log(data);
             updateData(api.userAccount, data)
                 .then((response) => {
                     console.log(response);
@@ -52,7 +51,8 @@ function Account() {
                     console.warn(err);
                 });
         } else {
-            updateData(api.userAccount, formData)
+            const data = { ...formData, password: '123456' };
+            updateData(api.userAccount, data)
                 .then((response) => {
                     console.log(response);
                 })
@@ -66,7 +66,7 @@ function Account() {
             {/* <Modal visible={true} title={'hello'} save={'Gửi'} /> */}
             <div id="home" className="tab-pane fade in active">
                 <div className="form fix-form">
-                    <form action="#" method="post">
+                    <div>
                         <div className="row">
                             <div className="col-md-6 col-sm-6 update-avatar-account">
                                 <input
@@ -82,7 +82,17 @@ function Account() {
                                     className=""
                                     ref={file}
                                 />
-                                {imgUrl && <img className="avatar-user-url" src={imgUrl} alt="" />}
+
+                                <img
+                                    className="avatar-user-url"
+                                    src={
+                                        imgUrl === ''
+                                            ? 'https://allenandclarke.com.au/wp-content/uploads/2020/08/Blank-Man_White-1343x1385px.jpg'
+                                            : imgUrl
+                                    }
+                                    alt=""
+                                />
+
                                 <button
                                     onClick={(e) => {
                                         e.preventDefault();
@@ -129,15 +139,19 @@ function Account() {
                             <div className="col-md-6 col-sm-6">
                                 <label>Giới tính</label>
                                 <br />
-                                <input
+                                <select
                                     onChange={handleChange}
                                     value={formData.gender}
                                     type="text"
                                     name="gender"
                                     placeholder="Nam/Nữ"
                                     required=""
-                                    className="city"
-                                />
+                                    className="select-gender"
+                                >
+                                    <option value="">Nam/Nữ</option>
+                                    <option value="0">Nam</option>
+                                    <option value="1">Nữ</option>
+                                </select>
                             </div>
 
                             <div className="col-md-6 col-sm-6">
@@ -178,6 +192,7 @@ function Account() {
                                     placeholder="user123456"
                                     required=""
                                     className="country"
+                                    disabled="true"
                                 />
                             </div>
                             <div className="col-md-6 col-sm-6">
@@ -191,6 +206,7 @@ function Account() {
                                     placeholder={'******'}
                                     required=""
                                     className="zipcode"
+                                    disabled="true"
                                 />
                             </div>
                         </div>
@@ -204,7 +220,7 @@ function Account() {
                         >
                             Save change
                         </button>
-                    </form>
+                    </div>
                 </div>
             </div>
             {/* <div id="menu1" className="tab-pane fade">
