@@ -10,7 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function ManageUsers() {
+function ManageAdminUsers() {
     const [adminUsers, setAdminUser] = useState([]);
 
     const navigate = useNavigate();
@@ -104,4 +104,4 @@ function ManageUsers() {
     );
 }
 
-export default ManageUsers;
+export default ManageAdminUsers;
