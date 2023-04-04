@@ -15479,7 +15479,7 @@ code {
 /* === Components === */
 /* Badges */
 .badge {
-    border-radius: 0.125rem;
+    border-radius: 5rem;
     font-size: 11px;
     font-weight: initial;
     line-height: 1;
@@ -15506,35 +15506,35 @@ code {
 
 .badge-success,
 .preview-list .preview-item .preview-thumbnail .badge.badge-online {
-    border: 1px solid #1bcfb4;
-    background: #1bcfb4;
-    color: #ffffff;
+    border: 1px solid #c0dd78;
+    background: #e9f5ce;
+    color: #467104;
 }
 
 .badge-info,
 .preview-list .preview-item .preview-thumbnail .badge.badge-offline {
-    border: 1px solid #198ae3;
-    background: #198ae3;
-    color: #ffffff;
+    border: 1px solid #94dcf7;
+    background: #d9f5fd;
+    color: #1571bf;
 }
 
 .badge-warning,
 .preview-list .preview-item .preview-thumbnail .badge.badge-busy {
-    border: 1px solid #fed713;
-    background: #fed713;
-    color: #ffffff;
+    border: 1px solid #f5cd6f;
+    background: #feefcb;
+    color: #945703;
 }
 
 .badge-danger {
-    border: 1px solid #fe7c96;
-    background: #fe7c96;
-    color: #ffffff;
+    border: 1px solid #ffc3c9;
+    background: #ffecee;
+    color: #bb2a33;
 }
 
 .badge-light {
-    border: 1px solid #f8f9fa;
-    background: #f8f9fa;
-    color: #ffffff;
+    border: 1px solid #f0f0f0;
+    background: #f5f6f7;
+    color: #686868;
 }
 
 .badge-dark {
@@ -18503,6 +18503,8 @@ dl li {
     // min-height: calc(100vh - 70px);
     height: 100%;
     overflow-y: auto;
+    overflow-y: overlay;
+    // scrollbar-gutter: stable;
     background: #ffffff;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
@@ -18985,11 +18987,14 @@ dl li {
 
 th {
     text-transform: none !important;
+    width: auto !important;
 }
 
 td {
     text-transform: none !important;
 }
+
+
 
 @keyframes scaleVertical {
     from {

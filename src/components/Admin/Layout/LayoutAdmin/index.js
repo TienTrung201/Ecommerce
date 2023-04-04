@@ -414,11 +414,10 @@ function LayoutAdmin({ children }) {
                                         className={cx('nav-item')}
                                     >
                                         <Link
-                                            to="/admin/manage-users"
+                                            to="/admin/manage-admins"
                                             className={cx('nav-link', {
                                                 active: location.pathname.includes('/admin/manage-users'),
                                             })}
-                                            href="#"
                                         >
                                             Danh sách người dùng
                                         </Link>
@@ -445,7 +444,7 @@ function LayoutAdmin({ children }) {
                                 <div className={cx('border-bottom')}>
                                     <h6 className={cx('font-weight-normal', 'mb-3')}>Website</h6>
                                 </div>
-                                <button className={cx('btn', 'btn-lg', 'btn-gradient-primary', 'mt-4')}>
+                                <button className={cx('btn', 'btn-gradient-primary', 'text-ellipsis', 'mt-4')}>
                                     Đến trang bán hàng
                                 </button>
                                 <div className={cx('border-bottom', 'mt-4')}></div>
