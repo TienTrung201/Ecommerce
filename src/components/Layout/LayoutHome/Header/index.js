@@ -6,8 +6,9 @@ import '@/assets/css/fixStyleBase.scss';
 import { faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useRef } from 'react';
 import CartHeader from '@/pages/Cart/CartHeader';
+import UserAccount from '@/components/Admin/Layout/User';
 
-function Header() {
+function Header({ isUser }) {
     //event close open header
     const cart = useRef();
     const menuBar = useRef();
@@ -414,24 +415,7 @@ function Header() {
                                         </Link>
                                     </li>
                                 </ul>
-                                <div className="topbar-left">
-                                    <div className="element element-search hidden-xs hidden-sm">
-                                        <Link onClick={handleOpenSearch} to="#" className="zoa-icon search-toggle">
-                                            <img src={images.search} alt="menubar" />
-                                        </Link>
-                                    </div>
-                                    <div className="element element-user hidden-xs hidden-sm">
-                                        <Link to="/login" className="zoa-icon js-user">
-                                            <img src={images.user} alt="menubar" />
-                                        </Link>
-                                    </div>
-                                    <div onClick={handleOpenCart} className="element element-cart">
-                                        <Link className="zoa-icon icon-cart">
-                                            <img src={images.cart} alt="menubar" />
-                                            <span className="count cart-count">0</span>
-                                        </Link>
-                                    </div>
-                                </div>
+                                <UserAccount onOpenSearch={handleOpenSearch} onOpenCart={handleOpenCart} />
                             </div>
                         </div>
                     </div>

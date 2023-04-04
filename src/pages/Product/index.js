@@ -92,7 +92,7 @@ function Product() {
                                   name: categorie.name,
                                   promotionId: categorie.promotionId,
                                   discountRate: 0,
-                                  categoryId: result.categoryId,
+                                  categoryId: categorie.categoryId,
                               };
                     })
                     .filter((category) => category !== undefined);

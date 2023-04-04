@@ -1,3 +1,16 @@
+.btn-app-primary {
+    background-color: #bb9b7c !important;
+    color: #fff !important;
+    &:hover {
+        background-color: #ecc9a6 !important;
+    }
+}
+.text-color-app {
+    color: #bb9b7c !important;
+    &:hover {
+        color: #ecc9a6 !important;
+    }
+}
 //header
 .pushmenu-open,
 .pushmenu,
@@ -89,8 +102,345 @@
         }
     }
 }
-
+.user-account {
+    padding-left: 14px !important;
+    a {
+        width: 30px;
+        img {
+            width: 30px;
+            border-radius: 50%;
+        }
+    }
+}
 //header
+//myaccount
+label.mail {
+    padding-left: 0 !important;
+}
+.address ul li.active a {
+    color: #222222;
+    position: relative;
+}
+.my-account .Account-Date {
+    padding-right: 20px;
+    &::placeholder {
+        color: #8d8d8d;
+    }
+}
+.my-account {
+    .product-name {
+        .product-img {
+            margin-right: 20px !important;
+        }
+    }
+}
+.fix-form {
+    padding-top: 0 !important;
+}
+.update-avatar-account {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // background-color: #008080;
+    box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    overflow: hidden;
+    width: 150px !important;
+    height: 150px !important;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    .avatar-user-url {
+        width: 100%;
+        // height: 100%;
+        object-fit: cover;
+    }
+    .openChoseFile {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.5);
+        height: 100%;
+        width: 100%;
+        border-radius: 50%;
+        opacity: 0;
+        transition: 0.2s ease-in-out;
+        border: none;
+        &:hover {
+            opacity: 1;
+        }
+        .camera-icon {
+            font-size: 2rem;
+        }
+        // width: 200px;
+    }
+}
+
+tbody tr {
+    border-bottom: 1px solid rgb(207, 207, 207);
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+.cart-table {
+    // border-bottom: 1px solid #222222;
+    .cart-items-bytrung {
+        display: flex;
+        height: 100px;
+        // background-color: #7e7e7e;
+        align-items: center;
+        position: relative;
+        padding-right: 60px;
+
+        .cart-img {
+            width: 80px;
+            height: 80px;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+        .cart-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1rem;
+            padding-left: 20px;
+            .item-name {
+                font-size: 1.4rem;
+                margin-top: 0;
+            }
+            .item-type {
+                font-size: 1.2rem;
+                color: #949090;
+            }
+            .item-quantity {
+                font-size: 1.2rem;
+                color: #949090;
+            }
+        }
+        .cart-total {
+            position: absolute;
+            right: 20px;
+        }
+    }
+    .cart-total-order {
+        display: flex;
+        justify-content: flex-end;
+        .order-total-box {
+            display: flex;
+            width: 200px;
+            justify-content: flex-end;
+            padding-right: 20px;
+            align-items: center;
+            .total-title {
+                font-size: 1.8rem;
+            }
+            .total-price {
+                margin-left: 20px;
+                font-size: 2rem;
+            }
+        }
+    }
+}
+//address account
+.address-list {
+    // margin: 0 auto;
+    // max-width: 600px;
+}
+/* Tiêu đề danh sách */
+.address-list-title {
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+/* Khu vực danh sách địa chỉ */
+.address-list-container {
+    // border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+}
+/* Một địa chỉ */
+.address-list-item {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    // position: relative;
+    margin: 20px 0;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+}
+/* Header của một địa chỉ */
+.address-list-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.address-list-item-edit-button {
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+.address-list-item-header-right {
+    // position: absolute;
+    // right: 0;
+}
+.address-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    // background-color: #f7f7f7;
+    border-radius: 5px;
+}
+
+.address-form__title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.address-form__group {
+    margin-bottom: 20px;
+}
+
+.address-form__label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.address-form__input,
+.address-form__textarea {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.address-form__input:focus,
+.address-form__textarea:focus {
+    border-color: #00bfff;
+    outline: none;
+}
+
+.address-form__button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #00bfff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.address-form__button:hover {
+    background-color: #008080;
+}
+
+.button-app {
+    background-color: #222222;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    font-size: 1.4rem;
+    &:hover {
+        opacity: 0.8;
+    }
+}
+//payment
+.payment-methods {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.payment-methods__title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.payment-methods__list {
+    list-style: none;
+    padding: 0;
+}
+
+.payment-methods__item {
+    margin-bottom: 20px;
+}
+
+.payment-methods__card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 5px;
+}
+.add-payment {
+    background-color: #fff;
+    text-decoration: underline !important;
+}
+
+.payment-methods__card-logo {
+    width: 60px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.payment-methods__card-details {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.payment-methods__card-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.payment-methods__card-number {
+    font-size: 16px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.payment-methods__card-email {
+    font-size: 16px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.payment-methods__card-button {
+    background-color: #008cba;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-methods__card-button:hover {
+    background-color: #005c77;
+}
+.payment-methods__item {
+    padding: 0 !important;
+}
+
+//payment
 //About
 .breadcrumb li .iconRight {
     padding: 0 7px;
@@ -207,7 +557,7 @@
     }
 
     .shop-element.right {
-        @media (max-width: 1024px) {
+        @media (max-width: 750px) {
             display: none !important;
         }
 
@@ -220,7 +570,7 @@
         .js-filter {
             @media (max-width: 1024px) {
                 width: 100%;
-                justify-content: space-evenly !important;
+                // justify-content: space-evenly !important;
             }
         }
     }
@@ -370,4 +720,14 @@
 }
 .displayNone {
     display: none;
+}
+.form-customer .form-group label {
+    margin-bottom: 2px !important;
+}
+.form-customer .form-group input {
+    height: 40px !important;
+}
+.account-tab li a,
+.zoa-product-tabs .tabs li a {
+    font-size: 25px !important;
 }

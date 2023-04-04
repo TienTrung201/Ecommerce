@@ -1,8 +1,24 @@
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { userSelector } from '@/redux/selector';
+import { faAddressCard, faMoneyBill1, faUser } from '@fortawesome/free-regular-svg-icons';
+import { faChevronRight, faListUl } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import Account from './Account';
+import Address from './Address';
+import Order from './Order';
+import PaymentMethods from './PaymentMethods';
 
 function MyAccount() {
+    const { infoManagerment } = useParams();
+
+    const user = useSelector(userSelector);
+    const [name, setName] = useState(user.fullName);
+    const [phone, setPhone] = useState(user.phoneNumber);
+    const [email, setEmail] = useState(user.email);
+    const [address, setAddress] = useState(user.address);
+    const [avatar, setAvatar] = useState(null);
     return (
         <>
             <div className="container container-content">
@@ -27,37 +43,37 @@ function MyAccount() {
                                 </h2>
                                 <div className="address">
                                     <ul className="nav ">
-                                        <li>
-                                            <Link href="#">
-                                                <img
-                                                    src={require('@/assets/image/Icon_User.jpg')}
-                                                    alt="Icon_User.jpg"
-                                                />{' '}
+                                        <li className={infoManagerment === 'account' ? 'active' : ''}>
+                                            <Link to="/myAccount/account">
+                                                <i className="icon-menu-user">
+                                                    <FontAwesomeIcon icon={faUser} />
+                                                </i>
                                                 Account detail
                                             </Link>
                                         </li>
-                                        <li>
-                                            <Link href="#">
-                                                <img src={require('@/assets/image/Icon_Add.jpg')} alt="Icon_User.jpg" />{' '}
-                                                Adderesses
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link href="#">
-                                                <img
-                                                    src={require('@/assets/image/Icon_Listing.jpg')}
-                                                    alt="Icon_User.jpg"
-                                                />{' '}
+
+                                        <li className={infoManagerment === 'order' ? 'active' : ''}>
+                                            <Link to="/myAccount/order">
+                                                <i className="icon-menu-user">
+                                                    <FontAwesomeIcon icon={faListUl} />
+                                                </i>
                                                 My orders
                                             </Link>
                                         </li>
-                                        <li>
-                                            <Link href="#">
-                                                <img
-                                                    src={require('@/assets/image/Icon_Upload.jpg')}
-                                                    alt="Icon_User.jpg"
-                                                />{' '}
-                                                Download
+                                        <li className={infoManagerment === 'address' ? 'active' : ''}>
+                                            <Link to="/myAccount/address">
+                                                <i className="icon-menu-user">
+                                                    <FontAwesomeIcon icon={faAddressCard} />
+                                                </i>
+                                                My Addresses
+                                            </Link>
+                                        </li>
+                                        <li className={infoManagerment === 'paymentMethods' ? 'active' : ''}>
+                                            <Link to="/myAccount/paymentMethods">
+                                                <i className="icon-menu-user">
+                                                    <FontAwesomeIcon icon={faMoneyBill1} />
+                                                </i>
+                                                My PaymentMethods
                                             </Link>
                                         </li>
                                     </ul>
@@ -65,16 +81,7 @@ function MyAccount() {
                                 <div className="login">
                                     <ul className="nav ">
                                         <li>
-                                            <Link href="#">
-                                                <img
-                                                    src={require('@/assets/image/Icon_Lock.jpg')}
-                                                    alt="Icon_User.jpg"
-                                                />{' '}
-                                                change password
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link href="#">
+                                            <Link to="#">
                                                 <img src={require('@/assets/image/Icon_Off.jpg')} alt="Icon_User.jpg" />{' '}
                                                 log out
                                             </Link>
@@ -84,160 +91,10 @@ function MyAccount() {
                             </div>
                         </div>
                         <div className="col-md-8 col-sm-8 porfolio">
-                            <ul className="nav nav-tabs">
-                                <li className="active">
-                                    <Link href="#home">Billing Adress</Link>
-                                </li>
-                                <li>
-                                    <Link href="#menu1">Shipping Address</Link>
-                                </li>
-                            </ul>
-                            <div className="tab-content">
-                                <div id="home" className="tab-pane fade in active">
-                                    <div className="form">
-                                        <form action="#" method="post">
-                                            <div className="row">
-                                                <div className="col-md-6 col-sm-6">
-                                                    <label>Country</label>
-                                                    <br />
-                                                    <input
-                                                        type="text"
-                                                        name="country"
-                                                        placeholder="Việt Nam"
-                                                        required=""
-                                                        className="country"
-                                                    />
-                                                </div>
-                                                <div className="col-md-6 col-sm-6">
-                                                    <label>City /state</label>
-                                                    <br />
-                                                    <input
-                                                        type="text"
-                                                        name="city"
-                                                        placeholder="Hà nội"
-                                                        required=""
-                                                        className="city"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <label>Street address</label>
-                                            <input
-                                                type="text"
-                                                name="city"
-                                                placeholder="no1, trang tien, hoan kiem district"
-                                                required=""
-                                                className="city"
-                                            />
-                                            <div className="row">
-                                                <div className="col-md-6 col-sm-6">
-                                                    <label>ZIP</label>
-                                                    <br />
-                                                    <input
-                                                        type="text"
-                                                        name="country"
-                                                        placeholder={12345}
-                                                        required=""
-                                                        className="zipcode"
-                                                    />
-                                                </div>
-                                                <div className="col-md-6 col-sm-6">
-                                                    <label>phone</label>
-                                                    <br />
-                                                    <input
-                                                        type="text"
-                                                        name="city"
-                                                        placeholder="+84 0123456789"
-                                                        required=""
-                                                        className="phone"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <label className="mail">email</label>
-                                            <br />
-                                            <input
-                                                type="text"
-                                                name="city"
-                                                placeholder="felixdg@gmail.com"
-                                                required=""
-                                                className="gmail"
-                                            />
-                                            <button className="change">Save change</button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div id="menu1" className="tab-pane fade">
-                                    <div className="form">
-                                        <form action="#" method="post">
-                                            <div className="row">
-                                                <div className="col-md-6 col-sm-6">
-                                                    <label>Country</label>
-                                                    <br />
-                                                    <input
-                                                        type="text"
-                                                        name="country"
-                                                        placeholder="Việt Nam"
-                                                        required=""
-                                                        className="country"
-                                                    />
-                                                </div>
-                                                <div className="col-md-6 col-sm-6">
-                                                    <label>City /state</label>
-                                                    <br />
-                                                    <input
-                                                        type="text"
-                                                        name="city"
-                                                        placeholder="Hà nội"
-                                                        required=""
-                                                        className="city"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <label>Street address</label>
-                                            <input
-                                                type="text"
-                                                name="city"
-                                                placeholder="no1, trang tien, hoan kiem district"
-                                                required=""
-                                                className="city"
-                                            />
-                                            <div className="row">
-                                                <div className="col-md-6 col-sm-6">
-                                                    <label>ZIP</label>
-                                                    <br />
-                                                    <input
-                                                        type="text"
-                                                        name="country"
-                                                        placeholder={12345}
-                                                        required=""
-                                                        className="zipcode"
-                                                    />
-                                                </div>
-                                                <div className="col-md-6 col-sm-6">
-                                                    <label>phone</label>
-                                                    <br />
-                                                    <input
-                                                        type="text"
-                                                        name="city"
-                                                        placeholder="+84 0123456789"
-                                                        required=""
-                                                        className="phone"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <label className="mail">email</label>
-                                            <br />
-                                            <input
-                                                type="text"
-                                                name="city"
-                                                placeholder="felixdg@gmail.com"
-                                                required=""
-                                                className="gmail"
-                                            />
-                                            <button className="change">Save change</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                            {infoManagerment === 'account' || infoManagerment === undefined ? <Account /> : false}
+                            {infoManagerment === 'order' ? <Order /> : false}
+                            {infoManagerment === 'address' ? <Address /> : false}
+                            {infoManagerment === 'paymentMethods' ? <PaymentMethods /> : false}
                         </div>
                     </div>
                 </div>
