@@ -1,28 +1,124 @@
+import { api } from '@/api';
+import { updateData } from '@/api/service';
 import Modal from '@/components/Layout/Modal';
+import { uploadFile } from '@/firebase/service';
+import { userSelector } from '@/redux/selector';
+import { faCameraRetro } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 function Account() {
+    const user = useSelector(userSelector);
     const onDateFocus = (e) => (e.target.type = 'date');
     const onDateBlur = (e) => (e.target.type = 'text');
+    const [formData, setFormData] = useState({
+        fullName: '',
+        phoneNumber: '',
+        gender: '',
+        birthDate: '',
+        password: '',
+        avatar: '',
+        email: '',
+        userName: '',
+    });
+    const [imgFile, setImgFile] = useState(null);
+    const [imgUrl, setImgUrl] = useState(
+        'https://thuthuatnhanh.com/wp-content/uploads/2019/08/avatar-pikachu-de-thuong.jpg',
+    );
+    const handleChangeImg = (fileimg) => {
+        setImgFile(fileimg);
+        setImgUrl(URL.createObjectURL(fileimg));
+    };
+    const file = useRef();
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prevState) => ({ ...prevState, [name]: value }));
+    };
+    useEffect(() => {
+        const { fullName, phoneNumber, gender, birthDate, password, avatar, email, userName } = user;
 
+        setFormData({ fullName, phoneNumber, gender, birthDate, password, avatar, email, userName });
+    }, [user]);
+    const handleSendForm = async () => {
+        if (imgFile) {
+            const uploadedItemImg = await uploadFile(imgFile, 'images/avatar-users');
+            const data = { ...formData, avatar: uploadedItemImg.url };
+            updateData(api.userAccount, data)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((err) => {
+                    console.warn(err);
+                });
+        } else {
+            updateData(api.userAccount, formData)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((err) => {
+                    console.warn(err);
+                });
+        }
+    };
     return (
         <div className="tab-content">
             {/* <Modal visible={true} title={'hello'} save={'Gửi'} /> */}
             <div id="home" className="tab-pane fade in active">
-                <div className="form">
+                <div className="form fix-form">
                     <form action="#" method="post">
                         <div className="row">
+                            <div className="col-md-6 col-sm-6 update-avatar-account">
+                                <input
+                                    onChange={(e) => {
+                                        handleChangeImg(e.target.files[0]);
+                                        e.target.value = '';
+                                    }}
+                                    style={{ display: 'none' }}
+                                    type="file"
+                                    name="avatar"
+                                    placeholder=""
+                                    required=""
+                                    className=""
+                                    ref={file}
+                                />
+                                {imgUrl && <img className="avatar-user-url" src={imgUrl} alt="" />}
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        file.current.click();
+                                    }}
+                                    className="openChoseFile"
+                                >
+                                    <FontAwesomeIcon className="camera-icon" icon={faCameraRetro} />
+                                </button>
+                            </div>
+
+                            {/* <div className="col-md-6 col-sm-6"></div> */}
+                        </div>
+                        <div className="row">
                             <div className="col-md-6 col-sm-6">
-                                <label>Name</label>
+                                <label>Tên</label>
                                 <br />
-                                <input type="text" name="name" placeholder="Name" required="" className="city" />
+                                <input
+                                    onChange={handleChange}
+                                    value={formData.fullName}
+                                    type="text"
+                                    name="fullName"
+                                    placeholder="Name"
+                                    required=""
+                                    className="city"
+                                />
                             </div>
 
                             <div className="col-md-6 col-sm-6">
-                                <label>phone</label>
+                                <label>Điện thoại</label>
                                 <br />
                                 <input
+                                    onChange={handleChange}
+                                    value={formData.phoneNumber}
                                     type="text"
-                                    name="city"
+                                    name="phoneNumber"
                                     placeholder="+84 0123456789"
                                     required=""
                                     className="phone"
@@ -33,35 +129,63 @@ function Account() {
                             <div className="col-md-6 col-sm-6">
                                 <label>Giới tính</label>
                                 <br />
-                                <input type="text" name="name" placeholder="Nam/Nữ" required="" className="city" />
+                                <input
+                                    onChange={handleChange}
+                                    value={formData.gender}
+                                    type="text"
+                                    name="gender"
+                                    placeholder="Nam/Nữ"
+                                    required=""
+                                    className="city"
+                                />
                             </div>
 
                             <div className="col-md-6 col-sm-6">
-                                <label>Ngày Sinh</label>
+                                <label>Ngày sinh</label>
                                 <br />
                                 <input
+                                    onChange={handleChange}
+                                    value={formData.birthDate}
                                     onFocus={onDateFocus}
                                     onBlur={onDateBlur}
                                     type="text"
                                     placeholder="Ngày sinh"
-                                    name="city"
+                                    name="birthDate"
                                     className="phone Account-Date"
                                 />
                             </div>
                         </div>
-                        <label>Street address</label>
+                        <label className="mail">Email</label>
+                        <br />
                         <input
+                            onChange={handleChange}
+                            value={formData.email}
                             type="text"
-                            name="city"
-                            placeholder="no1, trang tien, hoan kiem district"
+                            name="email"
+                            placeholder="felixdg@gmail.com"
                             required=""
-                            className="city"
+                            className="gmail"
                         />
                         <div className="row">
                             <div className="col-md-6 col-sm-6">
-                                <label>Password</label>
+                                <label>Tên đăng nhập</label>
                                 <br />
                                 <input
+                                    onChange={handleChange}
+                                    value={formData.userName}
+                                    type="text"
+                                    name="userName"
+                                    placeholder="user123456"
+                                    required=""
+                                    className="country"
+                                />
+                            </div>
+                            <div className="col-md-6 col-sm-6">
+                                <label>Mật khẩu</label>
+                                <br />
+                                <input
+                                    onChange={handleChange}
+                                    value={formData.password}
                                     type="text"
                                     name="password"
                                     placeholder={'******'}
@@ -69,26 +193,21 @@ function Account() {
                                     className="zipcode"
                                 />
                             </div>
-                            <div className="col-md-6 col-sm-6">
-                                <label>Country</label>
-                                <br />
-                                <input
-                                    type="text"
-                                    name="country"
-                                    placeholder="Việt Nam"
-                                    required=""
-                                    className="country"
-                                />
-                            </div>
                         </div>
-                        <label className="mail">email</label>
-                        <br />
-                        <input type="text" name="city" placeholder="felixdg@gmail.com" required="" className="gmail" />
-                        <button className="change">Save change</button>
+
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleSendForm();
+                            }}
+                            className="change"
+                        >
+                            Save change
+                        </button>
                     </form>
                 </div>
             </div>
-            <div id="menu1" className="tab-pane fade">
+            {/* <div id="menu1" className="tab-pane fade">
                 <div className="form">
                     <form action="#" method="post">
                         <div className="row">
@@ -96,6 +215,7 @@ function Account() {
                                 <label>Country</label>
                                 <br />
                                 <input
+                                    onChange={handleChange}
                                     type="text"
                                     name="country"
                                     placeholder="Việt Nam"
@@ -141,7 +261,7 @@ function Account() {
                         <button className="change">Save change</button>
                     </form>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }

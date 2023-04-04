@@ -43,7 +43,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                 <div className="user-account element element-user hidden-xs hidden-sm">
                     <Link to="/myaccount">
                         <img
-                            src="https://scontent.fhan9-1.fna.fbcdn.net/v/t39.30808-6/217787396_1189274101592245_3569643062164622595_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=Qm7J-psdizkAX8BNQKb&_nc_ht=scontent.fhan9-1.fna&oh=00_AfDTC2-xc40hubsUW_AFn5qWujK2JEWkBVMHpG9yoGpB0A&oe=642B62C3"
+                            src="https://th.bing.com/th/id/OIP.C57kALwK2NycHXOWwd_0wwHaF6?pid=ImgDet&rs=1"
                             alt="menubar"
                         />
                     </Link>
