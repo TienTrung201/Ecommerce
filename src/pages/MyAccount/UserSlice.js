@@ -12,6 +12,8 @@ export const userSlice = createSlice({
         password: '',
         phoneNumber: null,
         userName: '',
+        addresses: [],
+        paymentMethods: [],
     },
     reducers: {
         setUser: (state, action) => {
@@ -25,6 +27,8 @@ export const userSlice = createSlice({
             state.password = action.payload.password;
             state.phoneNumber = action.payload.phoneNumber;
             state.userName = action.payload.userName;
+            state.addresses = action.payload.addresses;
+            state.paymentMethods = action.payload.paymentMethods;
         },
     },
 });

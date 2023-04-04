@@ -11,6 +11,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
+        console.log(user);
         getData(api.userAccount)
             .then((response) => {
                 dispatch(userSlice.actions.setUser(response.data));

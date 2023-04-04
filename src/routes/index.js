@@ -50,6 +50,7 @@ const publicRoutes = [
     { path: '/contact', component: Contact, layout: LayoutPage },
     { path: '/fAQs', component: FAQs, layout: LayoutPage },
     { path: '/myAccount', component: MyAccount, layout: LayoutPage },
+    { path: '/myAccount/:infoManagerment', component: MyAccount, layout: LayoutPage },
     { path: '/page404', component: Page404, layout: LayoutPage },
     { path: '/shop', component: Shop, layout: LayoutPage },
     // { path: '/collection', component: Collection, layout: LayoutPage },
