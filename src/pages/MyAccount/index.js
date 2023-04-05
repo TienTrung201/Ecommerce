@@ -11,6 +11,7 @@ import Order from './Order';
 import PaymentMethods from './PaymentMethods';
 
 function MyAccount() {
+    const user = useSelector(userSelector);
     const { infoManagerment } = useParams();
 
     const handleSignOut = (e) => {
@@ -91,10 +92,14 @@ function MyAccount() {
                             </div>
                         </div>
                         <div className="col-md-8 col-sm-8 porfolio">
-                            {infoManagerment === 'account' || infoManagerment === undefined ? <Account /> : false}
-                            {infoManagerment === 'order' ? <Order /> : false}
-                            {infoManagerment === 'address' ? <Address /> : false}
-                            {infoManagerment === 'paymentMethods' ? <PaymentMethods /> : false}
+                            {infoManagerment === 'account' || infoManagerment === undefined ? (
+                                <Account user={user} />
+                            ) : (
+                                false
+                            )}
+                            {infoManagerment === 'order' ? <Order user={user} /> : false}
+                            {infoManagerment === 'address' ? <Address user={user} /> : false}
+                            {infoManagerment === 'paymentMethods' ? <PaymentMethods user={user} /> : false}
                         </div>
                     </div>
                 </div>

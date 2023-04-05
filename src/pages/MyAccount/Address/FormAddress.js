@@ -12,6 +12,7 @@ function AddressForm({ formData, onChanceForm }) {
                     id="name"
                     name="fullName"
                     required=""
+                    placeholder="Tên người nhận"
                     value={formData.fullName}
                 />
             </div>
@@ -23,6 +24,7 @@ function AddressForm({ formData, onChanceForm }) {
                     onChange={onChanceForm}
                     className="address-form__input"
                     type="tel"
+                    placeholder="Số điện thoại"
                     id="phone"
                     name="phoneNumber"
                     value={formData.phoneNumber}
@@ -32,13 +34,14 @@ function AddressForm({ formData, onChanceForm }) {
 
             <div className="address-form__group">
                 <label className="address-form__label" htmlFor="city">
-                    Thành phố/Tỉnh
+                    Tỉnh/Thành phố
                 </label>
                 <input
                     onChange={onChanceForm}
                     className="address-form__input"
                     type="text"
                     id="city"
+                    placeholder="Tỉnh/Thành phố"
                     name="city"
                     required=""
                     value={formData.city}
@@ -51,6 +54,7 @@ function AddressForm({ formData, onChanceForm }) {
                 <input
                     onChange={onChanceForm}
                     className="address-form__input"
+                    placeholder="Quận/Huyện"
                     type="text"
                     id="district"
                     name="district"
@@ -66,6 +70,7 @@ function AddressForm({ formData, onChanceForm }) {
                     onChange={onChanceForm}
                     className="address-form__input"
                     type="text"
+                    placeholder="Phường"
                     id="ward"
                     name="ward"
                     value={formData.ward}
@@ -80,6 +85,7 @@ function AddressForm({ formData, onChanceForm }) {
                     className="address-form__input address-form__textarea"
                     onChange={onChanceForm}
                     id="address"
+                    placeholder="Địa chỉ"
                     name="addressLine"
                     required=""
                     value={formData.addressLine}

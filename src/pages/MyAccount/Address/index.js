@@ -1,17 +1,15 @@
 import Modal from '@/components/Layout/Modal';
 import { useEffect, useState } from 'react';
 import AddressForm from './FormAddress';
-import { userSelector } from '@/redux/selector';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { deleteData, postData, updateData } from '@/api/service';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { api } from '@/api';
 import userSlice from '../UserSlice';
 
-function Address() {
+function Address({ user }) {
     const [actionForm, setActionForm] = useState('');
     const [visible, setVisible] = useState(false);
-    const user = useSelector(userSelector);
     const { addresses } = user;
 
     //form change
@@ -115,7 +113,7 @@ function Address() {
             <Modal
                 visible={visible}
                 title={'Thêm địa chỉ mới'}
-                save={'Thêm'}
+                save={actionForm === 'edit' ? 'Cập nhật' : 'Thêm'}
                 haldleSendModal={actionForm === 'edit' ? handleEditAddress : handleAddNewAddress}
                 setVisible={setVisible}
             >

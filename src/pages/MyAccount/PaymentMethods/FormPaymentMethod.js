@@ -1,53 +1,50 @@
 import React, { useState } from 'react';
 
-function PaymentForm() {
-    const [formData, setFormData] = useState({
-        name: '',
-        cardNumber: '',
-        expirationDate: '',
-        cvv: '',
-    });
-
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData((prevState) => ({ ...prevState, [name]: value }));
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        // Gửi dữ liệu đến server
-        console.log(formData);
-        // Reset form
-        setFormData({
-            name: '',
-            cardNumber: '',
-            expirationDate: '',
-            cvv: '',
-        });
-    };
-
+function PaymentForm({ formData, onChangeForm }) {
+    //onfocus input date
+    const onDateFocus = (e) => (e.target.type = 'date');
+    const onDateBlur = (e) => (e.target.type = 'text');
+    //onfocus input date
     return (
-        <form onSubmit={handleSubmit} className="address-form">
+        <div className="address-form">
             <div className="address-form__group">
                 <label className="address-form__label">
                     Tên chủ thẻ:
                     <input
                         type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
+                        name="cardholderName"
+                        placeholder="Tên chủ thẻ"
+                        value={formData.cardholderName}
+                        onChange={onChangeForm}
                         className="address-form__input"
                     />
                 </label>
+            </div>
+            <div className="address-form__group">
+                <label className="address-form__label">Loại thẻ</label>
+                <select
+                    onChange={onChangeForm}
+                    value={formData.provider}
+                    type="text"
+                    name="provider"
+                    placeholder="Card"
+                    required=""
+                    className="address-form__input"
+                >
+                    <option value=""></option>
+                    <option value="Visa">Visa</option>
+                    <option value="Mastercard">Mastercard</option>
+                </select>
             </div>
             <div className="address-form__group">
                 <label className="address-form__label">
                     Số thẻ:
                     <input
                         type="text"
-                        name="cardNumber"
-                        value={formData.cardNumber}
-                        onChange={handleChange}
+                        placeholder="Số thẻ"
+                        name="accountNumber"
+                        value={formData.accountNumber}
+                        onChange={onChangeForm}
                         className="address-form__input"
                     />
                 </label>
@@ -56,27 +53,31 @@ function PaymentForm() {
                 <label className="address-form__label">
                     Ngày hết hạn:
                     <input
+                        onChange={onChangeForm}
+                        onFocus={onDateFocus}
+                        onBlur={onDateBlur}
+                        value={formData.expiryDate}
                         type="text"
-                        name="expirationDate"
-                        value={formData.expirationDate}
-                        onChange={handleChange}
+                        placeholder="Ngày hết hạn"
+                        name="expiryDate"
                         className="address-form__input"
                     />
                 </label>
             </div>
             <div className="address-form__group">
                 <label className="address-form__label">
-                    CVV:
+                    CVC:
                     <input
                         type="text"
-                        name="cvv"
-                        value={formData.cvv}
-                        onChange={handleChange}
+                        placeholder="CVC"
+                        name="securityCode"
+                        value={formData.securityCode}
+                        onChange={onChangeForm}
                         className="address-form__input"
                     />
                 </label>
             </div>
-        </form>
+        </div>
     );
 }
 

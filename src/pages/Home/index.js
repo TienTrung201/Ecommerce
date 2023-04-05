@@ -113,7 +113,7 @@ function Home() {
 
                                         return (
                                             <div
-                                                key={products.productId}
+                                                key={product.productId}
                                                 className="col-xs-6 col-sm-6 col-md-4 col-lg-4 product-item"
                                             >
                                                 <div className="product-img">

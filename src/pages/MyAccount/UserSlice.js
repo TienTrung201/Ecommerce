@@ -35,12 +35,16 @@ export const userSlice = createSlice({
         addAdress: (state, action) => {
             state.addresses.push(action.payload);
         },
+        addPaymentMethod: (state, action) => {
+            state.paymentMethods.push(action.payload);
+        },
         removeAddress: (state, action) => {
-            console.log(action.payload);
             state.addresses.splice(action.payload, 1);
         },
+        removePaymentMethod: (state, action) => {
+            state.paymentMethods.splice(action.payload, 1);
+        },
         editAddress: (state, action) => {
-            console.log(action.payload);
             state.addresses.splice(action.payload.position, 1, action.payload.data);
         },
         setPosition: (state, action) => {

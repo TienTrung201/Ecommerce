@@ -2,15 +2,14 @@ import { api } from '@/api';
 import { updateData } from '@/api/service';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { uploadFile } from '@/firebase/service';
-import { userSelector } from '@/redux/selector';
 import { faCameraRetro } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-function Account() {
+function Account({ user }) {
     const dispatch = useDispatch();
-    const user = useSelector(userSelector);
+
     //onfocus input date
     const onDateFocus = (e) => (e.target.type = 'date');
     const onDateBlur = (e) => (e.target.type = 'text');
