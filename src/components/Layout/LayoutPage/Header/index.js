@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useRef } from 'react';
 import CartHeader from '@/pages/Cart/CartHeader';
-import UserAccount from '@/components/Admin/Layout/User';
+import UserAccount from '@/components/Layout/User';
 function Header() {
     //event close open header
     const cart = useRef();

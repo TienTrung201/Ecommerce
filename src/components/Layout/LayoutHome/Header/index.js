@@ -6,7 +6,7 @@ import '@/assets/css/fixStyleBase.scss';
 import { faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useRef } from 'react';
 import CartHeader from '@/pages/Cart/CartHeader';
-import UserAccount from '@/components/Admin/Layout/User';
+import UserAccount from '@/components/Layout/User';
 
 function Header({ isUser }) {
     //event close open header

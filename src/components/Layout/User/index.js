@@ -6,12 +6,12 @@ import { useEffect } from 'react';
 import { getData } from '@/api/service';
 import { api } from '@/api';
 import userSlice from '@/pages/MyAccount/UserSlice';
+import Notification from '@/components/Admin/Notification';
 function UserAccount({ onOpenSearch, onOpenCart }) {
     const user = useSelector(userSelector);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
-        console.log(user);
         getData(api.userAccount)
             .then((response) => {
                 dispatch(userSlice.actions.setUser(response.data));
@@ -27,6 +27,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
     }, [navigate, dispatch]);
     return (
         <div className="topbar-left">
+            <Notification />
             <div className="element element-search hidden-xs hidden-sm">
                 <Link onClick={onOpenSearch} to="#" className="zoa-icon search-toggle">
                     <img src={images.search} alt="menubar" />
@@ -53,9 +54,12 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                     </Link>
                 </div>
             ) : (
-                <div className="element element-user hidden-xs hidden-sm">
+                <div className="user-account element element-user hidden-xs hidden-sm">
                     <Link to="/user/signin" className="zoa-icon js-user">
-                        <img src={images.user} alt="menubar" />
+                        <img
+                            src="https://allenandclarke.com.au/wp-content/uploads/2020/08/Blank-Man_White-1343x1385px.jpg"
+                            alt="menubar"
+                        />
                     </Link>
                 </div>
             )}

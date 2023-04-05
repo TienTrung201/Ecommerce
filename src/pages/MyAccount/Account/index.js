@@ -1,16 +1,22 @@
 import { api } from '@/api';
 import { updateData } from '@/api/service';
+import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { uploadFile } from '@/firebase/service';
 import { userSelector } from '@/redux/selector';
 import { faCameraRetro } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Account() {
+    const dispatch = useDispatch();
     const user = useSelector(userSelector);
+    //onfocus input date
     const onDateFocus = (e) => (e.target.type = 'date');
     const onDateBlur = (e) => (e.target.type = 'text');
+    //onfocus input date
+
+    //Form
     const [formData, setFormData] = useState({
         fullName: '',
         phoneNumber: '',
@@ -21,6 +27,12 @@ function Account() {
         email: '',
         userName: '',
     });
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prevState) => ({ ...prevState, [name]: value }));
+    };
+    //handle change Img
+
     const [imgFile, setImgFile] = useState(null);
     const [imgUrl, setImgUrl] = useState('');
     const handleChangeImg = (fileimg) => {
@@ -28,39 +40,44 @@ function Account() {
         setImgUrl(URL.createObjectURL(fileimg));
     };
     const file = useRef();
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData((prevState) => ({ ...prevState, [name]: value }));
-    };
     useEffect(() => {
         const { fullName, phoneNumber, gender, birthDate, password, avatar, email, userName } = user;
 
         setFormData({ fullName, phoneNumber, gender, birthDate, password, avatar, email, userName });
         setImgUrl(avatar);
     }, [user]);
+    //Form
+    //update data
+    const updateDataUser = (data) => {
+        console.log(data);
+        updateData(api.userAccount, data)
+            .then((response) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Cập nhập thành công'));
+                }, 1000);
+                console.log(response);
+            })
+            .catch((err) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showError('Thất bại'));
+                }, 1000);
+                console.warn(err);
+            });
+    };
     const handleSendForm = async () => {
+        dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
+
         if (imgFile) {
             const uploadedItemImg = await uploadFile(imgFile, 'images/avatar-users');
             const data = { ...formData, password: '123456', avatar: uploadedItemImg.url };
-            console.log(data);
-            updateData(api.userAccount, data)
-                .then((response) => {
-                    console.log(response);
-                })
-                .catch((err) => {
-                    console.warn(err);
-                });
+            updateDataUser(data);
         } else {
-            const data = { ...formData, password: '123456' };
-            updateData(api.userAccount, data)
-                .then((response) => {
-                    console.log(response);
-                })
-                .catch((err) => {
-                    console.warn(err);
-                });
+            const data = { ...formData, gender: Number(formData.gender), password: '123456' };
+            updateDataUser(data);
         }
     };
+    //update data
+
     return (
         <div className="tab-content">
             {/* <Modal visible={true} title={'hello'} save={'Gửi'} /> */}
@@ -192,7 +209,7 @@ function Account() {
                                     placeholder="user123456"
                                     required=""
                                     className="country"
-                                    disabled="true"
+                                    disabled={true}
                                 />
                             </div>
                             <div className="col-md-6 col-sm-6">
@@ -206,7 +223,7 @@ function Account() {
                                     placeholder={'******'}
                                     required=""
                                     className="zipcode"
-                                    disabled="true"
+                                    disabled={true}
                                 />
                             </div>
                         </div>

@@ -14,14 +14,16 @@ const api = {
     wishLists: domain + '/api/wishlists',
     shopOrders: domain + '/api/shoporders',
     providers: domain + '/api/providers',
+    //user
+    loginUser: domain + '/api/users/login',
+    userAccount: domain + '/api/users/account',
+    registerUser: domain + '/api/users/register',
+    // admin
     registerAdmin: domain + '/api/adminusers/register',
     loginAdmin: domain + '/api/adminusers/login',
     adminUsers: domain + '/api/adminusers',
     adminAccount: domain + '/api/adminusers/account',
     roles: domain + '/api/roles',
-    loginUser: domain + '/api/users/login',
-    userAccount: domain + '/api/users/account',
-    registerUser: domain + '/api/users/register',
 };
 
 export { api };

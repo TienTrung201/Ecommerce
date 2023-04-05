@@ -14,6 +14,7 @@ export const userSlice = createSlice({
         createdAt: null,
         addresses: [],
         paymentMethods: [],
+        positionAddress: '',
     },
 
     reducers: {
@@ -30,6 +31,20 @@ export const userSlice = createSlice({
             state.userName = action.payload.userName;
             state.addresses = action.payload.addresses;
             state.paymentMethods = action.payload.paymentMethods;
+        },
+        addAdress: (state, action) => {
+            state.addresses.push(action.payload);
+        },
+        removeAddress: (state, action) => {
+            console.log(action.payload);
+            state.addresses.splice(action.payload, 1);
+        },
+        editAddress: (state, action) => {
+            console.log(action.payload);
+            state.addresses.splice(action.payload.position, 1, action.payload.data);
+        },
+        setPosition: (state, action) => {
+            state.positionAddress = action.payload;
         },
     },
 });

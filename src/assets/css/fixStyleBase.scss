@@ -191,16 +191,12 @@ label.mail {
     }
 }
 
-tbody tr {
-    border-bottom: 1px solid rgb(207, 207, 207);
-}
-
-tbody tr:last-child {
-    border-bottom: none;
-}
-
 .cart-table {
     // border-bottom: 1px solid #222222;
+    border-bottom: 1px solid rgb(126, 126, 126);
+    &:last-child {
+        border: none;
+    }
     .cart-items-bytrung {
         display: flex;
         height: 100px;
@@ -208,7 +204,10 @@ tbody tr:last-child {
         align-items: center;
         position: relative;
         padding-right: 60px;
-
+        border-bottom: 1px solid rgb(207, 207, 207);
+        &:last-child {
+            border: none;
+        }
         .cart-img {
             width: 80px;
             height: 80px;
@@ -272,6 +271,7 @@ tbody tr:last-child {
 }
 
 /* Khu vực danh sách địa chỉ */
+
 .address-list-container {
     // border: 1px solid #ddd;
     border-radius: 4px;
@@ -299,8 +299,12 @@ tbody tr:last-child {
     margin-bottom: 5px;
 }
 .address-list-item-header-right {
+    flex: 1;
     // position: absolute;
     // right: 0;
+}
+.address-list-item-body {
+    flex: 5;
 }
 .address-form {
     max-width: 500px;
