@@ -10,16 +10,31 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function Shop() {
     //Products  FilterProduct and Paging
+    const location = useLocation();
     const navigate = useNavigate();
-    const [filterCategory, setFilterCategory] = useState('');
-    const [filterProvider, setFilterProvider] = useState('');
-    const [minPrice, setMinPrice] = useState('');
-    const [maxPrice, setMaxPrice] = useState('');
-    const [pageNumber, setPageNumber] = useState(1);
+    const [filterCategory, setFilterCategory] = useState(
+        new URLSearchParams(location.search).get('category')
+            ? new URLSearchParams(location.search).get('category')
+            : '',
+    );
+    const [filterProvider, setFilterProvider] = useState(
+        new URLSearchParams(location.search).get('provider')
+            ? new URLSearchParams(location.search).get('provider')
+            : '',
+    );
+    const [minPrice, setMinPrice] = useState(
+        new URLSearchParams(location.search).get('min') ? new URLSearchParams(location.search).get('min') : '',
+    );
+    const [maxPrice, setMaxPrice] = useState(
+        new URLSearchParams(location.search).get('max') ? new URLSearchParams(location.search).get('max') : '',
+    );
+    const [pageNumber, setPageNumber] = useState(
+        new URLSearchParams(location.search).get('page') ? new URLSearchParams(location.search).get('page') : 1,
+    );
     const [totalPages, setTotalPages] = useState([]);
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -29,7 +44,6 @@ function Shop() {
             filterProvider !== '' ? '&provider=' + filterProvider : ''
         }${minPrice !== '' ? '&min=' + minPrice : ''}${maxPrice !== '' ? '&max=' + maxPrice : ''}`;
         navigate(`/shop${dataQuery}`);
-        console.log(dataQuery);
         Promise.all([
             getData(api.products + dataQuery),
             getData(api.categories),
@@ -108,7 +122,7 @@ function Shop() {
     };
     const handleNextPage = () => {
         if (pageNumber < totalPages.length) {
-            setPageNumber((prev) => prev + 1);
+            setPageNumber((prev) => parseInt(prev) + 1);
         }
     };
     const handlePrevPage = () => {
@@ -211,7 +225,7 @@ function Shop() {
                                             {proviers.map((provider) => {
                                                 return (
                                                     <li
-                                                        onClick={() => handleFilterProvider()}
+                                                        onClick={() => handleFilterProvider(provider.name)}
                                                         key={provider.providerId}
                                                     >
                                                         <Link
@@ -227,7 +241,7 @@ function Shop() {
                                     </div>
                                 </div>
                             </li>
-                            <li className="filter">
+                            {/* <li className="filter">
                                 <i className="zoa-icon-sort">
                                     <FontAwesomeIcon icon={faArrowUpWideShort} />
                                 </i>
@@ -264,7 +278,7 @@ function Shop() {
                                         <Link to="created-descending">Date, new to old</Link>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
                     <div className="shop-element right">
@@ -356,42 +370,54 @@ function Shop() {
                             );
                         })}
                     </div>
-                    <div className="text-center">
-                        <div className="pagination">
-                            <Link
-                                onClick={() => {
-                                    handlePrevPage();
-                                }}
-                            >
-                                &laquo;
-                            </Link>
-                            {totalPages.map((p, i) => {
-                                return (
+                    {totalPages.length > 1 ? (
+                        <div className="text-center">
+                            <div className="pagination">
+                                {pageNumber === `1` ? (
+                                    false
+                                ) : (
                                     <Link
-                                        key={i}
-                                        onClick={(e) => {
-                                            if (pageNumber === 1) {
-                                                e.preventDefault();
-                                            }
-                                            setPageNumber(p);
+                                        onClick={() => {
+                                            handlePrevPage();
                                         }}
-                                        className={p === pageNumber ? 'active' : ''}
-                                        to="#"
                                     >
-                                        {p}
+                                        &laquo;
                                     </Link>
-                                );
-                            })}
+                                )}
 
-                            <Link
-                                onClick={() => {
-                                    handleNextPage();
-                                }}
-                            >
-                                &raquo;
-                            </Link>
+                                {totalPages.map((p, i) => {
+                                    return (
+                                        <Link
+                                            key={i}
+                                            onClick={(e) => {
+                                                if (pageNumber === `${p}`) {
+                                                    e.preventDefault();
+                                                }
+                                                setPageNumber(`${p}`);
+                                            }}
+                                            className={pageNumber === `${p}` ? 'active' : ''}
+                                            to="#"
+                                        >
+                                            {p}
+                                        </Link>
+                                    );
+                                })}
+                                {pageNumber === `${totalPages.length}` ? (
+                                    false
+                                ) : (
+                                    <Link
+                                        onClick={() => {
+                                            handleNextPage();
+                                        }}
+                                    >
+                                        &raquo;
+                                    </Link>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    ) : (
+                        false
+                    )}
                 </div>
             </div>
         </>

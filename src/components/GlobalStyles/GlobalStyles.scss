@@ -17,12 +17,12 @@
 $active--Color: #31a24c;
 :root {
     --primary: #fe2c55;
-    --backGround-App: #6e00ff;
+    --backGround-App: #000;
     --backGround-App2: #6e01fd;
     --text-color: #2b3036;
     --text-chat: #333;
     --Icon-Color: #fff;
-    --backGround--page: #f3f6ff;
+    --backGround--page: #fff;
     --backGround--page2--white: #fff;
 
     --backgroundTransparent: transparent;
@@ -55,4 +55,9 @@ a {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     appearance: none;
+}
+.autoCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
