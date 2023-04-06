@@ -197,7 +197,7 @@ function PromotionsCreate() {
                 <div className={cx('col-md-8', 'grid-margin', 'stretch-card')}>
                     <div className={cx('card')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title')}>Chương trình khuyến mãi</h4>
+                            <h4 className={cx('card-title', 'm-0')}>Chương trình khuyến mãi</h4>
                             <p className={cx('card-description')}>
                                 Mã khuyến mãi sẽ được khách hàng nhập tại màn hình thanh toán
                             </p>
@@ -303,7 +303,7 @@ function PromotionsCreate() {
                 <div className={cx('col-md-4', 'grid-margin', 'stretch-card')}>
                     <div className={cx('card')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title')}>Tổng quan khuyến mãi</h4>
+                            <h4 className={cx('card-title', 'm-0')}>Tổng quan khuyến mãi</h4>
                             <p className={cx('card-description')}> Basic form elements </p>
                         </div>
                     </div>

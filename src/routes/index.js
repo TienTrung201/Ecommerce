@@ -36,6 +36,10 @@ import ShopOrdersDetail from '@/pages/Admin/ShopOrdersDetail';
 import AdminLogin from '@/pages/Admin/AdminLogin';
 import AdminRegister from '@/pages/Admin/AdminRegister';
 import Profile from '@/pages/Admin/Profile';
+import ProductProviders from '@/pages/Admin/ProductProviders';
+import ProductOptions from '@/pages/Admin/ProductOptions';
+import ProductProviderCreate from '@/pages/Admin/ProductProvidersCreate';
+import ProductOptionsCreate from '@/pages/Admin/ProductOptionsCreate';
 
 const publicRoutes = [
     { path: '/', component: Home, layout: LayoutHome },
@@ -59,6 +63,10 @@ const privateRoutes = [
     { path: '/admin', component: Dashboard, layout: LayoutAdmin },
     { path: '/admin/categories', component: ProductCategories, layout: LayoutAdmin },
     { path: '/admin/categories/:action/:id', component: ProductCategoriesCreate, layout: LayoutAdmin },
+    { path: '/admin/providers', component: ProductProviders, layout: LayoutAdmin },
+    { path: '/admin/providers/:action/:id', component: ProductProviderCreate, layout: LayoutAdmin },
+    { path: '/admin/product-options', component: ProductOptions, layout: LayoutAdmin },
+    { path: '/admin/product-options/:action/:id', component: ProductOptionsCreate, layout: LayoutAdmin },
     { path: '/admin/promotions', component: Promotions, layout: LayoutAdmin },
     { path: '/admin/promotions/:action/:id', component: PromotionsCreate, layout: LayoutAdmin },
     { path: '/admin/products', component: Products, layout: LayoutAdmin },

@@ -75,8 +75,11 @@ function Promotions() {
             <div className={cx('card')}>
                 <div className={cx('card-body')}>
                     <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
-                        <h4 className={cx('card-title', 'mb-0')}>Tất cả khuyến mãi</h4>
-                        <Link to="/admin/promotions/create/0" className={cx('btn', 'btn-gradient-primary', 'btn-md')}>
+                        <h4 className={cx('card-title', 'm-0')}>Tất cả khuyến mãi</h4>
+                        <Link
+                            to="/admin/promotions/create/0"
+                            className={cx('btn', 'btn-sm', 'btn-gradient-primary', 'btn-md')}
+                        >
                             Tạo khuyến mãi
                         </Link>
                     </div>
