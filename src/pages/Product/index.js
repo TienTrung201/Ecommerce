@@ -139,39 +139,40 @@ function Product() {
                 .then((response) => {
                     setTimeout(() => {
                         dispatch(notificationsSlice.actions.showSuccess('thành công'));
+                        getData(api.shoppingCarts + '/' + user.uid)
+                            .then((response) => {
+                                console.log(response);
+                                dispatch(cartSlice.actions.setCartId(response.cartId));
+                                const cartUser = response.items.reduce((acc, item) => {
+                                    const { cartItemId, qty } = item;
+                                    const { productId, image, name, items } = item.product;
+                                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                                    acc.push({
+                                        cartItemId,
+                                        productId,
+                                        image,
+                                        name,
+                                        costPrice,
+                                        qtyInStock,
+                                        productItemId,
+                                        sku,
+                                        qty,
+                                        optionsId,
+                                    });
+                                    return acc;
+                                }, []);
+                                dispatch(cartSlice.actions.setCart(cartUser));
+
+                                console.log(cartUser);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
                     }, 1000);
                     setTimeout(() => {
                         dispatch(notificationsSlice.actions.destroy());
                     }, 2000);
-                    getData(api.shoppingCarts + '/' + user.uid)
-                        .then((response) => {
-                            console.log(response);
-                            dispatch(cartSlice.actions.setCartId(response.cartId));
-                            const cartUser = response.items.reduce((acc, item) => {
-                                const { cartItemId, qty } = item;
-                                const { productId, image, name, items } = item.product;
-                                const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
-                                acc.push({
-                                    cartItemId,
-                                    productId,
-                                    image,
-                                    name,
-                                    costPrice,
-                                    qtyInStock,
-                                    productItemId,
-                                    sku,
-                                    qty,
-                                    optionsId,
-                                });
-                                return acc;
-                            }, []);
-                            dispatch(cartSlice.actions.setCart(cartUser));
 
-                            console.log(cartUser);
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
                     console.log(response);
                 })
                 .catch((error) => {

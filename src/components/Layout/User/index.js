@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import images from '@/assets/image';
 import { useDispatch, useSelector } from 'react-redux';
-import { userSelector } from '@/redux/selector';
+import { cartSelector, userSelector } from '@/redux/selector';
 import { useEffect } from 'react';
 import { getData } from '@/api/service';
 import { api } from '@/api';
@@ -12,6 +12,7 @@ import cartSlice from '@/pages/Cart/CartSlice';
 function UserAccount({ onOpenSearch, onOpenCart }) {
     //userAccount
     const user = useSelector(userSelector);
+    const cartItems = useSelector(cartSelector);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
@@ -72,7 +73,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
             <div onClick={onOpenCart} className="element element-cart">
                 <Link className="zoa-icon icon-cart">
                     <img src={images.cart} alt="menubar" />
-                    <span className="count cart-count">0</span>
+                    <span className="count cart-count">{cartItems.cartItems.length}</span>
                 </Link>
                 <CartHeader />
             </div>
