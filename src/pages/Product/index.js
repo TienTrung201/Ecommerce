@@ -1,7 +1,7 @@
 import { api } from '@/api';
 import { getData, postData } from '@/api/service';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
-import { optionsSelector } from '@/redux/selector';
+import { optionsSelector, userSelector } from '@/redux/selector';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faCartPlus, faChevronRight, faMinus, faPlus, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
+import cartSlice from '../Cart/CartSlice';
 
 function Product() {
     const dispatch = useDispatch();
@@ -16,6 +17,7 @@ function Product() {
     const maxProductPrice = useRef();
     const [productItem, setProductItem] = useState(null);
     const options = useSelector(optionsSelector);
+    const user = useSelector(userSelector);
     const [sizeOprion, setSizeOption] = useState(null);
     const [colorOption, setColorOption] = useState(null);
     const [ItemsProduct, setItemsProduct] = useState([{ optionsId: [] }]);
@@ -138,11 +140,44 @@ function Product() {
                     setTimeout(() => {
                         dispatch(notificationsSlice.actions.showSuccess('thành công'));
                     }, 1000);
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.destroy());
+                    }, 2000);
+                    getData(api.shoppingCarts + '/' + user.uid)
+                        .then((response) => {
+                            console.log(response);
+                            dispatch(cartSlice.actions.setCartId(response.cartId));
+                            const cartUser = response.items.reduce((acc, item) => {
+                                const { cartItemId, qty } = item;
+                                const { productId, image, name, items } = item.product;
+                                const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                                acc.push({
+                                    cartItemId,
+                                    productId,
+                                    image,
+                                    name,
+                                    costPrice,
+                                    qtyInStock,
+                                    productItemId,
+                                    sku,
+                                    qty,
+                                    optionsId,
+                                });
+                                return acc;
+                            }, []);
+                            dispatch(cartSlice.actions.setCart(cartUser));
+
+                            console.log(cartUser);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
                     console.log(response);
                 })
                 .catch((error) => {
+                    dispatch(notificationsSlice.actions.showError('Thất bại'));
                     setTimeout(() => {
-                        dispatch(notificationsSlice.actions.showError('Thất bại'));
+                        dispatch(notificationsSlice.actions.destroy());
                     }, 1000);
                     console.log(error);
                 });

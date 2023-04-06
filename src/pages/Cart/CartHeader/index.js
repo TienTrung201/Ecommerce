@@ -1,25 +1,48 @@
 import { api } from '@/api';
-import { deleteData } from '@/api/service';
+import { updateData } from '@/api/service';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
-import { cartSelector, optionsSelector } from '@/redux/selector';
+import { cartSelector, optionsSelector, userSelector } from '@/redux/selector';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import cartSlice from '../CartSlice';
 
 function CartHeader() {
     const dispatch = useDispatch();
     const cartUser = useSelector(cartSelector);
+    const user = useSelector(userSelector);
     const optionProduct = useSelector(optionsSelector);
-    const handleDeleteCartItem = (id) => {
-        deleteData(api.shoppingCarts + '/' + id)
+    const handleDeleteCartItem = (id, position) => {
+        console.log(cartUser);
+        const data = cartUser.cartItems.filter((cartItem) => cartItem.cartItemId !== id);
+        const convertDataUpdate = data.map((dataItem) => {
+            return {
+                cartItemId: dataItem.cartItemId,
+                qty: dataItem.qty,
+                cartId: cartUser.cartId,
+                productItemId: dataItem.productItemId,
+            };
+        });
+        console.log({ cartId: cartUser.cartId, userId: user.uid, items: convertDataUpdate });
+        updateData(api.shoppingCarts, {
+            cartId: cartUser.cartId,
+            userId: user.uid,
+            items: convertDataUpdate,
+        })
             .then((response) => {
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.showSuccess('Xóa thành công'));
+                    dispatch(cartSlice.actions.removeItemCart(position));
                 }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+
                 console.log(response);
             })
             .catch((error) => {
+                dispatch(notificationsSlice.actions.showError('Thất bại'));
                 setTimeout(() => {
-                    dispatch(notificationsSlice.actions.showError('Thất bại'));
+                    dispatch(notificationsSlice.actions.destroy());
                 }, 1000);
                 console.log(error);
             });
@@ -30,7 +53,7 @@ function CartHeader() {
             <span className="header__cart-list-empty-cart-msg">Chưa có sản phẩm</span>
             <h4 className="header__cart-heading">Sản phẩm đã thêm</h4>
             <ul className="header__cart-list-items">
-                {cartUser.cartItems.map((item) => {
+                {cartUser.cartItems.map((item, i) => {
                     return (
                         <li key={item.cartItemId} className="header__cart-item">
                             <img className="header__cart-item-img" src={item.image} alt="" />
@@ -55,7 +78,7 @@ function CartHeader() {
                                     </span>
                                     <span
                                         onClick={() => {
-                                            handleDeleteCartItem(item.cartItemId);
+                                            handleDeleteCartItem(item.cartItemId, i);
                                         }}
                                         className="header__cart-item-remove"
                                     >

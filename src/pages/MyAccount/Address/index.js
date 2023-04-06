@@ -67,12 +67,15 @@ function Address({ user }) {
                     dispatch(notificationsSlice.actions.showSuccess('Xóa thành công'));
                     dispatch(userSlice.actions.removeAddress(index));
                 }, 1000);
-
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
                 console.log(response);
             })
             .catch((err) => {
+                dispatch(notificationsSlice.actions.showError('Thất bại'));
                 setTimeout(() => {
-                    dispatch(notificationsSlice.actions.showError('Thất bại'));
+                    dispatch(notificationsSlice.actions.destroy());
                 }, 1000);
                 console.warn(err);
             });

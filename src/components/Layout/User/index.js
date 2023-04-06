@@ -33,6 +33,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
         getData(api.shoppingCarts + '/' + user.uid)
             .then((response) => {
                 console.log(response);
+                dispatch(cartSlice.actions.setCartId(response.cartId));
                 const cartUser = response.items.reduce((acc, item) => {
                     const { cartItemId, qty } = item;
                     const { productId, image, name, items } = item.product;
@@ -52,6 +53,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                     return acc;
                 }, []);
                 dispatch(cartSlice.actions.setCart(cartUser));
+
                 console.log(cartUser);
             })
             .catch((error) => {

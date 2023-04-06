@@ -36,14 +36,7 @@ function Header() {
         menuBar.current.classList.remove('pushmenu-open');
         handleCloseOverlay();
     };
-    const handleOpenCart = () => {
-        cart.current.classList.add('pushmenu-open');
-        handleOpenOverlay();
-    };
-    const handleCloseCart = () => {
-        cart.current.classList.remove('pushmenu-open');
-        handleCloseOverlay();
-    };
+
     //event close open header
     return (
         <>
@@ -133,7 +126,7 @@ function Header() {
             {/* pushmenu-open */}
             {/* Push cart */}
             <div ref={cart} className="pushmenu  pushmenu-left cart-box-container">
-                <CartHeader onCloseCart={handleCloseCart} />
+                <CartHeader />
             </div>
             {/* Push cart */}
 
@@ -256,7 +249,7 @@ function Header() {
                                 </Link>
                             </div>
                             <div className="col-md-4 col flex justify-content-end">
-                                <UserAccount onOpenSearch={handleOpenSearch} onOpenCart={handleOpenCart} />
+                                <UserAccount onOpenSearch={handleOpenSearch} />
                             </div>
                         </div>
                     </div>
