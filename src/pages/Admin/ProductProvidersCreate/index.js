@@ -10,8 +10,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function EditRoles() {
-    const [roleNameInput, setRoleNameInput] = useState('');
+function ProductProviderCreate() {
+    const [providerNameInput, setProviderNameInput] = useState('');
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -19,10 +19,10 @@ function EditRoles() {
 
     useEffect(() => {
         if (action === 'update') {
-            getData(api.roles + '/' + id)
+            getData(api.providers + '/' + id)
                 .then((response) => {
                     console.log(response);
-                    setRoleNameInput(response.data.name);
+                    setProviderNameInput(response.name);
                 })
                 .catch((error) => {
                     console.warn(error);
@@ -31,8 +31,8 @@ function EditRoles() {
     }, [action, id]);
 
     // ---------- Handle input change ----------
-    const handleRoleNameInputChange = (e) => {
-        setRoleNameInput(e.target.value);
+    const handleProviderNameInputChange = (e) => {
+        setProviderNameInput(e.target.value);
     };
     // ---------- End Handle input change ----------
 
@@ -41,26 +41,26 @@ function EditRoles() {
         e.preventDefault();
 
         const data = {
-            name: roleNameInput,
+            name: providerNameInput,
         };
 
-        if (roleNameInput) {
-            dispatch(notificationsSlice.actions.showLoading('Đang tạo role'));
+        if (providerNameInput) {
+            dispatch(notificationsSlice.actions.showLoading('Đang thêm nhà cung cấp'));
 
-            postData(api.roles, data)
+            postData(api.providers, data)
                 .then((response) => {
                     console.log(response);
                     setTimeout(() => {
-                        dispatch(notificationsSlice.actions.showSuccess('Tạo role thành công'));
-                        navigate('/admin/manage-roles');
+                        dispatch(notificationsSlice.actions.showSuccess('Thêm thành công'));
+                        navigate('/admin/providers');
                     }, 1000);
                 })
                 .catch((error) => {
                     console.warn(error);
-                    dispatch(notificationsSlice.actions.showError('Tạo role không thành công'));
+                    dispatch(notificationsSlice.actions.showError('Thêm không thành công'));
                 });
         } else {
-            dispatch(notificationsSlice.actions.showError('Tạo role không thành công'));
+            dispatch(notificationsSlice.actions.showError('Thêm không thành công'));
             setTimeout(() => {
                 dispatch(notificationsSlice.actions.destroy());
             }, 1000);
@@ -72,18 +72,18 @@ function EditRoles() {
     const handleUpdate = (e) => {
         e.preventDefault();
         const data = {
-            name: roleNameInput,
+            name: providerNameInput,
         };
 
-        if (roleNameInput) {
+        if (providerNameInput) {
             dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
 
-            updateData(api.roles + '/' + id, data)
+            updateData(api.providers + '/' + id, data)
                 .then((response) => {
                     console.log(response);
                     setTimeout(() => {
                         dispatch(notificationsSlice.actions.showSuccess('Cập nhật thành công'));
-                        navigate('/admin/manage-roles');
+                        navigate('/admin/providers');
                     }, 1000);
                 })
                 .catch((error) => {
@@ -103,13 +103,13 @@ function EditRoles() {
     const handleDelete = () => {
         dispatch(notificationsSlice.actions.showLoading('Đang xóa'));
 
-        deleteData(api.roles + '/' + id)
+        deleteData(api.providers + '/' + id)
             .then((response) => {
                 console.log(response);
 
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.showSuccess('Xóa thành công'));
-                    navigate('/admin/manage-roles');
+                    navigate('/admin/providers');
                 }, 1000);
             })
             .catch((error) => {
@@ -125,13 +125,17 @@ function EditRoles() {
     return (
         <>
             <div className={cx('page-header', 'align-middle')}>
-                <h3 className={cx('page-title', 'mt-0')}>Tạo mới vai trò</h3>
+                <h3 className={cx('page-title', 'mt-0')}>
+                    {action === 'update' ? 'Cập nhật nhà cung cấp' : 'Thêm nhà cung cấp'}
+                </h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}>
-                            <Link to="/admin/manage-roles">Danh sách vai trò</Link>
+                            <Link to="/admin/providers">Nhà cung cấp</Link>
                         </li>
-                        <li className={cx('breadcrumb-item', 'active')}>Tạo vai trò</li>
+                        <li className={cx('breadcrumb-item', 'active')}>
+                            {action === 'update' ? 'Cập nhật nhà cung cấp' : 'Thêm nhà cung cấp'}
+                        </li>
                     </ol>
                 </nav>
             </div>
@@ -139,18 +143,18 @@ function EditRoles() {
                 <div className={cx('col-md-8', 'grid-margin', 'stretch-card')}>
                     <div className={cx('card')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title', 'm-0')}>Tạo vai trò</h4>
+                            <h4 className={cx('card-title', 'm-0')}>Nhà cung cấp</h4>
                             <p className={cx('card-description')}></p>
                             <form className={cx('forms-sample')}>
                                 <div className={cx('form-group')}>
-                                    <label htmlFor="exampleInputName1">Tên vai trò *</label>
+                                    <label htmlFor="exampleInputName1">Tên nhà cung cấp</label>
                                     <input
-                                        onChange={handleRoleNameInputChange}
-                                        value={roleNameInput}
+                                        onChange={handleProviderNameInputChange}
+                                        value={providerNameInput}
                                         type="text"
                                         className={cx('form-control', 'form-control-sm', 'border-secondary')}
                                         id="exampleInputName1"
-                                        placeholder="Nhập tên vai trò"
+                                        placeholder="Nhập tên nhà cung cấp"
                                     />
                                 </div>
 
@@ -166,7 +170,7 @@ function EditRoles() {
 
                                             <Popconfirm
                                                 title="Xóa khuyến mãi"
-                                                description="Bạn có chắc chắn muốn xóa vai trò?"
+                                                description="Bạn có chắc chắn muốn xóa nhà cung cấp?"
                                                 onConfirm={handleDelete}
                                                 okText="Xóa"
                                                 cancelText="Hủy"
@@ -186,11 +190,11 @@ function EditRoles() {
                                             onClick={handleSubmit}
                                             className={cx('btn', 'btn-gradient-primary', 'me-2')}
                                         >
-                                            Tạo vai trò
+                                            Thêm nhà cung cấp
                                         </button>
                                     )}
 
-                                    <Link to="/admin/manage-roles" className={cx('btn', 'btn-light')}>
+                                    <Link to="/admin/providers" className={cx('btn', 'btn-light')}>
                                         Hủy
                                     </Link>
                                 </div>
@@ -203,8 +207,8 @@ function EditRoles() {
                 <div className={cx('col-md-4', 'grid-margin', 'stretch-card')}>
                     <div className={cx('card')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title', 'm-0')}>Mô tả các quyền</h4>
-                            <p className={cx('card-description')}>Roles description</p>
+                            <h4 className={cx('card-title', 'm-0')}>Mô tả nhà cung cấp</h4>
+                            <p className={cx('card-description')}>Provider description</p>
                         </div>
                     </div>
                 </div>
@@ -214,4 +218,4 @@ function EditRoles() {
     );
 }
 
-export default EditRoles;
+export default ProductProviderCreate;

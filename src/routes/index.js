@@ -12,6 +12,9 @@ import Shop from '@/pages/Shop';
 
 import LayoutPage from '@/components/Layout/LayoutPage';
 import LayoutHome from '@/components/Layout/LayoutHome';
+import SignUp from '@/pages/Login/SignUp';
+import SignIn from '@/pages/Login/SignIn';
+import ForgotPassword from '@/pages/Login/ForgotPasswprd';
 // import Collection from '@/pages/Collection';
 
 // Admin
@@ -24,7 +27,7 @@ import PromotionsCreate from '@/pages/Admin/PromotionsCreate';
 import Products from '@/pages/Admin/Products';
 import ProductsCreate from '@/pages/Admin/ProductsCreate';
 import Product from '@/pages/Product';
-import ManageUsers from '@/pages/Admin/ManageAdminUsers';
+import ManageAdminUsers from '@/pages/Admin/ManageAdminUsers';
 import ManageRoles from '@/pages/Admin/ManageRoles';
 import EditUserRoles from '@/pages/Admin/EditUserRoles';
 import EditRoles from '@/pages/Admin/EditRoles';
@@ -35,9 +38,10 @@ import ShopOrdersDetail from '@/pages/Admin/ShopOrdersDetail';
 import AdminLogin from '@/pages/Admin/AdminLogin';
 import AdminRegister from '@/pages/Admin/AdminRegister';
 import Profile from '@/pages/Admin/Profile';
-import SignUp from '@/pages/Login/SignUp';
-import SignIn from '@/pages/Login/SignIn';
-import ForgotPassword from '@/pages/Login/ForgotPasswprd';
+import ProductProviders from '@/pages/Admin/ProductProviders';
+import ProductOptions from '@/pages/Admin/ProductOptions';
+import ProductProviderCreate from '@/pages/Admin/ProductProvidersCreate';
+import ProductOptionsCreate from '@/pages/Admin/ProductOptionsCreate';
 
 const publicRoutes = [
     { path: '/', component: Home, layout: LayoutHome },
@@ -64,11 +68,15 @@ const privateRoutes = [
     { path: '/admin', component: Dashboard, layout: LayoutAdmin },
     { path: '/admin/categories', component: ProductCategories, layout: LayoutAdmin },
     { path: '/admin/categories/:action/:id', component: ProductCategoriesCreate, layout: LayoutAdmin },
+    { path: '/admin/providers', component: ProductProviders, layout: LayoutAdmin },
+    { path: '/admin/providers/:action/:id', component: ProductProviderCreate, layout: LayoutAdmin },
+    { path: '/admin/product-options', component: ProductOptions, layout: LayoutAdmin },
+    { path: '/admin/product-options/:action/:id', component: ProductOptionsCreate, layout: LayoutAdmin },
     { path: '/admin/promotions', component: Promotions, layout: LayoutAdmin },
     { path: '/admin/promotions/:action/:id', component: PromotionsCreate, layout: LayoutAdmin },
     { path: '/admin/products', component: Products, layout: LayoutAdmin },
     { path: '/admin/products/:action/:id', component: ProductsCreate, layout: LayoutAdmin },
-    { path: '/admin/manage-admins', component: ManageUsers, layout: LayoutAdmin },
+    { path: '/admin/manage-admins', component: ManageAdminUsers, layout: LayoutAdmin },
     { path: '/admin/manage-admins/:action/:id', component: EditUserRoles, layout: LayoutAdmin },
     { path: '/admin/manage-roles', component: ManageRoles, layout: LayoutAdmin },
     { path: '/admin/manage-roles/:action/:id', component: EditRoles, layout: LayoutAdmin },

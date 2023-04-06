@@ -7,16 +7,16 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function ManageRoles() {
-    const [roles, setRoles] = useState([]);
+function ProductProviders() {
+    const [providers, setProviders] = useState([]);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        getData(api.roles)
+        getData(api.providers)
             .then((response) => {
                 console.log(response);
-                setRoles(response.data);
+                setProviders(response);
             })
             .catch((error) => {
                 console.warn(error);
@@ -26,23 +26,25 @@ function ManageRoles() {
     return (
         <>
             <div className={cx('page-header', 'align-middle')}>
-                <h3 className={cx('page-title', 'mt-0')}> Danh sách vai trò </h3>
+                <h3 className={cx('page-title', 'mt-0')}>Danh sách nhà cung cấp</h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
-                        <li className={cx('breadcrumb-item')}></li>
-                        <li className={cx('breadcrumb-item', 'active')}>Vai trò</li>
+                        <li className={cx('breadcrumb-item')}>
+                            <Link to="/admin/products">Sản phẩm</Link>
+                        </li>
+                        <li className={cx('breadcrumb-item', 'active')}>Nhà cung cấp</li>
                     </ol>
                 </nav>
             </div>
             <div className={cx('card')}>
                 <div className={cx('card-body')}>
                     <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
-                        <h4 className={cx('card-title', 'mb-0', 'mt-0')}>Tất cả vai trò</h4>
+                        <h4 className={cx('card-title', 'mb-0', 'mt-0')}>Tất cả nhà cung cấp</h4>
                         <Link
-                            to="/admin/manage-roles/create/0"
+                            to="/admin/providers/create/0"
                             className={cx('btn', 'btn-sm', 'btn-gradient-primary', 'btn-md')}
                         >
-                            Tạo vai trò
+                            Thêm nhà cung cấp
                         </Link>
                     </div>
 
@@ -51,14 +53,14 @@ function ManageRoles() {
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Vai trò</th>
+                                    <th>Tên nhà cung cấp</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {roles.map((item, index) => (
+                                {providers.map((item, index) => (
                                     <tr
                                         onClick={() => {
-                                            navigate(`/admin/manage-roles/update/${item.roleId}`);
+                                            navigate(`/admin/providers/update/${item.providerId}`);
                                         }}
                                         className={cx('pointer')}
                                     >
@@ -75,4 +77,4 @@ function ManageRoles() {
     );
 }
 
-export default ManageRoles;
+export default ProductProviders;
