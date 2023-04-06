@@ -15392,17 +15392,6 @@ span.star:last-child {
 .address ul li a img {
     padding-right: 15px;
 }
-.address ul li:nth-child(1) {
-    color: #333;
-}
-.address ul li:nth-child(1)::before {
-    content: '';
-    border: 1px solid #222;
-    bottom: 3px;
-    position: absolute;
-    width: 111px;
-    left: 9%;
-}
 
 .login {
     padding-top: 20px;
