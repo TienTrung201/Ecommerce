@@ -1,9 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
 import images from '@/assets/admin/images';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Divider, Image, Input, Popconfirm, Select, Space } from 'antd';
+import { Divider, Image, Popconfirm, Select } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -217,6 +215,7 @@ function ProductsCreate() {
         selectedItem.price = itemPrice;
         selectedItem.costPrice = itemCostPrice;
         selectedItem.image = itemImage.image;
+
         clearItemInput();
     };
 
@@ -376,7 +375,7 @@ function ProductsCreate() {
                 <div className={cx('col-md-8', 'grid-margin', 'stretch-card')}>
                     <div className={cx('card')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title')}>Sản phẩm</h4>
+                            <h4 className={cx('card-title', 'm-0')}>Sản phẩm</h4>
                             <p className={cx('card-description')}></p>
 
                             {/* Form */}
@@ -398,7 +397,11 @@ function ProductsCreate() {
                                 {/* Product description */}
                                 <div className={cx('form-group')}>
                                     <label htmlFor="exampleTextarea1">Nội dung</label>
-                                    <TextEditor onChange={handleProductDescChange} editorState={productDescInput} />
+                                    <TextEditor
+                                        onChange={handleProductDescChange}
+                                        editorState={productDescInput}
+                                        height={240}
+                                    />
                                 </div>
                                 {/* End Product description */}
 
@@ -615,7 +618,7 @@ function ProductsCreate() {
                                         <button
                                             onClick={handleCreateProduct}
                                             type="submit"
-                                            className={cx('btn', 'btn-lg', 'btn-gradient-primary', 'me-2')}
+                                            className={cx('btn', 'btn-gradient-primary', 'me-2')}
                                         >
                                             Tạo sản phẩm
                                         </button>
@@ -624,7 +627,7 @@ function ProductsCreate() {
                                             <button
                                                 onClick={handleUpdateProduct}
                                                 type="submit"
-                                                className={cx('btn', 'btn-lg', 'btn-gradient-primary', 'me-2')}
+                                                className={cx('btn', 'btn-gradient-primary', 'me-2')}
                                             >
                                                 Cập nhật
                                             </button>
@@ -646,7 +649,7 @@ function ProductsCreate() {
                                             </Popconfirm>
                                         </>
                                     )}
-                                    <Link to="/admin/products" className={cx('btn', 'btn-lg', 'btn-light')}>
+                                    <Link to="/admin/products" className={cx('btn', 'btn-light')}>
                                         Hủy
                                     </Link>
                                 </div>
@@ -661,7 +664,7 @@ function ProductsCreate() {
                 <div className={cx('col-md-4', 'grid-margin', 'stretch-card')}>
                     <div className={cx('card')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title')}>Trạng thái hiển thị</h4>
+                            <h4 className={cx('card-title', 'm-0')}>Trạng thái hiển thị</h4>
                             <p className={cx('card-description')}></p>
 
                             <div className={cx('form-group')}>
@@ -708,18 +711,6 @@ function ProductsCreate() {
                                     value={productProviderId}
                                     placeholder="Nhập hãng sản xuất"
                                     id="inputProvider"
-                                    dropdownRender={(menu) => (
-                                        <>
-                                            {menu}
-                                            <Divider style={{ margin: '8px 0' }} />
-                                            <Space style={{ padding: '0 8px 4px' }}>
-                                                <Input placeholder="Thêm hãng mới" />
-                                                <Button type="text" icon={<FontAwesomeIcon icon={faPlus} />}>
-                                                    Thêm
-                                                </Button>
-                                            </Space>
-                                        </>
-                                    )}
                                     options={providers.map((item) => ({ label: item.name, value: item.providerId }))}
                                 />
                             </div>

@@ -40,8 +40,8 @@ function ManageAdminUsers() {
             <div className={cx('card')}>
                 <div className={cx('card-body')}>
                     <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
-                        <h4 className={cx('card-title', 'mb-0')}>Tất cả người dùng</h4>
-                        <Link to="" className={cx('btn', 'btn-gradient-primary', 'btn-md')}>
+                        <h4 className={cx('card-title', 'mb-0', 'mt-0')}>Tất cả người dùng</h4>
+                        <Link to="" className={cx('btn', 'btn-sm', 'btn-gradient-primary', 'btn-md')}>
                             Thêm người dùng
                         </Link>
                     </div>
@@ -70,10 +70,10 @@ function ManageAdminUsers() {
                                                 onClick={() => {
                                                     navigate(`/admin/manage-admins/edit-roles/${item.adminUserId}`);
                                                 }}
-                                                className={cx('d-flex', 'flex-column', 'pointer')}
+                                                className={cx('pointer', 'text-wrap')}
                                             >
                                                 {item?.roles?.map((role) => (
-                                                    <span className={cx('badge', 'badge-info', 'mb-1')}>
+                                                    <span className={cx('badge', 'badge-info', 'm-1')}>
                                                         {role.name}
                                                     </span>
                                                 ))}

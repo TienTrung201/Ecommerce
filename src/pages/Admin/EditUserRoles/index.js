@@ -119,7 +119,7 @@ function EditUserRoles() {
                                         onClick={handleSubmit}
                                         className={cx('btn', 'btn-gradient-primary', 'me-2')}
                                     >
-                                        Thêm vai trò
+                                        Phân quyền
                                     </button>
                                     <Link to="/admin/manage-admins" className={cx('btn', 'btn-light')}>
                                         Hủy
