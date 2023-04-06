@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import '@/assets/css/fixStyleBase.scss';
 import { faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useRef } from 'react';
-import CartHeader from '@/pages/Cart/CartHeader';
 import UserAccount from '@/components/Layout/User';
 
 function Header({ isUser }) {
@@ -36,14 +35,6 @@ function Header({ isUser }) {
     };
     const handleCloseMenuBar = () => {
         menuBar.current.classList.remove('pushmenu-open');
-        handleCloseOverlay();
-    };
-    const handleOpenCart = () => {
-        cart.current.classList.add('pushmenu-open');
-        handleOpenOverlay();
-    };
-    const handleCloseCart = () => {
-        cart.current.classList.remove('pushmenu-open');
         handleCloseOverlay();
     };
     //event close open header
@@ -137,9 +128,7 @@ function Header({ isUser }) {
             </div>
             {/* pushmenu-open */}
             {/* Push cart */}
-            <div ref={cart} className="pushmenu  pushmenu-left cart-box-container">
-                <CartHeader onCloseCart={handleCloseCart} />
-            </div>
+
             {/* Push cart */}
 
             {/* Search form */}
@@ -419,7 +408,7 @@ function Header({ isUser }) {
                                         </Link>
                                     </li>
                                 </ul>
-                                <UserAccount onOpenSearch={handleOpenSearch} onOpenCart={handleOpenCart} />
+                                <UserAccount onOpenSearch={handleOpenSearch} />
                             </div>
                         </div>
                     </div>

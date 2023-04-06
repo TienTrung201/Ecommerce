@@ -4,11 +4,13 @@ import categoriesSlice from '@/pages/Category/CategotySlice';
 import optionsSlice from '@/pages/OptionItem/optionItemSlice';
 import adminUserSlice from '@/pages/Admin/AdminLogin/adminUserSlice';
 import userSlice from '@/pages/MyAccount/UserSlice';
+import cartSlice from '@/pages/Cart/CartSlice';
 const store = configureStore({
     reducer: {
         // ------------ User interface ------------
         categories: categoriesSlice.reducer,
         options: optionsSlice.reducer,
+        cart: cartSlice.reducer,
         user: userSlice.reducer,
 
         // ------------ Admin interface ------------

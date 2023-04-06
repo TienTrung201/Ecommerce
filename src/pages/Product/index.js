@@ -1,15 +1,17 @@
 import { api } from '@/api';
-import { getData } from '@/api/service';
+import { getData, postData } from '@/api/service';
+import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { optionsSelector } from '@/redux/selector';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faCartPlus, faChevronRight, faMinus, faPlus, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 
 function Product() {
+    const dispatch = useDispatch();
     //filter product
     const maxProductPrice = useRef();
     const [productItem, setProductItem] = useState(null);
@@ -73,7 +75,6 @@ function Product() {
     const { id } = useParams();
     const [product, setProduct] = useState({});
     const [priceRangeProduct, setPriceRangeProduct] = useState([]);
-
     useEffect(() => {
         Promise.all([getData(api.products + `/${id}`), getData(api.categories), getData(api.promotions)])
             .then((values) => {
@@ -126,6 +127,28 @@ function Product() {
             });
     }, [id]);
     //get Product
+    //handle add product to cart
+    const handleAddToCart = () => {
+        if (message === null) {
+            const data = { items: [{ productItemId: productItem.productItemId, qty: productQuantity }] };
+            dispatch(notificationsSlice.actions.showLoading('Thêm vào giỏ hàng'));
+
+            postData(api.shoppingCarts, data)
+                .then((response) => {
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.showSuccess('thành công'));
+                    }, 1000);
+                    console.log(response);
+                })
+                .catch((error) => {
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.showError('Thất bại'));
+                    }, 1000);
+                    console.log(error);
+                });
+        }
+    };
+    //handle add product to cart
 
     //Change Description and Review
     const [tabs, setTabs] = useState('Reviews');
@@ -206,14 +229,10 @@ function Product() {
         dots: false,
         speed: 300,
         slidesToShow: 5,
-        // centerPadding: "60px",
         slidesToScroll: 1,
         swipeToSlide: true,
         focusOnSelect: true,
-        // centerMode: true,
         infinite: false,
-        // row: 1,
-        // slidesPerRow: 1,
     };
     return (
         <>
@@ -448,7 +467,10 @@ function Product() {
                                             </button>
                                         </div>
                                         <Link
-                                            to=""
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                handleAddToCart();
+                                            }}
                                             className={
                                                 message !== null
                                                     ? 'button-unauthorized zoa-btn zoa-addcart'
@@ -456,11 +478,11 @@ function Product() {
                                             }
                                         >
                                             <i className="zoa-icon-cart" />
-                                            add to cart
+                                            Thêm vào giỏ hàng
                                         </Link>
                                     </div>
                                     <Link to="" className="btn-wishlist">
-                                        + Add to wishlist
+                                        + Thêm vào danh sách yêu thích
                                     </Link>
                                 </div>
                             </div>

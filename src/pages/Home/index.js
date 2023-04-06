@@ -107,7 +107,7 @@ function Home() {
                             <div className="col-md-7 col-sm-6 col-xs-12">
                                 <div className="row engoc-row-equal">
                                     {products.map((product, index) => {
-                                        if (index >= 5) {
+                                        if (index >= 6) {
                                             return false;
                                         }
 

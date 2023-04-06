@@ -48,7 +48,7 @@ function Account({ user }) {
     //Form
     //update data
     const updateDataUser = (data) => {
-        console.log(data);
+        dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
         updateData(api.userAccount, data)
             .then((response) => {
                 setTimeout(() => {

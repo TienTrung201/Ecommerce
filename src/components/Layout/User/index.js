@@ -7,7 +7,10 @@ import { getData } from '@/api/service';
 import { api } from '@/api';
 import userSlice from '@/pages/MyAccount/UserSlice';
 import Notification from '@/components/Admin/Notification';
+import CartHeader from '@/pages/Cart/CartHeader';
+import cartSlice from '@/pages/Cart/CartSlice';
 function UserAccount({ onOpenSearch, onOpenCart }) {
+    //userAccount
     const user = useSelector(userSelector);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -25,6 +28,36 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                 }
             });
     }, [navigate, dispatch]);
+    //userAccount
+    useEffect(() => {
+        getData(api.shoppingCarts + '/' + user.uid)
+            .then((response) => {
+                console.log(response);
+                const cartUser = response.items.reduce((acc, item) => {
+                    const { cartItemId, qty } = item;
+                    const { productId, image, name, items } = item.product;
+                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                    acc.push({
+                        cartItemId,
+                        productId,
+                        image,
+                        name,
+                        costPrice,
+                        qtyInStock,
+                        productItemId,
+                        sku,
+                        qty,
+                        optionsId,
+                    });
+                    return acc;
+                }, []);
+                dispatch(cartSlice.actions.setCart(cartUser));
+                console.log(cartUser);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [user.uid, dispatch]);
     return (
         <div className="topbar-left">
             <Notification />
@@ -39,6 +72,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                     <img src={images.cart} alt="menubar" />
                     <span className="count cart-count">0</span>
                 </Link>
+                <CartHeader />
             </div>
             {user.uid !== '' ? (
                 <div className="user-account element element-user hidden-xs hidden-sm">
