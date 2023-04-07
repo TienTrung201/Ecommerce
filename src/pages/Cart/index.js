@@ -4,7 +4,7 @@ import notificationsSlice from '@/components/Admin/Notification/notificationsSli
 import { cartSelector, optionsSelector, userSelector } from '@/redux/selector';
 import { faClose, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
@@ -19,31 +19,35 @@ function Cart() {
     const wishlist = useRef();
     const cartItem = useRef();
     const wishlistItem = useRef();
+    // set quantiti item cart
     const handeSetQuantity = (id, position, action) => {
         dispatch(notificationsSlice.actions.showLoading(''));
 
-        let productChanged = cartUser.cartItems.find((item) => item.cartItemId === id);
-        if (productChanged.qty === 1 && action === '-') {
+        let itemCartChanged = cartUser.cartItems.find((item) => item.cartItemId === id);
+        if (itemCartChanged.qty === 1 && action === '-') {
             handleDeleteCartItem(id, position);
-        } else if (productChanged.qty === productChanged.qtyInStock && action === '+') {
-            dispatch(notificationsSlice.actions.showError(`Chỉ còn ${productChanged.qtyInStock} sản phẩm`));
+        } else if (itemCartChanged.qty === itemCartChanged.qtyInStock && action === '+') {
+            dispatch(notificationsSlice.actions.showError(`Chỉ còn ${itemCartChanged.qtyInStock} sản phẩm`));
+            setTimeout(() => {
+                dispatch(notificationsSlice.actions.destroy());
+            }, 1000);
         } else {
             if (action === '+') {
-                productChanged = cartUser.cartItems.map((cartItem) => {
+                itemCartChanged = cartUser.cartItems.map((cartItem) => {
                     if (cartItem.cartItemId === id) {
                         return { ...cartItem, qty: cartItem.qty + 1 };
                     }
                     return cartItem;
                 });
             } else {
-                productChanged = cartUser.cartItems.map((cartItem) => {
+                itemCartChanged = cartUser.cartItems.map((cartItem) => {
                     if (cartItem.cartItemId === id) {
                         return { ...cartItem, qty: cartItem.qty - 1 };
                     }
                     return cartItem;
                 });
             }
-            const convertDataUpdate = productChanged.map((dataItem) => {
+            const convertDataUpdate = itemCartChanged.map((dataItem) => {
                 return {
                     cartItemId: dataItem.cartItemId,
                     qty: dataItem.qty,
@@ -60,35 +64,7 @@ function Cart() {
                     console.log(response);
                     setTimeout(() => {
                         dispatch(notificationsSlice.actions.showSuccess('Cập nhật thành công'));
-                        getData(api.shoppingCarts + '/' + user.uid)
-                            .then((response) => {
-                                console.log(response);
-                                dispatch(cartSlice.actions.setCartId(response.cartId));
-                                const cartUser = response.items.reduce((acc, item) => {
-                                    const { cartItemId, qty } = item;
-                                    const { productId, image, name, items } = item.product;
-                                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
-                                    acc.push({
-                                        cartItemId,
-                                        productId,
-                                        image,
-                                        name,
-                                        costPrice,
-                                        qtyInStock,
-                                        productItemId,
-                                        sku,
-                                        qty,
-                                        optionsId,
-                                    });
-                                    return acc;
-                                }, []);
-                                dispatch(cartSlice.actions.setCart(cartUser));
-
-                                console.log(cartUser);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
+                        dispatch(cartSlice.actions.setCart(itemCartChanged));
                     }, 1000);
                     setTimeout(() => {
                         dispatch(notificationsSlice.actions.destroy());
@@ -96,16 +72,20 @@ function Cart() {
                 })
                 .catch((error) => {
                     dispatch(notificationsSlice.actions.showError('Lỗi'));
-
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.destroy());
+                    }, 1000);
                     console.log(error);
                 });
         }
     };
+    // set quantiti product cart
+    //delete product in cart
 
     const handleDeleteCartItem = (id, position) => {
         console.log(cartUser);
-        const data = cartUser.cartItems.filter((cartItem) => cartItem.cartItemId !== id);
-        const convertDataUpdate = data.map((dataItem) => {
+        const dataDeleteBefore = cartUser.cartItems.filter((cartItem) => cartItem.cartItemId !== id);
+        const convertDataUpdate = dataDeleteBefore.map((dataItem) => {
             return {
                 cartItemId: dataItem.cartItemId,
                 qty: dataItem.qty,
@@ -138,6 +118,32 @@ function Cart() {
                 console.log(error);
             });
     };
+    //delete product in cart
+    //checked item product
+    const handleCheckedItemProduct = (id) => {
+        let checkedItem = cartUser.cartItems.find((item) => item.cartItemId === id);
+
+        const cartCheckedBefore = cartUser.cartItems.map((item) => {
+            if (item.cartItemId === checkedItem.cartItemId) {
+                return { ...item, isChecked: !item.isChecked };
+            }
+            return item;
+        });
+        dispatch(cartSlice.actions.setCart(cartCheckedBefore));
+    };
+    //checked item product
+    //total cart
+    const totalCart = useMemo(() => {
+        const total = cartUser.cartItems.reduce((acc, item) => {
+            if (item.isChecked) {
+                return (acc += item.costPrice * item.qty);
+            }
+            return (acc += 0);
+        }, 0);
+        return total;
+    }, [cartUser]);
+    //total cart
+    //menu tab
     const handleChangeCart = (e) => {
         cart.current.classList.add('active', 'in');
         wishlist.current.classList.remove('active', 'in');
@@ -150,6 +156,8 @@ function Cart() {
         cartItem.current.classList.remove('active');
         wishlistItem.current.classList.add('active');
     };
+    //menu tab
+
     return (
         <div className="container">
             <div className="zoa-cart">
@@ -187,7 +195,14 @@ function Cart() {
                                             return (
                                                 <tr key={item.cartItemId} className="item_cart">
                                                     <td>
-                                                        <input type="checkbox"></input>
+                                                        <input
+                                                            onChange={() => {
+                                                                handleCheckedItemProduct(item.cartItemId);
+                                                            }}
+                                                            type="checkbox"
+                                                            className="checkbox"
+                                                            checked={item.isChecked}
+                                                        />
                                                     </td>
                                                     <td className=" product-name">
                                                         <div className="product-img">
@@ -196,7 +211,12 @@ function Cart() {
                                                     </td>
                                                     <td className="product-desc">
                                                         <div className="product-info">
-                                                            <Link to="" title="">
+                                                            <Link
+                                                                to={`/product/${item.name.replace(/ /g, '-')}/${
+                                                                    item.productId
+                                                                }`}
+                                                                title=""
+                                                            >
                                                                 {item.name}
                                                             </Link>
                                                             <span>#SKU: {item.sku}</span>
@@ -309,7 +329,7 @@ function Cart() {
                                         <div className="cart-text">
                                             <div className="cart-element">
                                                 <p>Total products:</p>
-                                                <p>$118.00</p>
+                                                <p>{totalCart} đ</p>
                                             </div>
                                             <div className="cart-element">
                                                 <p>Estimated shipping costs:</p>
@@ -317,10 +337,17 @@ function Cart() {
                                             </div>
                                             <div className="cart-element text-bold">
                                                 <p>Total:</p>
-                                                <p>$118.00</p>
+                                                <p>{totalCart} đ</p>
                                             </div>
                                         </div>
-                                        <Link href="" className="zoa-btn zoa-checkout">
+                                        <Link
+                                            href=""
+                                            className={
+                                                totalCart === 0
+                                                    ? 'zoa-btn zoa-checkout button-unauthorized'
+                                                    : 'zoa-btn zoa-checkout'
+                                            }
+                                        >
                                             Checkout
                                         </Link>
                                     </div>

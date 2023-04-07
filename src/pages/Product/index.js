@@ -158,10 +158,11 @@ function Product() {
                                         sku,
                                         qty,
                                         optionsId,
+                                        isChecked: false,
                                     });
                                     return acc;
                                 }, []);
-                                dispatch(cartSlice.actions.setCart(cartUser));
+                                dispatch(cartSlice.actions.setCart(cartUser.reverse()));
 
                                 console.log(cartUser);
                             })

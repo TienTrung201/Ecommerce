@@ -712,6 +712,11 @@ label.mail {
     // tr th {
     //     text-align: center;
     // }
+    .checkbox {
+        width: 18px !important;
+        height: 18px !important;
+        cursor: pointer;
+    }
     .product-quantity {
         text-align: center;
     }
@@ -913,16 +918,7 @@ label.mail {
     .notification {
         color: #dd2a2a;
     }
-    .button-unauthorized {
-        opacity: 0.5;
-        cursor: auto !important;
-        color: #fff !important;
-        &:hover {
-            background: #222222;
-            color: #fff;
-            border-color: #222222;
-        }
-    }
+
     .size-group {
         position: relative;
         .iconDown {

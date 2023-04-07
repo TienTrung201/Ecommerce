@@ -11,6 +11,7 @@ function CartHeader() {
     const cartUser = useSelector(cartSelector);
     const user = useSelector(userSelector);
     const optionProduct = useSelector(optionsSelector);
+    //delete item in cart
     const handleDeleteCartItem = (id, position) => {
         console.log(cartUser);
         dispatch(notificationsSlice.actions.showLoading(''));
@@ -48,6 +49,8 @@ function CartHeader() {
                 console.log(error);
             });
     };
+    //delete item in cart
+
     return (
         <div className="header__cart-list">
             <img className="header__cart-list-empty-cart-img" src="./assets/img/empty_cart.png" alt="Empty cart" />
