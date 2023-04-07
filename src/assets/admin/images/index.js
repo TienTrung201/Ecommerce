@@ -15,23 +15,23 @@ import circlePng from './dashboard/circle.png';
 import placeholder from './placeholder.png';
 
 // background
-import loginBg from './login-bg.png';
+import loginBg from './login-bg.webp';
 
 const images = {
-  logo: logo,
-  logoMini: logoMini,
-  placeholder,
-  loginBg,
-  faces: {
-    face1: face1,
-    face2: face2,
-    face3: face3,
-    face4: face4,
-  },
-  dashboard: {
-    circleSvg,
-    circlePng,
-  },
+    logo: logo,
+    logoMini: logoMini,
+    placeholder,
+    loginBg,
+    faces: {
+        face1: face1,
+        face2: face2,
+        face3: face3,
+        face4: face4,
+    },
+    dashboard: {
+        circleSvg,
+        circlePng,
+    },
 };
 
 export default images;

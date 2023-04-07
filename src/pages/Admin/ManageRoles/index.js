@@ -25,8 +25,8 @@ function ManageRoles() {
 
     return (
         <>
-            <div className={cx('page-header', 'align-middle')}>
-                <h3 className={cx('page-title', 'mt-0')}> Danh sách vai trò </h3>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
+                <h3 className={cx('page-title', 'mt-0')}>Vai trò</h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}></li>
@@ -34,7 +34,7 @@ function ManageRoles() {
                     </ol>
                 </nav>
             </div>
-            <div className={cx('card')}>
+            <div className={cx('card', 'shadow-sm')}>
                 <div className={cx('card-body')}>
                     <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
                         <h4 className={cx('card-title', 'mb-0', 'mt-0')}>Tất cả vai trò</h4>

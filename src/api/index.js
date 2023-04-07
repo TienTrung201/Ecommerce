@@ -1,4 +1,8 @@
-const domain = 'https://localhost:7044';
+let domain = 'http://xuanphucspace-001-site1.atempurl.com';
+
+if (window.location.hostname === 'localhost') {
+    domain = 'https://localhost:7044';
+}
 
 const api = {
     promotions: domain + '/api/promotions',

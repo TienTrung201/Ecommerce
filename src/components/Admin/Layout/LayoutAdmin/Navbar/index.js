@@ -1,19 +1,23 @@
 import classNames from 'classnames/bind';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
 
+import * as Unicons from '@iconscout/react-unicons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { adminUserSelector } from '@/redux/selector';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import images from '@/assets/admin/images';
 
 const cx = classNames.bind(styles);
 
 function Navbar({ onClickActiveSidebar, onClickIconOnly }) {
     const [showNotifications, setShowNotifications] = useState(false);
+    const [showAccountMenu, setShowAccountMenu] = useState(false);
+
+    const navigate = useNavigate();
 
     const adminUser = useSelector(adminUserSelector);
 
@@ -24,6 +28,19 @@ function Navbar({ onClickActiveSidebar, onClickIconOnly }) {
         localStorage.setItem('token', '');
         window.location.reload();
     };
+
+    useEffect(() => {
+        const handleCloseMenu = () => {
+            setShowAccountMenu(false);
+            setShowNotifications(false);
+        };
+
+        document.addEventListener('click', handleCloseMenu);
+
+        return () => {
+            document.removeEventListener('click', handleCloseMenu);
+        };
+    }, []);
 
     return (
         <>
@@ -87,6 +104,10 @@ function Navbar({ onClickActiveSidebar, onClickIconOnly }) {
                             <div className={cx('nav-link', 'pointer', 'select-none')}>
                                 <div className={cx('nav-profile-img')}>
                                     <img
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setShowAccountMenu(!showAccountMenu);
+                                        }}
                                         style={{ border: '1px solid #bba8bff5' }}
                                         src={adminUser.avatar || images.placeholder}
                                         alt=""
@@ -94,15 +115,45 @@ function Navbar({ onClickActiveSidebar, onClickIconOnly }) {
                                     {/* <span className={cx('availability-status', 'online')}></span> */}
                                 </div>
                             </div>
+                            <ul
+                                className={cx(
+                                    'dropdown-menu',
+                                    'dropdown-menu-right',
+                                    'navbar-dropdown',
+                                    'preview-list',
+                                    'overflow-hidden',
+                                    {
+                                        show: showAccountMenu,
+                                    },
+                                )}
+                            >
+                                <li
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate('/admin/profile');
+                                    }}
+                                    className={cx('dropdown-item', 'preview-item', 'fs-14', 'pointer')}
+                                >
+                                    {/* <FontAwesomeIcon className={cx('text-secondary')} icon={faUser} /> */}
+                                    <Unicons.UilUser size="18" />
+                                    <span className={cx('ms-2')}>Tài khoản của bạn</span>
+                                </li>
+                                <li
+                                    onClick={handleSignOut}
+                                    className={cx('dropdown-item', 'preview-item', 'fs-14', 'pointer')}
+                                >
+                                    {/* <FontAwesomeIcon className={cx('text-secondary')} icon={faArrowRightFromBracket} /> */}
+                                    <Unicons.UilSignOutAlt size="18" />
+                                    <span className={cx('ms-2')}>Đăng xuất</span>
+                                </li>
+                            </ul>
                         </li>
 
                         <li className={cx('nav-item', 'dropdown')}>
-                            <span
-                                className={cx('nav-link', 'count-indicator', 'dropdown-toggle')}
-                                data-bs-toggle="dropdown"
-                            >
+                            <span className={cx('nav-link', 'count-indicator', 'dropdown-toggle')}>
                                 <i
-                                    onClick={() => {
+                                    onClick={(e) => {
+                                        e.stopPropagation();
                                         setShowNotifications(!showNotifications);
                                     }}
                                     className={cx('mdi', 'pointer')}
@@ -198,7 +249,10 @@ function Navbar({ onClickActiveSidebar, onClickIconOnly }) {
                         </li>
                     </ul>
                     <button
-                        onClick={onClickActiveSidebar}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onClickActiveSidebar();
+                        }}
                         className={cx('navbar-toggler', 'navbar-toggler-right', 'd-lg-none', 'align-self-center')}
                         type="button"
                     >

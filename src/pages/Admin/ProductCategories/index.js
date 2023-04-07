@@ -28,20 +28,20 @@ function ProductCategories() {
 
     return (
         <>
-            <div className={cx('page-header', 'align-middle')}>
-                <h3 className={cx('page-title', 'mt-0')}> Danh mục sản phẩm </h3>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
+                <h3 className={cx('page-title', 'mt-0')}>Danh mục</h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}>
                             <Link to="/admin/products">Sản phẩm</Link>
                         </li>
                         <li className={cx('breadcrumb-item', 'active')} aria-current="page">
-                            Danh mục sản phẩm
+                            Danh mục
                         </li>
                     </ol>
                 </nav>
             </div>
-            <div className={cx('card')}>
+            <div className={cx('card', 'shadow-sm')}>
                 <div className={cx('card-body')}>
                     <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
                         <h4 className={cx('card-title', 'm-0')}>Tất cả danh mục</h4>

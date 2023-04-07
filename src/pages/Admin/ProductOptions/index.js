@@ -25,18 +25,18 @@ function ProductOptions() {
 
     return (
         <>
-            <div className={cx('page-header', 'align-middle')}>
-                <h3 className={cx('page-title', 'mt-0')}>Thuộc tính sản phẩm</h3>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
+                <h3 className={cx('page-title', 'mt-0')}>Thuộc tính</h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}>
                             <Link to="/admin/products">Sản phẩm</Link>
                         </li>
-                        <li className={cx('breadcrumb-item', 'active')}>Thuộc tính sản phẩm</li>
+                        <li className={cx('breadcrumb-item', 'active')}>Thuộc tính</li>
                     </ol>
                 </nav>
             </div>
-            <div className={cx('card')}>
+            <div className={cx('card', 'shadow-sm')}>
                 <div className={cx('card-body')}>
                     <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
                         <h4 className={cx('card-title', 'mb-0', 'mt-0')}>Tất cả người dùng</h4>
