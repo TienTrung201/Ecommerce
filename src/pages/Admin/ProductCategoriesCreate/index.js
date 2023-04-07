@@ -184,17 +184,17 @@ function ProductCategoriesCreate() {
     return (
         <>
             {/* Page header */}
-            <div className={cx('page-header', 'align-middle')}>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
                 <h3 className={cx('page-title', 'mt-0')}>
-                    {action === 'update' ? 'Cập nhật danh mục' : 'Tạo danh mục sản phẩm'}
+                    {action === 'update' ? 'Cập nhật danh mục' : 'Thêm mới danh mục'}
                 </h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}>
-                            <Link to="/admin/categories">Tất cả danh mục</Link>
+                            <Link to="/admin/categories">Danh mục</Link>
                         </li>
                         <li className={cx('breadcrumb-item', 'active')} aria-current="page">
-                            {action === 'update' ? 'Cập nhật danh mục' : 'Tạo danh mục'}
+                            {action === 'update' ? 'Cập nhật danh mục' : 'Thêm danh mục'}
                         </li>
                     </ol>
                 </nav>
@@ -205,9 +205,9 @@ function ProductCategoriesCreate() {
             <div className={cx('row', 'g-4', 'align-items-start')}>
                 {/* Category form */}
                 <div className={cx('col-md-8', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title', 'm-0')}>Danh mục sản phẩm</h4>
+                            <h4 className={cx('card-title', 'm-0')}>Danh mục</h4>
                             <p className={cx('card-description')}></p>
                             <form className={cx('forms-sample')}>
                                 <div className={cx('form-group')}>
@@ -267,12 +267,7 @@ function ProductCategoriesCreate() {
                                             onClick={() => {
                                                 inputImageRef.current && inputImageRef.current.click();
                                             }}
-                                            className={cx(
-                                                'file-upload-browse',
-                                                'btn',
-                                                'btn-sm',
-                                                'btn-gradient-primary',
-                                            )}
+                                            className={cx('file-upload-browse', 'btn', 'btn-sm', 'btn-inverse-info')}
                                             type="button"
                                         >
                                             Upload
@@ -286,7 +281,7 @@ function ProductCategoriesCreate() {
                                             onClick={handleUpdate}
                                             className={cx('btn', 'btn-gradient-primary', 'me-2')}
                                         >
-                                            Cập nhật danh mục
+                                            Cập nhật
                                         </button>
                                         <Popconfirm
                                             title="Xóa danh mục"
@@ -324,7 +319,7 @@ function ProductCategoriesCreate() {
 
                 {/* Category image */}
                 <div className={cx('col-md-4', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
                             <h4 className={cx('card-title', 'mt-0')}>Ảnh danh mục</h4>
                             {/* <p className={cx('card-description')}> Basic form elements </p> */}

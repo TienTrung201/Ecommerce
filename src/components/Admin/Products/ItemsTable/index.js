@@ -1,7 +1,6 @@
 import images from '@/assets/admin/images';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
-import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as Unicons from '@iconscout/react-unicons';
 import { Popconfirm } from 'antd';
 import classNames from 'classnames/bind';
 
@@ -33,7 +32,7 @@ function ItemsTable({ items, productOptions, handleRemoveItem, handleSelectItem 
                                                 : URL.createObjectURL(item.image))) ||
                                         images.placeholder
                                     }
-                                    className={cx('rounded-6')}
+                                    className={cx('rounded-6', 'border')}
                                     alt=""
                                 />
                             </td>
@@ -62,7 +61,8 @@ function ItemsTable({ items, productOptions, handleRemoveItem, handleSelectItem 
                                     }}
                                     className={cx('btn', 'btn-light', 'btn-rounded', 'btn-icon')}
                                 >
-                                    <FontAwesomeIcon icon={faPen} />
+                                    {/* <FontAwesomeIcon icon={faPen} /> */}
+                                    <Unicons.UilPen size="18" />
                                 </button>
                                 {/* End Edit button */}
 
@@ -82,7 +82,8 @@ function ItemsTable({ items, productOptions, handleRemoveItem, handleSelectItem 
                                         }}
                                         className={cx('btn', 'btn-light', 'btn-rounded', 'btn-icon', 'ms-2')}
                                     >
-                                        <FontAwesomeIcon icon={faTrash} />
+                                        {/* <FontAwesomeIcon icon={faTrash} /> */}
+                                        <Unicons.UilTrash size="18" />
                                     </button>
                                 </Popconfirm>
                                 {/* End Delete button */}

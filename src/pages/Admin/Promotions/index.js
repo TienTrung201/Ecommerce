@@ -2,7 +2,6 @@ import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scs
 import classNames from 'classnames/bind';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
-import { Badge } from 'antd';
 import { getData } from '@/api/service';
 import { api } from '@/api';
 import dayjs from 'dayjs';
@@ -57,22 +56,20 @@ function Promotions() {
                 </tr>
             );
         });
-    }, [promotions]);
+    }, [promotions, navigate]);
 
     return (
         <>
-            <div className={cx('page-header', 'align-middle')}>
-                <h3 className={cx('page-title', 'mt-0')}> Chương trình khuyến mãi </h3>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
+                <h3 className={cx('page-title', 'mt-0')}>Khuyến mãi</h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}></li>
-                        <li className={cx('breadcrumb-item', 'active')} aria-current="page">
-                            Chương trình khuyến mãi
-                        </li>
+                        <li className={cx('breadcrumb-item', 'active')}>Khuyến mãi</li>
                     </ol>
                 </nav>
             </div>
-            <div className={cx('card')}>
+            <div className={cx('card', 'shadow-sm')}>
                 <div className={cx('card-body')}>
                     <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
                         <h4 className={cx('card-title', 'm-0')}>Tất cả khuyến mãi</h4>

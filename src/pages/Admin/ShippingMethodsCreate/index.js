@@ -138,14 +138,14 @@ function ShippingMethodsCreate() {
 
     return (
         <>
-            <div className={cx('page-header', 'align-middle')}>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
                 <h3 className={cx('page-title', 'mt-0')}>
                     {action === 'update' ? 'Cập nhật đơn vị vận chuyển' : 'Thêm đơn vị vận chuyển'}
                 </h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}>
-                            <Link to="/admin/shipping-methods">Tất cả đơn vị vận chuyển</Link>
+                            <Link to="/admin/shipping-methods">Quản lý vận chuyển</Link>
                         </li>
                         <li className={cx('breadcrumb-item', 'active')} aria-current="page">
                             {action === 'update' ? 'Cập nhật đơn vị vận chuyển' : 'Thêm đơn vị vận chuyển'}
@@ -155,7 +155,7 @@ function ShippingMethodsCreate() {
             </div>
             <div className={cx('row', 'g-4', 'align-items-start')}>
                 <div className={cx('col-md-8', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
                             <h4 className={cx('card-title', 'm-0')}>Đơn vị vận chuyển</h4>
                             <p className={cx('card-description')}></p>
@@ -164,7 +164,7 @@ function ShippingMethodsCreate() {
                             </p> */}
                             <form className={cx('forms-sample')}>
                                 <div className={cx('form-group')}>
-                                    <label htmlFor="exampleInputName1">Tên đơn vị vận chuyển *</label>
+                                    <label htmlFor="exampleInputName1">Tên đơn vị vận chuyển</label>
                                     <input
                                         onChange={handleNameInputChange}
                                         value={nameInput}
@@ -176,7 +176,7 @@ function ShippingMethodsCreate() {
                                 </div>
 
                                 <div className={cx('form-group')}>
-                                    <label htmlFor="promotionValue">Giá cước *</label>
+                                    <label htmlFor="promotionValue">Giá cước</label>
                                     <input
                                         onChange={handlePriceInputChange}
                                         value={priceInput}
@@ -232,10 +232,10 @@ function ShippingMethodsCreate() {
                 </div>
 
                 <div className={cx('col-md-4', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title', 'm-0')}>Mô tả vận chuyển</h4>
-                            <p className={cx('card-description')}> Basic form elements </p>
+                            <h4 className={cx('card-title', 'm-0')}>Mô tả</h4>
+                            <p className={cx('card-description')}>Shipping descriptions</p>
                         </div>
                     </div>
                 </div>

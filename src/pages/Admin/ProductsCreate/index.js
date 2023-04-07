@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
 import images from '@/assets/admin/images';
-import { Divider, Image, Popconfirm, Select } from 'antd';
+import { Collapse, Divider, Image, Popconfirm, Select } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -15,6 +15,7 @@ import { api } from '@/api';
 import TextEditor from '@/components/Admin/TextEditor';
 
 const cx = classNames.bind(styles);
+const { Panel } = Collapse;
 
 function ProductsCreate() {
     const [providers, setProviders] = useState([]);
@@ -303,6 +304,7 @@ function ProductsCreate() {
 
                     setTimeout(() => {
                         dispatch(notificationsSlice.actions.showSuccess('Cập nhật sản phẩm thành công'));
+                        navigate('/admin/products');
                     }, 1000);
                 })
                 .catch((error) => {
@@ -353,14 +355,14 @@ function ProductsCreate() {
     return (
         <>
             {/* Page header */}
-            <div className={cx('page-header', 'align-middle')}>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
                 <h3 className={cx('page-title', 'mt-0')}>
                     {action === 'update' ? 'Cập nhật sản phẩm' : 'Thêm mới sản phẩm'}
                 </h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}>
-                            <Link to="/admin/products">Danh sách sản phẩm</Link>
+                            <Link to="/admin/products">Sản phẩm</Link>
                         </li>
                         <li className={cx('breadcrumb-item', 'active')} aria-current="page">
                             {action === 'update' ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm'}
@@ -373,7 +375,7 @@ function ProductsCreate() {
             <div className={cx('row', 'g-4', 'align-items-start')}>
                 {/* Main content */}
                 <div className={cx('col-md-8', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
                             <h4 className={cx('card-title', 'm-0')}>Sản phẩm</h4>
                             <p className={cx('card-description')}></p>
@@ -382,7 +384,7 @@ function ProductsCreate() {
                             <form className={cx('forms-sample')}>
                                 {/* Product name */}
                                 <div className={cx('form-group')}>
-                                    <label htmlFor="exampleInputName1">Tên sản phẩm *</label>
+                                    <label htmlFor="exampleInputName1">Tên sản phẩm</label>
                                     <input
                                         onChange={handleProductNameChange}
                                         value={productNameInput}
@@ -440,180 +442,195 @@ function ProductsCreate() {
                                 <Divider />
 
                                 {/* Product Options*/}
+
                                 <div className={cx('form-group')}>
                                     <h4 className={cx('card-title', 'd-flex', 'justify-between', 'align-items-center')}>
-                                        Thuộc tính sản phẩm
+                                        Phiên bản
                                     </h4>
-
-                                    <div className={cx('row', 'g-4')}>
-                                        {/* Options information */}
-                                        <div className={cx('col-md-9')}>
+                                    <Collapse ghost>
+                                        <Panel header="Thêm phiên bản sản phẩm" key="1">
                                             <div className={cx('row', 'g-4')}>
-                                                {/* Select properties */}
-                                                <div className={cx('col-md-12')}>
-                                                    <label htmlFor="inputProperties">Thuộc tính</label>
-                                                    <Select
-                                                        onChange={handleItemPropertiesChange}
-                                                        value={itemProperties}
-                                                        mode="multiple"
-                                                        placeholder="Chọn thuộc tính"
-                                                        style={{ width: '100%' }}
-                                                        options={productOptionsPreview}
-                                                        id="inputProperties"
-                                                    />
-                                                </div>
-                                                {/* End Select properties */}
+                                                {/* Options information */}
+                                                <div className={cx('col-md-9')}>
+                                                    <div className={cx('row', 'g-4')}>
+                                                        {/* SKU input */}
+                                                        <div className={cx('col-md-6')}>
+                                                            <label htmlFor="intputSku">SKU</label>
+                                                            <input
+                                                                onChange={handleItemSkuChange}
+                                                                value={itemSku}
+                                                                type="text"
+                                                                className={cx(
+                                                                    'form-control',
+                                                                    'form-control-sm',
+                                                                    'border-secondary',
+                                                                )}
+                                                                id="intputSku"
+                                                                placeholder="Nhập mã SKU"
+                                                            />
+                                                        </div>
+                                                        {/* End SKU input */}
 
-                                                {/* SKU input */}
-                                                <div className={cx('col-md-6')}>
-                                                    <label htmlFor="intputSku">SKU *</label>
+                                                        {/* Quantity input */}
+                                                        <div className={cx('col-md-6')}>
+                                                            <label htmlFor="inputQty">Số lượng</label>
+                                                            <input
+                                                                onChange={handleItemQtyChange}
+                                                                value={itemQty}
+                                                                type="number"
+                                                                className={cx(
+                                                                    'form-control',
+                                                                    'form-control-sm',
+                                                                    'border-secondary',
+                                                                )}
+                                                                id="inputQty"
+                                                                placeholder="Nhập số lượng"
+                                                            />
+                                                        </div>
+                                                        {/* End Quantity input */}
+
+                                                        {/* Price input */}
+                                                        <div className={cx('col-md-6')}>
+                                                            <label htmlFor="inputPrice">Giá bán</label>
+                                                            <input
+                                                                onChange={handleItemPriceChange}
+                                                                value={itemPrice}
+                                                                type="number"
+                                                                className={cx(
+                                                                    'form-control',
+                                                                    'form-control-sm',
+                                                                    'border-secondary',
+                                                                )}
+                                                                id="inputPrice"
+                                                                placeholder="Nhập giá bán"
+                                                            />
+                                                        </div>
+                                                        {/* End Price input */}
+
+                                                        {/* Cost price input */}
+                                                        <div className={cx('col-md-6')}>
+                                                            <label htmlFor="inputCostPrice">Giá gốc</label>
+                                                            <input
+                                                                onChange={handleItemCostPriceChange}
+                                                                value={itemCostPrice}
+                                                                type="number"
+                                                                className={cx(
+                                                                    'form-control',
+                                                                    'form-control-sm',
+                                                                    'border-secondary',
+                                                                )}
+                                                                id="inputCostPrice"
+                                                                placeholder="Nhập giá gốc"
+                                                            />
+                                                        </div>
+                                                        {/* End Cost price input */}
+
+                                                        {/* Select properties */}
+                                                        <div className={cx('col-md-12')}>
+                                                            <label htmlFor="inputProperties">Thuộc tính</label>
+                                                            <Select
+                                                                onChange={handleItemPropertiesChange}
+                                                                value={itemProperties}
+                                                                mode="multiple"
+                                                                placeholder="Chọn thuộc tính"
+                                                                style={{ width: '100%' }}
+                                                                options={productOptionsPreview}
+                                                                id="inputProperties"
+                                                            />
+                                                        </div>
+                                                        {/* End Select properties */}
+
+                                                        {/* Add or edit item */}
+                                                        <div className={cx('col-md-12')}>
+                                                            {Object.keys(selectedItem).length > 0 ? (
+                                                                <button
+                                                                    onClick={handleUpdateProductItem}
+                                                                    type="submit"
+                                                                    className={cx(
+                                                                        'btn',
+                                                                        'btn-sm',
+                                                                        'btn-gradient-info',
+                                                                        'me-2',
+                                                                    )}
+                                                                >
+                                                                    Cập nhật
+                                                                </button>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={handleAddProductItem}
+                                                                    type="submit"
+                                                                    className={cx(
+                                                                        'btn',
+                                                                        'btn-sm',
+                                                                        'btn-gradient-info',
+                                                                        'me-2',
+                                                                    )}
+                                                                >
+                                                                    Thêm phiên bản
+                                                                </button>
+                                                            )}
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    clearItemInput();
+                                                                }}
+                                                                className={cx('btn', 'btn-sm', 'btn-light')}
+                                                            >
+                                                                Hủy
+                                                            </button>
+                                                        </div>
+                                                        {/* End Add or edit item */}
+                                                    </div>
+                                                </div>
+                                                {/* End Options information */}
+
+                                                {/* Options image */}
+                                                <div className={cx('col-md-3')}>
+                                                    <label htmlFor="">Ảnh</label>
                                                     <input
-                                                        onChange={handleItemSkuChange}
-                                                        value={itemSku}
-                                                        type="text"
-                                                        className={cx(
-                                                            'form-control',
-                                                            'form-control-sm',
-                                                            'border-secondary',
-                                                        )}
-                                                        id="intputSku"
-                                                        placeholder="Nhập mã SKU"
+                                                        ref={itemImageInputRef}
+                                                        onChange={handleItemImageChange}
+                                                        hidden
+                                                        type="file"
                                                     />
-                                                </div>
-                                                {/* End SKU input */}
-
-                                                {/* Quantity input */}
-                                                <div className={cx('col-md-6')}>
-                                                    <label htmlFor="inputQty">Số lượng *</label>
-                                                    <input
-                                                        onChange={handleItemQtyChange}
-                                                        value={itemQty}
-                                                        type="number"
-                                                        className={cx(
-                                                            'form-control',
-                                                            'form-control-sm',
-                                                            'border-secondary',
-                                                        )}
-                                                        id="inputQty"
-                                                        placeholder="Nhập số lượng"
-                                                    />
-                                                </div>
-                                                {/* End Quantity input */}
-
-                                                {/* Price input */}
-                                                <div className={cx('col-md-6')}>
-                                                    <label htmlFor="inputPrice">Giá bán</label>
-                                                    <input
-                                                        onChange={handleItemPriceChange}
-                                                        value={itemPrice}
-                                                        type="number"
-                                                        className={cx(
-                                                            'form-control',
-                                                            'form-control-sm',
-                                                            'border-secondary',
-                                                        )}
-                                                        id="inputPrice"
-                                                        placeholder="Nhập giá bán"
-                                                    />
-                                                </div>
-                                                {/* End Price input */}
-
-                                                {/* Cost price input */}
-                                                <div className={cx('col-md-6')}>
-                                                    <label htmlFor="inputCostPrice">Giá gốc</label>
-                                                    <input
-                                                        onChange={handleItemCostPriceChange}
-                                                        value={itemCostPrice}
-                                                        type="number"
-                                                        className={cx(
-                                                            'form-control',
-                                                            'form-control-sm',
-                                                            'border-secondary',
-                                                        )}
-                                                        id="inputCostPrice"
-                                                        placeholder="Nhập giá gốc"
-                                                    />
-                                                </div>
-                                                {/* End Cost price input */}
-
-                                                {/* Add or edit item */}
-                                                <div className={cx('col-md-12')}>
-                                                    {Object.keys(selectedItem).length > 0 ? (
+                                                    <div className={cx('d-flex', 'flex-column')}>
+                                                        <Image
+                                                            style={{ borderRadius: 6, border: '1px solid #d9d9d9' }}
+                                                            width={'100%'}
+                                                            src={itemImage.imagePreview || images.placeholder}
+                                                        />
                                                         <button
-                                                            onClick={handleUpdateProductItem}
-                                                            type="submit"
-                                                            className={cx('btn', 'btn-sm', 'btn-gradient-info', 'me-2')}
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                itemImageInputRef.current &&
+                                                                    itemImageInputRef.current.click();
+                                                            }}
+                                                            className={cx('btn', 'btn-sm', 'btn-inverse-info', 'mt-4')}
                                                         >
-                                                            Cập nhật
+                                                            Tải lên
                                                         </button>
-                                                    ) : (
-                                                        <button
-                                                            onClick={handleAddProductItem}
-                                                            type="submit"
-                                                            className={cx('btn', 'btn-sm', 'btn-gradient-info', 'me-2')}
-                                                        >
-                                                            Thêm thuộc tính
-                                                        </button>
-                                                    )}
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            clearItemInput();
-                                                        }}
-                                                        className={cx('btn', 'btn-sm', 'btn-light')}
-                                                    >
-                                                        Hủy
-                                                    </button>
+                                                    </div>
                                                 </div>
-                                                {/* End Add or edit item */}
+                                                {/* End Options image */}
                                             </div>
-                                        </div>
-                                        {/* End Options information */}
+                                        </Panel>
+                                    </Collapse>
 
-                                        {/* Options image */}
-                                        <div className={cx('col-md-3')}>
-                                            <label htmlFor="">Ảnh</label>
-                                            <input
-                                                ref={itemImageInputRef}
-                                                onChange={handleItemImageChange}
-                                                hidden
-                                                type="file"
-                                            />
-                                            <div className={cx('d-flex', 'flex-column')}>
-                                                <Image
-                                                    style={{ borderRadius: 6, border: '1px solid #d9d9d9' }}
-                                                    width={'100%'}
-                                                    src={itemImage.imagePreview || images.placeholder}
-                                                />
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        itemImageInputRef.current && itemImageInputRef.current.click();
-                                                    }}
-                                                    className={cx('btn', 'btn-sm', 'btn-inverse-info', 'mt-4')}
-                                                >
-                                                    Tải lên
-                                                </button>
-                                            </div>
-                                        </div>
-                                        {/* End Options image */}
-
-                                        {/* Options table */}
-                                        <div className={cx('col-md-12', 'overflow-x-auto')}>
-                                            <ItemsTable
-                                                items={productItems}
-                                                productOptions={productOptions}
-                                                handleRemoveItem={handleRemoveProductItem}
-                                                handleSelectItem={handleSetSelectProductItem}
-                                            />
-                                        </div>
-                                        {/* End Options table */}
+                                    {/* Options table */}
+                                    <div className={cx('overflow-x-auto')}>
+                                        <ItemsTable
+                                            items={productItems}
+                                            productOptions={productOptions}
+                                            handleRemoveItem={handleRemoveProductItem}
+                                            handleSelectItem={handleSetSelectProductItem}
+                                        />
                                     </div>
+                                    {/* End Options table */}
                                 </div>
                                 {/* End Product Options*/}
 
-                                <Divider />
-                                <div>
+                                {/* <Divider /> */}
+                                <div className={cx('mt-5')}>
                                     {action === 'create' ? (
                                         <button
                                             onClick={handleCreateProduct}
@@ -662,7 +679,7 @@ function ProductsCreate() {
 
                 {/* Right bar */}
                 <div className={cx('col-md-4', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
                             <h4 className={cx('card-title', 'm-0')}>Trạng thái hiển thị</h4>
                             <p className={cx('card-description')}></p>

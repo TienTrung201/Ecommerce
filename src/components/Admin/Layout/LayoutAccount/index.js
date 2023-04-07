@@ -8,10 +8,10 @@ function LayoutAccount({ title = 'Form title', subTitle, children }) {
     return (
         <div className={cx('container-fluid', 'ps-0', 'pe-0')} style={{ height: '100vh', overflowY: 'auto' }}>
             <div className={cx('row', 'h-100')}>
-                <div className={cx('col-md-6', 'ps-0', 'pe-0')}>
+                <div className={cx('col-md-5', 'ps-0', 'pe-0')}>
                     <div className={cx('w-100', 'h-100')} style={{ padding: '48px' }}>
                         <div className={cx('w-100')}>
-                            <img style={{ height: '24px' }} src={images.logoMini} alt="" />
+                            <img style={{ height: '24px' }} src={images.logo} alt="" />
                         </div>
                         <div className={cx('w-100')}>
                             <h1 className={cx('fs-1', 'fw-bold', 'text-center', 'mt-5')}>{title}</h1>
@@ -27,7 +27,7 @@ function LayoutAccount({ title = 'Form title', subTitle, children }) {
                         </div>
                     </div>
                 </div>
-                <div className={cx('col-md-6', 'ps-0', 'pe-0', 'h-100', 'd-none', 'd-md-block')}>
+                <div className={cx('col-md-7', 'ps-0', 'pe-0', 'h-100', 'd-none', 'd-md-block')}>
                     <div className={cx('w-100', 'h-100', 'p-2')}>
                         <div
                             style={{

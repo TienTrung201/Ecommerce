@@ -124,26 +124,30 @@ function EditRoles() {
 
     return (
         <>
-            <div className={cx('page-header', 'align-middle')}>
-                <h3 className={cx('page-title', 'mt-0')}>Tạo mới vai trò</h3>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
+                <h3 className={cx('page-title', 'mt-0')}>
+                    {action === 'update' ? 'Cập nhật vai trò' : 'Thêm mới vai trò'}
+                </h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}>
-                            <Link to="/admin/manage-roles">Danh sách vai trò</Link>
+                            <Link to="/admin/manage-roles">Vai trò</Link>
                         </li>
-                        <li className={cx('breadcrumb-item', 'active')}>Tạo vai trò</li>
+                        <li className={cx('breadcrumb-item', 'active')}>
+                            {action === 'update' ? 'Cập nhật vai trò' : 'Thêm vai trò'}
+                        </li>
                     </ol>
                 </nav>
             </div>
             <div className={cx('row', 'g-4', 'align-items-start')}>
                 <div className={cx('col-md-8', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title', 'm-0')}>Tạo vai trò</h4>
+                            <h4 className={cx('card-title', 'm-0')}>Vai trò</h4>
                             <p className={cx('card-description')}></p>
                             <form className={cx('forms-sample')}>
                                 <div className={cx('form-group')}>
-                                    <label htmlFor="exampleInputName1">Tên vai trò *</label>
+                                    <label htmlFor="exampleInputName1">Tên vai trò</label>
                                     <input
                                         onChange={handleRoleNameInputChange}
                                         value={roleNameInput}
@@ -201,9 +205,9 @@ function EditRoles() {
 
                 {/* Right bar */}
                 <div className={cx('col-md-4', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title', 'm-0')}>Mô tả các quyền</h4>
+                            <h4 className={cx('card-title', 'm-0')}>Mô tả</h4>
                             <p className={cx('card-description')}>Roles description</p>
                         </div>
                     </div>

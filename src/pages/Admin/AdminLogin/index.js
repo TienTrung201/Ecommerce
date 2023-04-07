@@ -79,7 +79,7 @@ function AdminLogin() {
     // -------- End Handle submit login --------
 
     return (
-        <LayoutAccount title="Đăng nhập vào Cosmetics shop" subTitle="Chào mừng quay trở lại">
+        <LayoutAccount title="Đăng nhập vào Bellissa" subTitle="Chào mừng quay trở lại">
             <div className={cx('form-group')}>
                 <label htmlFor="inputUserName">Tên đăng nhập / email</label>
                 <input

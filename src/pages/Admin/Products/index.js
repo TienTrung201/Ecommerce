@@ -30,8 +30,8 @@ function Products() {
 
     return (
         <>
-            <div className={cx('page-header', 'align-middle')}>
-                <h3 className={cx('page-title', 'mt-0')}> Danh sách sản phẩm </h3>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
+                <h3 className={cx('page-title', 'mt-0')}> Sản phẩm </h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}></li>
@@ -39,7 +39,7 @@ function Products() {
                     </ol>
                 </nav>
             </div>
-            <div className={cx('card')}>
+            <div className={cx('card', 'shadow-sm')}>
                 <div className={cx('card-body')}>
                     <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
                         <h4 className={cx('card-title', 'm-0')}>Tất cả sản phẩm</h4>
@@ -72,9 +72,15 @@ function Products() {
                                         key={product.productId}
                                     >
                                         <td className={cx('py-1')}>
-                                            <img src={product.image || images.placeholder} alt="" />
+                                            <img
+                                                className={cx('rounded-6', 'border')}
+                                                src={product.image || images.placeholder}
+                                                alt=""
+                                            />
                                         </td>
-                                        <td>{product.name}</td>
+                                        <td className={cx('text-wrap', 'lh-base')} style={{ minWidth: '280px' }}>
+                                            {product.name}
+                                        </td>
                                         <td>
                                             {product.items.reduce((total, current) => total + current.qtyInStock, 0)}{' '}
                                             của {product.items.length} loại
