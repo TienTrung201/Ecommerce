@@ -1,15 +1,143 @@
-import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { api } from '@/api';
+import { getData, updateData } from '@/api/service';
+import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
+import { cartSelector, optionsSelector, userSelector } from '@/redux/selector';
+import { faClose, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
+import cartSlice from './CartSlice';
 
 function Cart() {
+    const dispatch = useDispatch();
+    const cartUser = useSelector(cartSelector);
+    const user = useSelector(userSelector);
+    const optionProduct = useSelector(optionsSelector);
     const cart = useRef();
     const wishlist = useRef();
     const cartItem = useRef();
     const wishlistItem = useRef();
+    const handeSetQuantity = (id, position, action) => {
+        dispatch(notificationsSlice.actions.showLoading(''));
 
+        let productChanged = cartUser.cartItems.find((item) => item.cartItemId === id);
+        if (productChanged.qty === 1 && action === '-') {
+            handleDeleteCartItem(id, position);
+        } else if (productChanged.qty === productChanged.qtyInStock && action === '+') {
+            dispatch(notificationsSlice.actions.showError(`Chỉ còn ${productChanged.qtyInStock} sản phẩm`));
+        } else {
+            if (action === '+') {
+                productChanged = cartUser.cartItems.map((cartItem) => {
+                    if (cartItem.cartItemId === id) {
+                        return { ...cartItem, qty: cartItem.qty + 1 };
+                    }
+                    return cartItem;
+                });
+            } else {
+                productChanged = cartUser.cartItems.map((cartItem) => {
+                    if (cartItem.cartItemId === id) {
+                        return { ...cartItem, qty: cartItem.qty - 1 };
+                    }
+                    return cartItem;
+                });
+            }
+            const convertDataUpdate = productChanged.map((dataItem) => {
+                return {
+                    cartItemId: dataItem.cartItemId,
+                    qty: dataItem.qty,
+                    cartId: cartUser.cartId,
+                    productItemId: dataItem.productItemId,
+                };
+            });
+            updateData(api.shoppingCarts, {
+                cartId: cartUser.cartId,
+                userId: user.uid,
+                items: convertDataUpdate,
+            })
+                .then((response) => {
+                    console.log(response);
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.showSuccess('Cập nhật thành công'));
+                        getData(api.shoppingCarts + '/' + user.uid)
+                            .then((response) => {
+                                console.log(response);
+                                dispatch(cartSlice.actions.setCartId(response.cartId));
+                                const cartUser = response.items.reduce((acc, item) => {
+                                    const { cartItemId, qty } = item;
+                                    const { productId, image, name, items } = item.product;
+                                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                                    acc.push({
+                                        cartItemId,
+                                        productId,
+                                        image,
+                                        name,
+                                        costPrice,
+                                        qtyInStock,
+                                        productItemId,
+                                        sku,
+                                        qty,
+                                        optionsId,
+                                    });
+                                    return acc;
+                                }, []);
+                                dispatch(cartSlice.actions.setCart(cartUser));
+
+                                console.log(cartUser);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                    }, 1000);
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.destroy());
+                    }, 2000);
+                })
+                .catch((error) => {
+                    dispatch(notificationsSlice.actions.showError('Lỗi'));
+
+                    console.log(error);
+                });
+        }
+    };
+
+    const handleDeleteCartItem = (id, position) => {
+        console.log(cartUser);
+        const data = cartUser.cartItems.filter((cartItem) => cartItem.cartItemId !== id);
+        const convertDataUpdate = data.map((dataItem) => {
+            return {
+                cartItemId: dataItem.cartItemId,
+                qty: dataItem.qty,
+                cartId: cartUser.cartId,
+                productItemId: dataItem.productItemId,
+            };
+        });
+        console.log({ cartId: cartUser.cartId, userId: user.uid, items: convertDataUpdate });
+        updateData(api.shoppingCarts, {
+            cartId: cartUser.cartId,
+            userId: user.uid,
+            items: convertDataUpdate,
+        })
+            .then((response) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Xóa thành công'));
+                    dispatch(cartSlice.actions.removeItemCart(position));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+
+                console.log(response);
+            })
+            .catch((error) => {
+                dispatch(notificationsSlice.actions.showError('Thất bại'));
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 1000);
+                console.log(error);
+            });
+    };
     const handleChangeCart = (e) => {
         cart.current.classList.add('active', 'in');
         wishlist.current.classList.remove('active', 'in');
@@ -44,9 +172,9 @@ function Cart() {
                                 <table className="table cart-table">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th className="product-thumbnail">Product</th>
                                             <th className="product-name">Description</th>
-                                            <th className="product-name">Color</th>
                                             <th className="product-name">Size</th>
                                             <th className="product-price">Price</th>
                                             <th className="product-quantity">Quantity</th>
@@ -55,144 +183,95 @@ function Cart() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr className="item_cart">
-                                            <td className=" product-name">
-                                                <div className="product-img">
-                                                    <img
-                                                        src={require('@/assets/image/product/cart_product_1.jpg')}
-                                                        alt="Product"
-                                                    />
-                                                </div>
-                                            </td>
-                                            <td className="product-desc">
-                                                <div className="product-info">
-                                                    <Link href="#" title="">
-                                                        Harman Kardon Onyx Studio{' '}
-                                                    </Link>
-                                                    <span>#SKU: 113106</span>
-                                                </div>
-                                            </td>
-                                            <td className="product-same">
-                                                <div className="product-info">
-                                                    <p>Dark</p>
-                                                </div>
-                                            </td>
-                                            <td className="product-same">
-                                                <div className="product-info">
-                                                    <p>L</p>
-                                                </div>
-                                            </td>
-                                            <td className="product-same total-price">
-                                                <p className="price">$19.00</p>
-                                            </td>
-                                            <td className="bcart-quantity single-product-detail">
-                                                <div className="cart-qtt">
-                                                    <button
-                                                        type="button"
-                                                        className="quantity-left-minus btn btn-number js-minus"
-                                                        data-type="minus"
-                                                        data-field=""
+                                        {cartUser.cartItems.map((item, i) => {
+                                            return (
+                                                <tr key={item.cartItemId} className="item_cart">
+                                                    <td>
+                                                        <input type="checkbox"></input>
+                                                    </td>
+                                                    <td className=" product-name">
+                                                        <div className="product-img">
+                                                            <img src={item.image} alt="Product" />
+                                                        </div>
+                                                    </td>
+                                                    <td className="product-desc">
+                                                        <div className="product-info">
+                                                            <Link to="" title="">
+                                                                {item.name}
+                                                            </Link>
+                                                            <span>#SKU: {item.sku}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td className="product-same">
+                                                        <div className="product-info">
+                                                            <p>
+                                                                {' '}
+                                                                {item.optionsId.map((optionCurrentItem) => {
+                                                                    const typeOption = optionProduct.find(
+                                                                        (o) => o.productOptionId === optionCurrentItem,
+                                                                    );
+                                                                    return typeOption.name + ' ';
+                                                                })}{' '}
+                                                            </p>
+                                                        </div>
+                                                    </td>
+
+                                                    <td className="product-same total-price">
+                                                        <p className="price">{item.costPrice} đ</p>
+                                                    </td>
+                                                    <td className="bcart-quantity single-product-detail">
+                                                        <div className="autoCenter">
+                                                            <button
+                                                                onClick={() => {
+                                                                    handeSetQuantity(item.cartItemId, i, '-');
+                                                                }}
+                                                                type="button"
+                                                                className="quantity-right-plus btn btn-number js-plus"
+                                                                data-type="plus"
+                                                                data-field=""
+                                                            >
+                                                                <i className="ion-ios-plus-empty">
+                                                                    <FontAwesomeIcon icon={faMinus} />
+                                                                </i>
+                                                            </button>
+                                                            <input
+                                                                type="text"
+                                                                name="number"
+                                                                value={item.qty}
+                                                                disabled={true}
+                                                                className="product_quantity_number js-number"
+                                                            />
+                                                            <button
+                                                                onClick={() => {
+                                                                    handeSetQuantity(item.cartItemId, i, '+');
+                                                                }}
+                                                                type="button"
+                                                                className="quantity-right-plus btn btn-number js-plus"
+                                                                data-type="plus"
+                                                                data-field=""
+                                                            >
+                                                                <i className="ion-ios-plus-empty">
+                                                                    <FontAwesomeIcon icon={faPlus} />
+                                                                </i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                    <td className="total-price">
+                                                        <p className="price">{item.qty * item.costPrice} đ</p>
+                                                    </td>
+                                                    <td
+                                                        onClick={() => {
+                                                            handleDeleteCartItem(item.cartItemId, i);
+                                                        }}
+                                                        className="product-remove"
                                                     >
-                                                        <span className="minus-icon">
-                                                            <i className="ion-ios-minus-empty" />
-                                                        </span>
-                                                    </button>
-                                                    <input
-                                                        type="text"
-                                                        name="number"
-                                                        defaultValue={1}
-                                                        className="product_quantity_number js-number"
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        className="quantity-right-plus btn btn-number js-plus"
-                                                        data-type="plus"
-                                                        data-field=""
-                                                    >
-                                                        <span className="plus-icon">
-                                                            <i className="ion-ios-plus-empty" />
-                                                        </span>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                            <td className="total-price">
-                                                <p className="price">$19.00</p>
-                                            </td>
-                                            <td className="product-remove">
-                                                <Link href="#" className="btn-del">
-                                                    <FontAwesomeIcon icon={faClose} />
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                        <tr className="item_cart">
-                                            <td className="product-name">
-                                                <div className="product-img">
-                                                    <img
-                                                        src={require('@/assets/image/product/cart_product_3.jpg')}
-                                                        alt="Product"
-                                                    />
-                                                </div>
-                                            </td>
-                                            <td className="product-desc">
-                                                <div className="product-info">
-                                                    <Link href="#" title="">
-                                                        Harman Kardon Onyx Studio{' '}
-                                                    </Link>
-                                                    <span>#SKU: 113106</span>
-                                                </div>
-                                            </td>
-                                            <td className="product-same">
-                                                <div className="product-info">
-                                                    <p>Dark</p>
-                                                </div>
-                                            </td>
-                                            <td className="product-same">
-                                                <div className="product-info">
-                                                    <p>L</p>
-                                                </div>
-                                            </td>
-                                            <td className="product-same total-price">
-                                                <p className="price">$19.00</p>
-                                            </td>
-                                            <td className="bcart-quantity single-product-detail">
-                                                <div className="cart-qtt">
-                                                    <button
-                                                        type="button"
-                                                        className="quantity-left-minus btn btn-number js-minus"
-                                                        data-type="minus"
-                                                        data-field=""
-                                                    >
-                                                        <span className="minus-icon">
-                                                            <i className="ion-ios-minus-empty" />
-                                                        </span>
-                                                    </button>
-                                                    <input
-                                                        type="text"
-                                                        name="number"
-                                                        defaultValue={1}
-                                                        className="product_quantity_number js-number"
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        className="quantity-right-plus btn btn-number js-plus"
-                                                        data-type="plus"
-                                                        data-field=""
-                                                    >
-                                                        <span className="plus-icon">
-                                                            <i className="ion-ios-plus-empty" />
-                                                        </span>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                            <td className="total-price">
-                                                <p className="price">$19.00</p>
-                                            </td>
-                                            <td className="product-remove">
-                                                <Link href="#" className="btn-del">
-                                                    <FontAwesomeIcon icon={faClose} />
-                                                </Link>
-                                            </td>
-                                        </tr>
+                                                        <Link href="#" className="btn-del">
+                                                            <FontAwesomeIcon icon={faClose} />
+                                                        </Link>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
                                     </tbody>
                                 </table>
                             </div>

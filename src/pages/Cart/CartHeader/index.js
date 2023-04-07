@@ -13,6 +13,7 @@ function CartHeader() {
     const optionProduct = useSelector(optionsSelector);
     const handleDeleteCartItem = (id, position) => {
         console.log(cartUser);
+        dispatch(notificationsSlice.actions.showLoading(''));
         const data = cartUser.cartItems.filter((cartItem) => cartItem.cartItemId !== id);
         const convertDataUpdate = data.map((dataItem) => {
             return {
