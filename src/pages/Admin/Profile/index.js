@@ -8,8 +8,7 @@ import TextEditor from '@/components/Admin/TextEditor';
 import TextEditorParagraph from '@/components/Admin/TextEditorParagraph';
 import { uploadFile } from '@/firebase/service';
 import { adminUserSelector } from '@/redux/selector';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as Unicons from '@iconscout/react-unicons';
 import { DatePicker, Select } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
@@ -200,7 +199,8 @@ function Profile() {
                                 className={cx('btn', 'btn-outline-primary', 'btn-sm', 'rounded-pill')}
                             >
                                 <span className={cx('me-2')}>Edit</span>
-                                <FontAwesomeIcon style={{ fontSize: 12 }} icon={faPen} />
+                                {/* <FontAwesomeIcon style={{ fontSize: 12 }} icon={faPen} /> */}
+                                <Unicons.UilPen size="14" />
                             </button>
                         </div>
                     </div>
@@ -216,7 +216,8 @@ function Profile() {
                                     className={cx('btn', 'btn-outline-primary', 'btn-sm', 'rounded-pill')}
                                 >
                                     <span className={cx('me-2')}>Edit</span>
-                                    <FontAwesomeIcon style={{ fontSize: 12 }} icon={faPen} />
+                                    {/* <FontAwesomeIcon style={{ fontSize: 12 }} icon={faPen} /> */}
+                                    <Unicons.UilPen size="14" />
                                 </button>
                             </div>
                         </div>

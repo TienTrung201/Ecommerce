@@ -178,26 +178,26 @@ function PromotionsCreate() {
 
     return (
         <>
-            <div className={cx('page-header', 'align-middle')}>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
                 <h3 className={cx('page-title', 'mt-0')}>
-                    {action === 'update' ? 'Cập nhật khuyến mãi' : 'Tạo khuyến mãi'}
+                    {action === 'update' ? 'Cập nhật khuyến mãi' : 'Thêm mới khuyến mãi'}
                 </h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}>
-                            <Link to="/admin/promotions">Tất cả khuyến mãi</Link>
+                            <Link to="/admin/promotions">Khuyến mãi</Link>
                         </li>
                         <li className={cx('breadcrumb-item', 'active')} aria-current="page">
-                            {action === 'update' ? 'Cập nhật khuyến mãi' : 'Tạo khuyến mãi'}
+                            {action === 'update' ? 'Cập nhật khuyến mãi' : 'Thêm khuyến mãi'}
                         </li>
                     </ol>
                 </nav>
             </div>
             <div className={cx('row', 'g-4', 'align-items-start')}>
                 <div className={cx('col-md-8', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title', 'm-0')}>Chương trình khuyến mãi</h4>
+                            <h4 className={cx('card-title', 'm-0')}>Khuyến mãi</h4>
                             <p className={cx('card-description')}>
                                 Mã khuyến mãi sẽ được khách hàng nhập tại màn hình thanh toán
                             </p>
@@ -263,7 +263,7 @@ function PromotionsCreate() {
                                             type="submit"
                                             className={cx('btn', 'btn-gradient-primary', 'me-2')}
                                         >
-                                            Cập nhật khuyến mãi
+                                            Cập nhật
                                         </button>
 
                                         <Popconfirm
@@ -301,9 +301,9 @@ function PromotionsCreate() {
                 </div>
 
                 <div className={cx('col-md-4', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title', 'm-0')}>Tổng quan khuyến mãi</h4>
+                            <h4 className={cx('card-title', 'm-0')}>Mô tả</h4>
                             <p className={cx('card-description')}> Basic form elements </p>
                         </div>
                     </div>

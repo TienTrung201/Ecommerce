@@ -124,7 +124,7 @@ function ProductProviderCreate() {
 
     return (
         <>
-            <div className={cx('page-header', 'align-middle')}>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
                 <h3 className={cx('page-title', 'mt-0')}>
                     {action === 'update' ? 'Cập nhật nhà cung cấp' : 'Thêm nhà cung cấp'}
                 </h3>
@@ -141,7 +141,7 @@ function ProductProviderCreate() {
             </div>
             <div className={cx('row', 'g-4', 'align-items-start')}>
                 <div className={cx('col-md-8', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
                             <h4 className={cx('card-title', 'm-0')}>Nhà cung cấp</h4>
                             <p className={cx('card-description')}></p>
@@ -205,9 +205,9 @@ function ProductProviderCreate() {
 
                 {/* Right bar */}
                 <div className={cx('col-md-4', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title', 'm-0')}>Mô tả nhà cung cấp</h4>
+                            <h4 className={cx('card-title', 'm-0')}>Mô tả</h4>
                             <p className={cx('card-description')}>Provider description</p>
                         </div>
                     </div>
