@@ -283,7 +283,7 @@ function Product() {
                     </li>
 
                     <li>
-                        <Link to="/">Category</Link>
+                        <Link to="/shop">Shop</Link>
                         <i className="iconRight">
                             <FontAwesomeIcon icon={faChevronRight} />
                         </i>
@@ -294,8 +294,8 @@ function Product() {
             </div>
             <div className="container container-content">
                 <div className="single-product-detail">
-                    <div className="row">
-                        <div className="col-xs-12 col-sm-6 col-md-6">
+                    <div className="row align-items-stretch">
+                        <div className="col-xs-12 col-sm-6 col-md-6 slide-product">
                             <div className="flex product-img-slide">
                                 <div className="product-images">
                                     <div className="ribbon zoa-sale">
@@ -307,7 +307,7 @@ function Product() {
                                         {...settings}
                                         className="main-img js-product-slider"
                                     >
-                                        <Link to="#" className="hover-images effect">
+                                        <Link to="#" className="hover-images effect autoCenter">
                                             <img src={product.image} alt="" className="img-responsive" />
                                         </Link>
                                         {product.items &&
@@ -316,7 +316,11 @@ function Product() {
                                                     return false;
                                                 }
                                                 return (
-                                                    <Link key={p.productItemId} to="#" className="hover-images effect">
+                                                    <Link
+                                                        key={p.productItemId}
+                                                        to="#"
+                                                        className="hover-images effect autoCenter"
+                                                    >
                                                         <img src={p.image} alt="" className="img-responsive" />
                                                     </Link>
                                                 );

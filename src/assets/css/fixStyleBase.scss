@@ -1,3 +1,13 @@
+@mixin mobile {
+    @media screen and (max-width: 739px) {
+        @content;
+    }
+}
+@mixin tablet {
+    @media screen and (min-width: 740px) and (max-width: 1023px) {
+        @content;
+    }
+}
 .btn-app-primary {
     background-color: #bb9b7c !important;
     color: #fff !important;
@@ -298,6 +308,21 @@ label.mail {
     margin-right: 10px;
     margin-bottom: 5px;
 }
+.address-list-item-header-left {
+    display: flex;
+    align-items: center;
+    .checkIsDefaultAddress {
+        width: 18px;
+        height: 18px;
+        margin-top: 0;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+    label {
+        margin-bottom: 0;
+    }
+}
+
 .address-list-item-header-right {
     flex: 1;
     // position: absolute;
@@ -498,6 +523,27 @@ label.mail {
     }
 }
 //cart
+.order_wrapper {
+    padding: 10px 20px;
+    .address-phone,
+    .address-name {
+        font-weight: 600;
+        color: #2c2c2c;
+        margin-bottom: 0;
+    }
+    .header__cart-list-items {
+        max-height: 200px !important;
+    }
+    .total {
+        display: flex;
+        justify-content: flex-end;
+        padding-bottom: 0;
+        p {
+            font-weight: 500;
+            font-size: 1.8rem;
+        }
+    }
+}
 .product-remove {
     position: relative;
     .btn-del {
@@ -608,7 +654,7 @@ label.mail {
 .header__cart-list-items {
     padding-left: 0;
     list-style: none;
-    height: 300px;
+    max-height: 300px !important;
     overflow-y: scroll;
 }
 
@@ -1005,3 +1051,22 @@ label.mail {
 .zoa-product-tabs .tabs li a {
     font-size: 25px !important;
 }
+//product
+.align-items-stretch {
+    align-items: stretch;
+}
+.slide-product {
+    .product-img-slide {
+        .product-images {
+            .img-responsive {
+                object-fit: cover;
+                height: 550px;
+                @include mobile {
+                    height: 250px;
+                }
+            }
+        }
+    }
+}
+
+//product

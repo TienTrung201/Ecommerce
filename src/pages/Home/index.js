@@ -148,12 +148,13 @@ function Home() {
                                                 <div className="product-info text-center">
                                                     <h3 className="product-title">{product.name}</h3>
                                                     <div className="product-price">
-                                                        <span className="old">${product.items[0].price}</span>
+                                                        <span className="old">{product.items[0].price} đ</span>
                                                         {product.discountRate === 0 ? (
-                                                            <span>${product.items[0].price}</span>
+                                                            <span>{product.items[0].price} đ</span>
                                                         ) : (
                                                             <span>
-                                                                ${(product.items[0].price * product.discountRate) / 100}
+                                                                {(product.items[0].price * product.discountRate) / 100}{' '}
+                                                                đ
                                                             </span>
                                                         )}
                                                     </div>

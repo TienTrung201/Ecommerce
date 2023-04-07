@@ -283,7 +283,7 @@ function Header({ isUser }) {
                                 </div>
                             </div>
                             <div className="col-md-3 col-xs-4 col-sm-4 col2 justify-content-center">
-                                <Link to="#">
+                                <Link to="/">
                                     <img src={require('@/assets/image/logo2.png')} alt="" className="img-reponsive" />
                                 </Link>
                             </div>

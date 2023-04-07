@@ -1,14 +1,16 @@
 import { api } from '@/api';
-import { getData, updateData } from '@/api/service';
+import { updateData } from '@/api/service';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { cartSelector, optionsSelector, userSelector } from '@/redux/selector';
 import { faClose, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 import cartSlice from './CartSlice';
+import Modal from '@/components/Layout/Modal';
+import Order from './order';
 
 function Cart() {
     const dispatch = useDispatch();
@@ -19,6 +21,7 @@ function Cart() {
     const wishlist = useRef();
     const cartItem = useRef();
     const wishlistItem = useRef();
+    const [visible, setVisible] = useState(false);
     // set quantiti item cart
     const handeSetQuantity = (id, position, action) => {
         dispatch(notificationsSlice.actions.showLoading(''));
@@ -143,6 +146,13 @@ function Cart() {
         return total;
     }, [cartUser]);
     //total cart
+    //handle click order cart
+    const handleOpenModalOrderCart = () => {
+        if (totalCart !== 0) {
+            setVisible(true);
+        }
+    };
+    //handle click order cart
     //menu tab
     const handleChangeCart = (e) => {
         cart.current.classList.add('active', 'in');
@@ -160,6 +170,9 @@ function Cart() {
 
     return (
         <div className="container">
+            <Modal visible={visible} setVisible={setVisible} title={'Đơn đặt hàng'} save={'Đặt hàng'}>
+                <Order total={totalCart} />
+            </Modal>
             <div className="zoa-cart">
                 <ul className="account-tab">
                     <li ref={cartItem} onClick={handleChangeCart} className="active">
@@ -341,7 +354,10 @@ function Cart() {
                                             </div>
                                         </div>
                                         <Link
-                                            href=""
+                                            onClick={() => {
+                                                handleOpenModalOrderCart();
+                                            }}
+                                            to=""
                                             className={
                                                 totalCart === 0
                                                     ? 'zoa-btn zoa-checkout button-unauthorized'

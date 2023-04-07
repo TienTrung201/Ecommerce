@@ -57,7 +57,7 @@ input::-webkit-inner-spin-button {
     appearance: none;
 }
 .autoCenter {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
 }
