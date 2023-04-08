@@ -7,6 +7,7 @@ import { adminUserSelector } from '@/redux/selector';
 import CustomCollapse from '@/components/Admin/CustomCollapse';
 import images from '@/assets/admin/images';
 import { useEffect, useState } from 'react';
+import { Divider } from 'antd';
 
 const cx = classNames.bind(styles);
 
@@ -210,10 +211,22 @@ function Sidebar({ active, iconOnly }) {
                     </CustomCollapse>
 
                     <li className={cx('nav-item', 'sidebar-actions')}>
-                        <div className={cx('border-bottom')}>
-                            <h6 className={cx('font-weight-normal', 'fs-14', 'mb-3')}>Website</h6>
-                        </div>
-                        <button className={cx('btn', 'btn-gradient-primary', 'text-ellipsis', 'mt-4')}>
+                        <Divider style={{ margin: '12px 0' }} />
+                        <button
+                            className={cx(
+                                'd-flex',
+                                'align-items-center',
+                                'btn',
+                                'btn-sm',
+                                'w-100',
+                                'btn-gradient-primary',
+                                'text-ellipsis',
+                                'mt-4',
+                            )}
+                        >
+                            <span className={cx('me-2')}>
+                                <Unicons.UilStore size="18" />
+                            </span>
                             Đến trang bán hàng
                         </button>
                     </li>

@@ -2,6 +2,7 @@ import images from '@/assets/admin/images';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
 import classNames from 'classnames/bind';
 import './statusMessage.css';
+import * as Unicons from '@iconscout/react-unicons';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { uploadFile } from '@/firebase/service';
@@ -10,6 +11,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { deleteData, getData, postData, updateData } from '@/api/service';
 import { api } from '@/api';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
+import Validator from '@/Validator/Validator';
 
 const cx = classNames.bind(styles);
 
@@ -19,6 +21,9 @@ function ProductCategoriesCreate() {
     const [imageUpload, setImageUpload] = useState({ image: null, imagePreview: '' });
     const [categoryName, setCategoryName] = useState('');
     const [promotionInput, setPromotionInput] = useState(null);
+
+    const [categoryNameError, setCategoryNameError] = useState('');
+
     const inputImageRef = useRef();
     const dispatch = useDispatch();
     const { action, id } = useParams();
@@ -57,6 +62,17 @@ function ProductCategoriesCreate() {
             });
     }, [action, id]);
 
+    // ---------- Handle validate input ----------
+    const handleValidateCategoryName = () => {
+        const isValidate = Validator({
+            setErrorMessage: setCategoryNameError,
+            rules: [Validator.isRequired(categoryName, 'Bạn chưa nhập tên danh mục')],
+        });
+
+        return isValidate;
+    };
+    // ---------- Handle validate input ----------
+
     // ---------- Handle input ----------
     const handleInputImageChange = (e) => {
         setImageUpload({
@@ -67,6 +83,7 @@ function ProductCategoriesCreate() {
 
     const handleInputCategoryNameChange = (e) => {
         setCategoryName(e.target.value);
+        setCategoryNameError('');
     };
 
     const handleSelectPromotionChange = (value) => {
@@ -94,7 +111,7 @@ function ProductCategoriesCreate() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (categoryName !== '') {
+        if (handleValidateCategoryName()) {
             dispatch(notificationsSlice.actions.showLoading('Đang tạo danh mục'));
             const data = await generateData();
 
@@ -112,11 +129,6 @@ function ProductCategoriesCreate() {
                     console.warn(error);
                     dispatch(notificationsSlice.actions.showError('Tạo danh mục thất bại'));
                 });
-        } else {
-            dispatch(notificationsSlice.actions.showError('Tạo danh mục thất bại'));
-            setTimeout(() => {
-                dispatch(notificationsSlice.actions.destroy());
-            }, 1000);
         }
     };
     // ---------- End Handle submit ----------
@@ -125,7 +137,7 @@ function ProductCategoriesCreate() {
     const handleUpdate = async (e) => {
         e.preventDefault();
 
-        if (categoryName !== '') {
+        if (handleValidateCategoryName()) {
             dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
 
             const data = await generateData();
@@ -142,11 +154,6 @@ function ProductCategoriesCreate() {
                     console.warn(error);
                     dispatch(notificationsSlice.actions.showError('Cập nhật thất bại'));
                 });
-        } else {
-            dispatch(notificationsSlice.actions.showError('Cập nhật thất bại'));
-            setTimeout(() => {
-                dispatch(notificationsSlice.actions.destroy());
-            }, 1000);
         }
     };
     // ---------- End Handle update ----------
@@ -214,12 +221,14 @@ function ProductCategoriesCreate() {
                                     <label htmlFor="exampleInputName1">Tên danh mục</label>
                                     <input
                                         onChange={handleInputCategoryNameChange}
+                                        onBlur={handleValidateCategoryName}
                                         value={categoryName}
                                         type="text"
                                         className={cx('form-control', 'form-control-sm', 'border-secondary')}
                                         id="exampleInputName1"
                                         placeholder="Nhập tên danh mục"
                                     />
+                                    <span className={cx('text-danger', 'fs-14')}>{categoryNameError}</span>
                                 </div>
                                 <div className={cx('form-group')}>
                                     <label htmlFor="exampleSelectGender">Chương trình giảm giá</label>
@@ -245,31 +254,19 @@ function ProductCategoriesCreate() {
                                         className={cx('file-upload-default')}
                                     />
                                     <div className={cx('input-group')}>
-                                        <input
-                                            value={
-                                                (imageUpload.image &&
-                                                    (typeof imageUpload.image === 'string'
-                                                        ? imageUpload.image
-                                                        : imageUpload.image.name)) ||
-                                                ''
-                                            }
-                                            type="text"
-                                            className={cx(
-                                                'form-control',
-                                                'border-secondary',
-                                                'form-control-sm',
-                                                'file-upload-info',
-                                            )}
-                                            disabled
-                                            placeholder="Tải lên ảnh danh mục"
-                                        />
                                         <button
                                             onClick={() => {
                                                 inputImageRef.current && inputImageRef.current.click();
                                             }}
-                                            className={cx('file-upload-browse', 'btn', 'btn-sm', 'btn-inverse-info')}
+                                            className={cx(
+                                                'file-upload-browse',
+                                                'btn',
+                                                'btn-sm',
+                                                'btn-outline-secondary',
+                                            )}
                                             type="button"
                                         >
+                                            <Unicons.UilUpload size="14" className={cx('me-2')} />
                                             Upload
                                         </button>
                                     </div>
