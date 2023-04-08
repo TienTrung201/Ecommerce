@@ -78,25 +78,22 @@ function EditUserRoles() {
 
     return (
         <>
-            <div className={cx('page-header', 'align-middle')}>
-                <h3 className={cx('page-title', 'mt-0')}>Phân quyền người dùng</h3>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
+                <h3 className={cx('page-title', 'mt-0')}>Phân quyền</h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}>
-                            <Link to="/admin/manage-users">Danh sách người dùng</Link>
+                            <Link to="/admin/manage-admins">Quản trị viên</Link>
                         </li>
-                        <li className={cx('breadcrumb-item', 'active')} aria-current="page">
-                            Phân quyền
-                        </li>
+                        <li className={cx('breadcrumb-item', 'active')}>Phân quyền</li>
                     </ol>
                 </nav>
             </div>
             <div className={cx('row', 'g-4', 'align-items-start')}>
                 <div className={cx('col-md-8', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title')}>Phân quyền</h4>
-                            <p className={cx('card-description')}></p>
+                            <h4 className={cx('card-title', 'mt-0', 'mb-5')}>Phân quyền</h4>
                             <form className={cx('forms-sample')}>
                                 <div className={cx('form-group')}>
                                     <label htmlFor="exampleInputName1">Vai trò</label>
@@ -132,9 +129,9 @@ function EditUserRoles() {
 
                 {/* Right bar */}
                 <div className={cx('col-md-4', 'grid-margin', 'stretch-card')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title')}>Mô tả các quyền</h4>
+                            <h4 className={cx('card-title', 'mb-0', 'mt-0')}>Mô tả</h4>
                             <p className={cx('card-description')}>Roles description</p>
                         </div>
                     </div>

@@ -8,8 +8,7 @@ import TextEditor from '@/components/Admin/TextEditor';
 import TextEditorParagraph from '@/components/Admin/TextEditorParagraph';
 import { uploadFile } from '@/firebase/service';
 import { adminUserSelector } from '@/redux/selector';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as Unicons from '@iconscout/react-unicons';
 import { DatePicker, Select } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
@@ -152,7 +151,7 @@ function Profile() {
 
     return (
         <>
-            <div className={cx('page-header', 'align-middle')}>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
                 <h3 className={cx('page-title', 'mt-0')}>Cài đặt tài khoản</h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
@@ -163,7 +162,7 @@ function Profile() {
                     </ol>
                 </nav>
             </div>
-            <div className={cx('card')}>
+            <div className={cx('card', 'shadow-sm')}>
                 <div className={cx('card-body')}>
                     <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
                         <h4 className={cx('card-title', 'mb-0')}>Thông tin của tôi</h4>
@@ -200,7 +199,8 @@ function Profile() {
                                 className={cx('btn', 'btn-outline-primary', 'btn-sm', 'rounded-pill')}
                             >
                                 <span className={cx('me-2')}>Edit</span>
-                                <FontAwesomeIcon style={{ fontSize: 12 }} icon={faPen} />
+                                {/* <FontAwesomeIcon style={{ fontSize: 12 }} icon={faPen} /> */}
+                                <Unicons.UilPen size="14" />
                             </button>
                         </div>
                     </div>
@@ -216,7 +216,8 @@ function Profile() {
                                     className={cx('btn', 'btn-outline-primary', 'btn-sm', 'rounded-pill')}
                                 >
                                     <span className={cx('me-2')}>Edit</span>
-                                    <FontAwesomeIcon style={{ fontSize: 12 }} icon={faPen} />
+                                    {/* <FontAwesomeIcon style={{ fontSize: 12 }} icon={faPen} /> */}
+                                    <Unicons.UilPen size="14" />
                                 </button>
                             </div>
                         </div>

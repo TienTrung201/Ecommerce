@@ -18,7 +18,7 @@ function ShopOrdersDetail() {
     const [orderAddress, setOrderAddress] = useState({});
     const [orderItems, setOrderItems] = useState([]);
     const [shippingMethods, setShippingMethods] = useState([]);
-    const { action, id } = useParams();
+    const { id } = useParams();
 
     useEffect(() => {
         Promise.all([getData(api.shopOrders + '/' + id), getData(api.shippingMethods)])
@@ -39,12 +39,12 @@ function ShopOrdersDetail() {
 
     return (
         <>
-            <div className={cx('page-header', 'align-middle', 'mb-0')}>
+            <div className={cx('page-header', 'align-middle', 'mb-0', 'mt-2')}>
                 <h3 className={cx('page-title', 'mt-0')}>Chi tiết đơn hàng #{shopOrder.orderId}</h3>
                 <nav>
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}>
-                            <Link to="/admin/orders">Danh sách đơn hàng</Link>
+                            <Link to="/admin/orders">Đơn hàng</Link>
                         </li>
                         <li className={cx('breadcrumb-item', 'active')}>Chi tiết đơn hàng</li>
                     </ol>
@@ -55,7 +55,7 @@ function ShopOrdersDetail() {
             </div>
             <div className={cx('row', 'gx-4', 'gy-4')}>
                 <div className={cx('col-md-8')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
                             {/* Card title */}
                             <h4 className={cx('card-title')}>
@@ -175,7 +175,7 @@ function ShopOrdersDetail() {
                         </div>
                     </div>
 
-                    <div className={cx('card', 'mt-4')}>
+                    <div className={cx('card', 'shadow-sm', 'mt-4')}>
                         <div className={cx('card-body')}>
                             <h4 className={cx('card-title')}>Trạng thái đơn hàng</h4>
                             {/* <p className={cx('card-description')}>Không có khách hàng</p> */}
@@ -202,7 +202,7 @@ function ShopOrdersDetail() {
                 </div>
 
                 <div className={cx('col-md-4')}>
-                    <div className={cx('card')}>
+                    <div className={cx('card', 'shadow-sm')}>
                         <div className={cx('card-body')}>
                             <h4 className={cx('card-title')}>Khách hàng</h4>
                             <p className={cx('card-description')}>Không có khách hàng</p>

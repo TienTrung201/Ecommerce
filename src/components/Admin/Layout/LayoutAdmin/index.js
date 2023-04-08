@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './LayoutAdmin.module.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Notification from '../../Notification';
 import { getData } from '@/api/service';
@@ -16,9 +16,33 @@ function LayoutAdmin({ children }) {
     const [sidebarIconOnly, setSidebarIconOnly] = useState(false);
     const [sidebarActive, setSidebarActive] = useState(false);
 
-    const dispatch = useDispatch();
+    const mainPanelRef = useRef();
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // Auto scroll to top
+    useEffect(() => {
+        if (mainPanelRef.current) {
+            mainPanelRef.current.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'smooth',
+            });
+        }
+    }, [navigate]);
+
+    useEffect(() => {
+        const handleHideSidebarMobile = () => {
+            setSidebarActive(false);
+        };
+
+        document.addEventListener('click', handleHideSidebarMobile);
+
+        return () => {
+            document.removeEventListener('click', handleHideSidebarMobile);
+        };
+    }, []);
 
     // Get current admin information
     useEffect(() => {
@@ -53,10 +77,10 @@ function LayoutAdmin({ children }) {
                 {/* <!-- partial --> */}
                 <div className={cx('container-fluid', 'page-body-wrapper')}>
                     {/* <!-- partial:../../partials/_sidebar.html --> */}
-                    <Sidebar active={sidebarActive} />
+                    <Sidebar iconOnly={sidebarIconOnly} active={sidebarActive} />
 
                     {/* <!-- partial --> */}
-                    <div className={cx('main-panel')}>
+                    <div ref={mainPanelRef} className={cx('main-panel')}>
                         <div className={cx('content-wrapper')}>{children}</div>
                         {/* <!-- content-wrapper ends --> */}
                         {/* <!-- partial:../../partials/_footer.html --> */}

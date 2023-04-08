@@ -1,16 +1,29 @@
 import classNames from 'classnames/bind';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBox, faHouse, faTags, faUser } from '@fortawesome/free-solid-svg-icons';
+import * as Unicons from '@iconscout/react-unicons';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { adminUserSelector } from '@/redux/selector';
 import CustomCollapse from '@/components/Admin/CustomCollapse';
 import images from '@/assets/admin/images';
+import { useEffect, useState } from 'react';
+import { Divider } from 'antd';
 
 const cx = classNames.bind(styles);
 
-function Sidebar({ active }) {
+function Sidebar({ active, iconOnly }) {
+    const [activeCollapse, setActiveCollapse] = useState(0);
+
+    const handleSetActiveCollapse = (id) => {
+        setActiveCollapse((prev) => (prev === id ? 0 : id));
+    };
+
+    useEffect(() => {
+        if (iconOnly) {
+            setActiveCollapse(0);
+        }
+    }, [iconOnly]);
+
     const location = useLocation();
 
     const handleStopBubble = (e) => {
@@ -32,7 +45,7 @@ function Sidebar({ active }) {
                                     alt="profile"
                                 />
                             </div>
-                            <div className={cx('nav-profile-text', 'd-flex', 'flex-column')}>
+                            <div className={cx('nav-profile-text', 'd-flex', 'flex-column', 'text-black')}>
                                 <span
                                     style={{ width: '130px' }}
                                     className={cx('font-weight-bold', 'mb-2', 'text-ellipsis')}
@@ -52,13 +65,20 @@ function Sidebar({ active }) {
                     <li data-active="dashboard" className={cx('nav-item', { active: location.pathname === '/admin' })}>
                         <Link to="/admin" className={cx('nav-link')} href="../../index.html">
                             <i className={cx('menu-icon')}>
-                                <FontAwesomeIcon icon={faHouse} />
+                                {/* <FontAwesomeIcon icon={faHouse} /> */}
+                                <Unicons.UilEstate />
                             </i>
-                            <span className={cx('menu-title', 'ms-4')}>Tổng quan</span>
+                            <span className={cx('menu-title', 'ms-3')}>Tổng quan</span>
                         </Link>
                     </li>
 
-                    <CustomCollapse title="Đơn hàng">
+                    <CustomCollapse
+                        id={1}
+                        isActive={activeCollapse}
+                        onClick={handleSetActiveCollapse}
+                        title="Đơn hàng"
+                        icon={<Unicons.UilBill />}
+                    >
                         <ul className={cx('nav', 'flex-column', 'sub-menu')}>
                             <li onClick={handleStopBubble} className={cx('nav-item')}>
                                 <Link
@@ -93,7 +113,13 @@ function Sidebar({ active }) {
                         </ul>
                     </CustomCollapse>
 
-                    <CustomCollapse title="Sản phẩm" icon={faBox}>
+                    <CustomCollapse
+                        id={2}
+                        isActive={activeCollapse}
+                        onClick={handleSetActiveCollapse}
+                        title="Sản phẩm"
+                        icon={<Unicons.UilBox />}
+                    >
                         <ul className={cx('nav', 'flex-column', 'sub-menu')}>
                             <li onClick={handleStopBubble} className={cx('nav-item')}>
                                 <Link
@@ -141,13 +167,20 @@ function Sidebar({ active }) {
                     <li className={cx('nav-item', { active: location.pathname.includes('/admin/promotions') })}>
                         <Link to="/admin/promotions" className={cx('nav-link')} href="#">
                             <i className={cx('menu-icon')}>
-                                <FontAwesomeIcon icon={faTags} />
+                                {/* <FontAwesomeIcon icon={faTags} /> */}
+                                <Unicons.UilTagAlt />
                             </i>
-                            <span className={cx('menu-title', 'ms-4')}>Khuyến mãi</span>
+                            <span className={cx('menu-title', 'ms-3')}>Khuyến mãi</span>
                         </Link>
                     </li>
 
-                    <CustomCollapse title="Người dùng" icon={faUser}>
+                    <CustomCollapse
+                        id={3}
+                        isActive={activeCollapse}
+                        onClick={handleSetActiveCollapse}
+                        title="Người dùng"
+                        icon={<Unicons.UilUsersAlt />}
+                    >
                         <ul className={cx('nav', 'flex-column', 'sub-menu')}>
                             <li onClick={handleStopBubble} data-active="product-list" className={cx('nav-item')}>
                                 <Link
@@ -156,7 +189,7 @@ function Sidebar({ active }) {
                                         active: location.pathname.includes('/admin/manage-admins'),
                                     })}
                                 >
-                                    Danh sách người dùng
+                                    Quản trị viên
                                 </Link>
                             </li>
                             <li onClick={handleStopBubble} data-active="product-category" className={cx('nav-item')}>
@@ -169,17 +202,33 @@ function Sidebar({ active }) {
                                     Quản lý vai trò
                                 </Link>
                             </li>
+                            <li onClick={handleStopBubble} data-active="product-list" className={cx('nav-item')}>
+                                <Link to="" className={cx('nav-link')}>
+                                    Khách hàng
+                                </Link>
+                            </li>
                         </ul>
                     </CustomCollapse>
 
                     <li className={cx('nav-item', 'sidebar-actions')}>
-                        <div className={cx('border-bottom')}>
-                            <h6 className={cx('font-weight-normal', 'fs-14', 'mb-3')}>Website</h6>
-                        </div>
-                        <button className={cx('btn', 'btn-gradient-primary', 'text-ellipsis', 'mt-4')}>
+                        <Divider style={{ margin: '12px 0' }} />
+                        <button
+                            className={cx(
+                                'd-flex',
+                                'align-items-center',
+                                'btn',
+                                'btn-sm',
+                                'w-100',
+                                'btn-gradient-primary',
+                                'text-ellipsis',
+                                'mt-4',
+                            )}
+                        >
+                            <span className={cx('me-2')}>
+                                <Unicons.UilStore size="18" />
+                            </span>
                             Đến trang bán hàng
                         </button>
-                        <div className={cx('border-bottom', 'mt-4')}></div>
                     </li>
                 </ul>
             </nav>
