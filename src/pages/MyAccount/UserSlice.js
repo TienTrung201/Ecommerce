@@ -15,7 +15,8 @@ export const userSlice = createSlice({
         addresses: [],
         paymentMethods: [],
         positionAddress: '',
-        paymentMethodId: '0',
+        paymentMethodId: 0,
+        shippingMethodId: 1,
     },
 
     reducers: {
@@ -53,6 +54,9 @@ export const userSlice = createSlice({
         },
         setpaymentMethod: (state, action) => {
             state.paymentMethodId = action.payload;
+        },
+        setShippingMethodId: (state, action) => {
+            state.shippingMethodId = action.payload;
         },
     },
 });

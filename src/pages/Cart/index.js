@@ -1,7 +1,7 @@
 import { api } from '@/api';
-import { updateData } from '@/api/service';
+import { postData, updateData } from '@/api/service';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
-import { cartSelector, optionsSelector, userSelector } from '@/redux/selector';
+import { cartSelector, optionsSelector, shippingMethodsSelector, userSelector } from '@/redux/selector';
 import { faClose, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMemo, useRef, useState } from 'react';
@@ -169,10 +169,73 @@ function Cart() {
     };
     //menu tab
 
+    //order
+    const { addresses, shippingMethodId, paymentMethodId } = user;
+    const shippingMethods = useSelector(shippingMethodsSelector);
+    const addressDefault = useMemo(() => {
+        const addressOrder = addresses.find((address) => address.isDefault === true);
+        return addressOrder;
+    }, [addresses]);
+    const priceShipping = useMemo(() => {
+        if (shippingMethods.length === 0) {
+            return 0;
+        }
+        const typeShipping = shippingMethods.find((shippingMethod) => {
+            return shippingMethod.shippingMethodId === shippingMethodId;
+        });
+        return typeShipping.price;
+    }, [shippingMethods, shippingMethodId]);
+
+    const handleOrderCart = () => {
+        const typeShipping = shippingMethods.find(
+            (shippingMethod) => shippingMethod.shippingMethodId === user.shippingMethodId,
+        );
+        const itemsOrder = cartUser.cartItems.filter((item) => item.isChecked === true);
+        const dataItemsOrder = itemsOrder.map((item) => {
+            return {
+                productItemId: item.productItemId,
+                qty: item.qty,
+            };
+        });
+        const dataOrder =
+            paymentMethodId === 0
+                ? {
+                      addressId: addressDefault.addressId,
+                      shippingMethodId: typeShipping.shippingMethodId,
+                      orderStatusId: 1,
+                      items: dataItemsOrder,
+                  }
+                : {
+                      addressId: addressDefault.addressId,
+                      shippingMethodId: typeShipping.shippingMethodId,
+                      paymentMethodId: paymentMethodId,
+                      orderStatusId: 1,
+                      items: dataItemsOrder,
+                  };
+        console.log(dataOrder);
+        // postData(api.shopOrders, dataOrder)
+        //     .then((response) => {
+        //         console.log(response);
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     });
+    };
     return (
         <div className="container">
-            <Modal visible={visible} setVisible={setVisible} title={'Đơn đặt hàng'} save={'Đặt hàng'}>
-                <Order total={totalCart} />
+            <Modal
+                haldleSendModal={handleOrderCart}
+                visible={visible}
+                setVisible={setVisible}
+                title={'Đơn đặt hàng'}
+                save={'Đặt hàng'}
+            >
+                <Order
+                    paymentMethodId={paymentMethodId}
+                    priceShipping={priceShipping}
+                    addressDefault={addressDefault}
+                    total={totalCart}
+                />
             </Modal>
             <div className="zoa-cart">
                 <ul className="account-tab">

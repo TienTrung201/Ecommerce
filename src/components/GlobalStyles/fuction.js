@@ -1,3 +1,6 @@
 export function convertVnd(number) {
-    return number.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    if (number) {
+        return number.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    }
+    return 0;
 }

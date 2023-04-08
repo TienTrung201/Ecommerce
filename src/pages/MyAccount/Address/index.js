@@ -73,25 +73,28 @@ function Address({ user }) {
             return address.isDefault === true;
         });
         console.log(oldAddressDefault);
-        updateData(api.address + '/' + oldAddressDefault.addressId, { ...oldAddressDefault, isDefault: false })
-            .then((response) => {
-                dispatch(
-                    userSlice.actions.editAddress({
-                        data: { ...oldAddressDefault, isDefault: false },
-                        position: oldAddressPossition,
-                    }),
-                );
-                console.log(response);
-            })
-            .catch((err) => {
-                setTimeout(() => {
-                    dispatch(notificationsSlice.actions.showError('Thất bại'));
-                }, 1000);
-                setTimeout(() => {
-                    dispatch(notificationsSlice.actions.destroy());
-                }, 1000);
-                console.warn(err);
-            });
+        if (oldAddressDefault) {
+            updateData(api.address + '/' + oldAddressDefault.addressId, { ...oldAddressDefault, isDefault: false })
+                .then((response) => {
+                    dispatch(
+                        userSlice.actions.editAddress({
+                            data: { ...oldAddressDefault, isDefault: false },
+                            position: oldAddressPossition,
+                        }),
+                    );
+                    console.log(response);
+                })
+                .catch((err) => {
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.showError('Thất bại'));
+                    }, 1000);
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.destroy());
+                    }, 1000);
+                    console.warn(err);
+                });
+        }
+
         const setAddressDefault = { ...address, isDefault: true };
         updateData(api.address + '/' + setAddressDefault.addressId, setAddressDefault)
             .then((response) => {

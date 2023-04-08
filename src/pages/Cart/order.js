@@ -1,32 +1,35 @@
 import { cartSelector, optionsSelector, shippingMethodsSelector, userSelector } from '@/redux/selector';
-import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import userSlice from '../MyAccount/UserSlice';
 import { convertVnd } from '@/components/GlobalStyles/fuction';
 
-function Order({ total }) {
+function Order({ total, priceShipping, addressDefault, paymentMethodId }) {
     const dispatch = useDispatch();
     const cartUser = useSelector(cartSelector);
     const user = useSelector(userSelector);
     const shippingMethods = useSelector(shippingMethodsSelector);
     const { addresses } = user;
     const optionProduct = useSelector(optionsSelector);
-    const addressDefault = useMemo(() => {
-        const addressOrder = addresses.find((address) => address.isDefault === true);
-        return addressOrder;
-    }, [addresses]);
-    const handleChangePaymentMethod = (e) => {
-        dispatch(userSlice.actions.setpaymentMethod(e.target.value));
+    // const addressDefault = useMemo(() => {
+    //     const addressOrder = addresses.find((address) => address.isDefault === true);
+    //     return addressOrder;
+    // }, [addresses]);
+    const handleShippingMethod = (e) => {
+        dispatch(userSlice.actions.setShippingMethodId(Number(e.target.value)));
     };
-    const priceShipping = useMemo(() => {
-        if (user.paymentMethodId === '0') {
-            return 0;
-        }
-        const typeShipping = shippingMethods.find(
-            (shippingMethod) => shippingMethod.shippingMethodId === Number(user.paymentMethodId),
-        );
-        return typeShipping.price;
-    }, [shippingMethods, user]);
+    const handleChangePaymentMethod = (e) => {
+        dispatch(userSlice.actions.removePaymentMethod(Number(e.target.value)));
+    };
+    // const priceShipping = useMemo(() => {
+    //     if (user.paymentMethodId === '0') {
+    //         return 0;
+    //     }
+    //     const typeShipping = shippingMethods.find(
+    //         (shippingMethod) => shippingMethod.shippingMethodId === Number(user.paymentMethodId),
+    //     );
+    //     return typeShipping.price;
+    // }, [shippingMethods, user]);
+
     return (
         <>
             <div className="order_wrapper">
@@ -72,6 +75,7 @@ function Order({ total }) {
                                                     );
                                                     return typeOption.name;
                                                 })}{' '}
+                                                ,
                                             </span>
                                         </div>
                                     </div>
@@ -87,8 +91,7 @@ function Order({ total }) {
                 <div className="address-form__group">
                     <label className="address-form__label">Phương thức thanh toán</label>
                     <select
-                        // onChange={onChangeForm}
-                        // value={formData.provider}
+                        onChange={handleChangePaymentMethod}
                         type="text"
                         name="provider"
                         placeholder="Card"
@@ -98,7 +101,7 @@ function Order({ total }) {
                         <option value="0">Thanh toán khi nhận hàng</option>
                         {user.paymentMethods.map((pm) => {
                             return (
-                                <option key={pm.paymentMethodId} value="Visa">
+                                <option key={pm.paymentMethodId} value={pm.paymentMethodId}>
                                     {`${pm.provider}  **** **** ****${pm.accountNumber.slice(-4)}`}
                                 </option>
                             );
@@ -109,14 +112,13 @@ function Order({ total }) {
                     <label className="address-form__label">Đơn vị vận chuyển</label>
                     <select
                         // value={formData.provider}
-                        onChange={handleChangePaymentMethod}
+                        onChange={handleShippingMethod}
                         type="text"
                         name="provider"
                         placeholder="Card"
                         required=""
                         className="address-form__input"
                     >
-                        <option value="0">Chọn đơn vị vận chuyển</option>
                         {shippingMethods.map((method) => {
                             return (
                                 <option key={method.shippingMethodId} value={method.shippingMethodId}>{`${
