@@ -8,6 +8,8 @@ import { api } from '@/api';
 import { useDispatch } from 'react-redux';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import dayjs from 'dayjs';
+import TextEditor from '@/components/Admin/TextEditor';
+import Validator from '@/Validator/Validator';
 
 const cx = classNames.bind(styles);
 
@@ -46,17 +48,61 @@ function PromotionsCreate() {
         }
     }, [action, id]);
 
+    // ------- Handle validate input -------
+    const [nameError, setNameError] = useState('');
+    const [discountError, setDiscountError] = useState('');
+    const [startDateError, setStartDateError] = useState('');
+    const [endDateError, setEndDateError] = useState('');
+    const handleValidateName = () => {
+        const isValidate = Validator({
+            setErrorMessage: setNameError,
+            rules: [Validator.isRequired(nameInput, 'Bạn chưa nhập tên khuyến mãi')],
+        });
+
+        return isValidate;
+    };
+
+    const handleValidateDiscount = () => {
+        const isValidate = Validator({
+            setErrorMessage: setDiscountError,
+            rules: [Validator.isRequired(discountInput, 'Bạn chưa nhập giá trị khuyến mãi')],
+        });
+
+        return isValidate;
+    };
+
+    const handleValidateStartDate = () => {
+        const isValidate = Validator({
+            setErrorMessage: setStartDateError,
+            rules: [Validator.isRequired(startDateInput.dateString, 'Bạn chưa nhập ngày bắt đầu')],
+        });
+
+        return isValidate;
+    };
+
+    const handleValidateEndDate = () => {
+        const isValidate = Validator({
+            setErrorMessage: setEndDateError,
+            rules: [Validator.isRequired(endDateInput.dateString, 'Bạn chưa nhập ngày kết thúc')],
+        });
+
+        return isValidate;
+    };
+    // ------- End Handle validate input -------
+
     // ------- Handle input change -------
     const handleNameInputChange = (e) => {
         setNameInput(e.target.value);
+        setNameError('');
     };
 
-    const handleDescriptionInputChange = (e) => {
-        setDescriptionInput(e.target.value);
+    const handleDescriptionInputChange = (value) => {
+        setDescriptionInput(value);
     };
 
     const handleDiscountInputChange = (e) => {
         setDiscountInput(e.target.value);
+        setDiscountError('');
     };
 
     const handleStartDateInputChange = (date, dateString) => {
@@ -64,6 +110,7 @@ function PromotionsCreate() {
             date: date,
             dateString: dateString,
         });
+        setStartDateError('');
     };
 
     const handleEndDateInputChange = (date, dateString) => {
@@ -71,6 +118,7 @@ function PromotionsCreate() {
             date: date,
             dateString: dateString,
         });
+        setEndDateError('');
     };
     // ------- End Handle input change -------
 
@@ -88,7 +136,7 @@ function PromotionsCreate() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (nameInput && discountInput && startDateInput.dateString && endDateInput.dateString) {
+        if (handleValidateName() && handleValidateDiscount() && handleValidateStartDate() && handleValidateEndDate()) {
             dispatch(notificationsSlice.actions.showLoading('Đang tạo khuyến mãi'));
 
             const data = generateData();
@@ -107,11 +155,6 @@ function PromotionsCreate() {
                     dispatch(notificationsSlice.actions.showError('Tạo khuyến mãi không thành công'));
                     console.warn(error);
                 });
-        } else {
-            dispatch(notificationsSlice.actions.showError('Tạo khuyến mãi không thành công'));
-            setTimeout(() => {
-                dispatch(notificationsSlice.actions.destroy());
-            }, 1000);
         }
     };
     // ------- End Handle submit -------
@@ -120,7 +163,7 @@ function PromotionsCreate() {
     const handleUpdate = (e) => {
         e.preventDefault();
 
-        if (nameInput && discountInput && startDateInput.dateString && endDateInput.dateString) {
+        if (handleValidateName() && handleValidateDiscount() && handleValidateStartDate() && handleValidateEndDate()) {
             dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
 
             const data = generateData();
@@ -138,11 +181,6 @@ function PromotionsCreate() {
                     dispatch(notificationsSlice.actions.showError('Cập nhật không thành công'));
                     console.warn(error);
                 });
-        } else {
-            dispatch(notificationsSlice.actions.showError('Cập nhật không thành công'));
-            setTimeout(() => {
-                dispatch(notificationsSlice.actions.destroy());
-            }, 1000);
         }
     };
     // ------- End Handle update -------
@@ -163,9 +201,6 @@ function PromotionsCreate() {
             .catch((error) => {
                 console.warn(error);
                 dispatch(notificationsSlice.actions.showError('Xóa thất bại'));
-                setTimeout(() => {
-                    dispatch(notificationsSlice.actions.destroy());
-                }, 1000);
             });
     };
     // ------- End Handle delete -------
@@ -206,53 +241,59 @@ function PromotionsCreate() {
                                     <label htmlFor="exampleInputName1">Tên hoặc mã khuyến mãi *</label>
                                     <input
                                         onChange={handleNameInputChange}
+                                        onBlur={handleValidateName}
                                         value={nameInput}
                                         type="text"
                                         className={cx('form-control', 'form-control-sm', 'border-secondary')}
                                         id="exampleInputName1"
                                         placeholder="Vd: Siêu sale sinh nhật hoặc COUPON10%"
                                     />
+                                    <span className={cx('text-danger', 'fs-14')}>{nameError}</span>
                                 </div>
                                 <div className={cx('form-group')}>
                                     <label htmlFor="exampleTextarea1">Nội dung</label>
-                                    <textarea
+                                    <TextEditor
                                         onChange={handleDescriptionInputChange}
-                                        value={descriptionInput}
-                                        className={cx('form-control', 'border-secondary')}
-                                        id="exampleTextarea1"
-                                        rows="4"
-                                    ></textarea>
+                                        editorState={descriptionInput}
+                                        height={240}
+                                    />
                                 </div>
                                 <div className={cx('form-group')}>
                                     <label htmlFor="promotionValue">Giá trị khuyến mãi *</label>
                                     <input
                                         onChange={handleDiscountInputChange}
+                                        onBlur={handleValidateDiscount}
                                         value={discountInput}
                                         type="number"
                                         className={cx('form-control', 'form-control-sm', 'border-secondary')}
                                         id="promotionValue"
                                         placeholder=""
                                     />
+                                    <span className={cx('text-danger', 'fs-14')}>{discountError}</span>
                                 </div>
                                 <div className={cx('form-group')}>
                                     <div className={cx('row', 'gx-4')}>
                                         <div className={cx('col-md-6')}>
                                             <label htmlFor="">Ngày bắt đầu *</label>
                                             <DatePicker
-                                                value={startDateInput.date}
                                                 onChange={handleStartDateInputChange}
+                                                onBlur={handleValidateStartDate}
+                                                value={startDateInput.date}
                                                 format="YYYY-MM-DD"
                                                 className={cx('w-100')}
                                             />
+                                            <span className={cx('text-danger', 'fs-14')}>{startDateError}</span>
                                         </div>
                                         <div className={cx('col-md-6')}>
                                             <label htmlFor="">Ngày kết thúc *</label>
                                             <DatePicker
-                                                value={endDateInput.date}
                                                 onChange={handleEndDateInputChange}
+                                                onBlur={handleValidateEndDate}
+                                                value={endDateInput.date}
                                                 format="YYYY-MM-DD"
                                                 className={cx('w-100')}
                                             />
+                                            <span className={cx('text-danger', 'fs-14')}>{endDateError}</span>
                                         </div>
                                     </div>
                                 </div>

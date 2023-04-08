@@ -1,3 +1,4 @@
+import Validator from '@/Validator/Validator';
 import { api } from '@/api';
 import { deleteData, getData, postData, updateData } from '@/api/service';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
@@ -12,6 +13,8 @@ const cx = classNames.bind(styles);
 
 function ProductProviderCreate() {
     const [providerNameInput, setProviderNameInput] = useState('');
+
+    const [providerNameError, setProviderNameError] = useState('');
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -30,9 +33,20 @@ function ProductProviderCreate() {
         }
     }, [action, id]);
 
-    // ---------- Handle input change ----------
+    // ---------- Handle validate input ----------
+    const handleValidateProviderName = () => {
+        const isValidate = Validator({
+            setErrorMessage: setProviderNameError,
+            rules: [Validator.isRequired(providerNameInput, 'Bạn chưa nhập tên nhà cung cấp')],
+        });
+
+        return isValidate;
+    };
+    // ---------- Handle validate input ----------
+
     const handleProviderNameInputChange = (e) => {
         setProviderNameInput(e.target.value);
+        setProviderNameError('');
     };
     // ---------- End Handle input change ----------
 
@@ -44,7 +58,7 @@ function ProductProviderCreate() {
             name: providerNameInput,
         };
 
-        if (providerNameInput) {
+        if (handleValidateProviderName()) {
             dispatch(notificationsSlice.actions.showLoading('Đang thêm nhà cung cấp'));
 
             postData(api.providers, data)
@@ -59,11 +73,6 @@ function ProductProviderCreate() {
                     console.warn(error);
                     dispatch(notificationsSlice.actions.showError('Thêm không thành công'));
                 });
-        } else {
-            dispatch(notificationsSlice.actions.showError('Thêm không thành công'));
-            setTimeout(() => {
-                dispatch(notificationsSlice.actions.destroy());
-            }, 1000);
         }
     };
     // ---------- End Handle create ----------
@@ -75,7 +84,7 @@ function ProductProviderCreate() {
             name: providerNameInput,
         };
 
-        if (providerNameInput) {
+        if (handleValidateProviderName()) {
             dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
 
             updateData(api.providers + '/' + id, data)
@@ -90,11 +99,6 @@ function ProductProviderCreate() {
                     console.warn(error);
                     dispatch(notificationsSlice.actions.showError('Cập nhật không thành công'));
                 });
-        } else {
-            dispatch(notificationsSlice.actions.showError('Cập nhật không thành công'));
-            setTimeout(() => {
-                dispatch(notificationsSlice.actions.destroy());
-            }, 1000);
         }
     };
     // ---------- End Handle update ----------
@@ -150,12 +154,14 @@ function ProductProviderCreate() {
                                     <label htmlFor="exampleInputName1">Tên nhà cung cấp</label>
                                     <input
                                         onChange={handleProviderNameInputChange}
+                                        onBlur={handleValidateProviderName}
                                         value={providerNameInput}
                                         type="text"
                                         className={cx('form-control', 'form-control-sm', 'border-secondary')}
                                         id="exampleInputName1"
                                         placeholder="Nhập tên nhà cung cấp"
                                     />
+                                    <span className={cx('text-danger', 'fs-14')}>{providerNameError}</span>
                                 </div>
 
                                 <div>
@@ -169,7 +175,7 @@ function ProductProviderCreate() {
                                             </button>
 
                                             <Popconfirm
-                                                title="Xóa khuyến mãi"
+                                                title="Xóa nhà cung cấp"
                                                 description="Bạn có chắc chắn muốn xóa nhà cung cấp?"
                                                 onConfirm={handleDelete}
                                                 okText="Xóa"

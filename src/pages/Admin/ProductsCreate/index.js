@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
 import images from '@/assets/admin/images';
+import * as Unicons from '@iconscout/react-unicons';
 import { Collapse, Divider, Image, Popconfirm, Select } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -13,6 +14,7 @@ import { deleteData, getData, postData, updateData } from '@/api/service';
 import { api } from '@/api';
 
 import TextEditor from '@/components/Admin/TextEditor';
+import Validator from '@/Validator/Validator';
 
 const cx = classNames.bind(styles);
 const { Panel } = Collapse;
@@ -22,6 +24,7 @@ function ProductsCreate() {
     const [categories, setCategories] = useState([]);
     const [productOptions, setProductOptions] = useState([]);
 
+    // Product
     const [productNameInput, setProductNameInput] = useState('');
     const [productDescInput, setProductDescInput] = useState('');
     const [productImageInput, setProductImageInput] = useState({ image: null, imagePreview: '' });
@@ -32,12 +35,23 @@ function ProductsCreate() {
     const [productItems, setProductItems] = useState([]);
     const [selectedItem, setSelectedItem] = useState({});
 
+    // Product item
     const [itemSku, setItemSku] = useState('');
     const [itemQty, setItemQty] = useState('');
     const [itemImage, setItemImage] = useState({ image: null, imagePreview: '' });
     const [itemProperties, setItemProperties] = useState([]);
     const [itemPrice, setItemPrice] = useState('');
     const [itemCostPrice, setItemCostPrice] = useState('');
+
+    // Validate
+    const [productNameError, setProductNameError] = useState('');
+    const [skuError, setSkuError] = useState('');
+    const [qtyError, setQtyError] = useState('');
+    const [priceError, setPriceError] = useState('');
+    const [optionIdsError, setOptionIdsError] = useState('');
+    const [productItemsError, setProductItemsError] = useState('');
+
+    const [activeCollapse, setActiveCollapse] = useState([]);
 
     const productImageInputRef = useRef();
     const itemImageInputRef = useRef();
@@ -48,7 +62,7 @@ function ProductsCreate() {
 
     const navigate = useNavigate();
 
-    // ------ Get dependen data -------
+    // ------ Get dependencies data -------
     useEffect(() => {
         // Get providers
         getData(api.providers)
@@ -107,12 +121,69 @@ function ProductsCreate() {
             options: p.options.map((o) => ({ label: o.name, value: o.productOptionId })),
         }));
     }, [productOptions]);
-    // ------ End Get dependen data ------
+    // ------ End Get dependencies data ------
+
+    // ------ Handle validate input ------
+    const handleValidateProductName = () => {
+        const isValidate = Validator({
+            setErrorMessage: setProductNameError,
+            rules: [Validator.isRequired(productNameInput, 'Bạn chưa nhập tên sản phẩm')],
+        });
+
+        return isValidate;
+    };
+
+    const handleValidateSku = () => {
+        const isValidate = Validator({
+            setErrorMessage: setSkuError,
+            rules: [Validator.isRequired(itemSku, 'Bạn chưa nhập SKU')],
+        });
+
+        return isValidate;
+    };
+
+    const handleValidateQty = () => {
+        const isValidate = Validator({
+            setErrorMessage: setQtyError,
+            rules: [Validator.isRequired(itemQty, 'Bạn chưa nhập số lượng')],
+        });
+
+        return isValidate;
+    };
+
+    const handleValidatePrice = () => {
+        const isValidate = Validator({
+            setErrorMessage: setPriceError,
+            rules: [Validator.isRequired(itemPrice, 'Bạn chưa nhập giá bán')],
+        });
+
+        return isValidate;
+    };
+
+    const handleValidateOptionIds = () => {
+        const isValidate = Validator({
+            setErrorMessage: setOptionIdsError,
+            rules: [Validator.isRequired(itemProperties, 'Bạn chưa chọn thuộc tính')],
+        });
+
+        return isValidate;
+    };
+
+    const handleValidateProductItems = () => {
+        const isValidate = Validator({
+            setErrorMessage: setProductItemsError,
+            rules: [Validator.isRequired(productItems, 'Bạn chưa thêm phiên bản sản phẩm')],
+        });
+
+        return isValidate;
+    };
+    // ------ End Handle validate input ------
 
     // ------ Handle input change ------
     // Product
     const handleProductNameChange = (e) => {
         setProductNameInput(e.target.value);
+        setProductNameError('');
     };
 
     const handleProductDescChange = (value) => {
@@ -141,10 +212,12 @@ function ProductsCreate() {
     // Product items
     const handleItemSkuChange = (e) => {
         setItemSku(e.target.value);
+        setSkuError('');
     };
 
     const handleItemQtyChange = (e) => {
         setItemQty(e.target.value);
+        setQtyError('');
     };
 
     const handleItemImageChange = (e) => {
@@ -156,10 +229,12 @@ function ProductsCreate() {
 
     const handleItemPropertiesChange = (e) => {
         setItemProperties(e);
+        setOptionIdsError('');
     };
 
     const handleItemPriceChange = (e) => {
         setItemPrice(e.target.value);
+        setPriceError('');
     };
 
     const handleItemCostPriceChange = (e) => {
@@ -171,7 +246,7 @@ function ProductsCreate() {
     const handleAddProductItem = (e) => {
         e.preventDefault();
 
-        if (itemSku && itemQty && itemProperties.length > 0 && itemPrice) {
+        if (handleValidateSku() && handleValidateQty() && handleValidateOptionIds() && handleValidatePrice()) {
             const item = {
                 sku: itemSku,
                 qtyInStock: Number(itemQty),
@@ -183,6 +258,7 @@ function ProductsCreate() {
 
             setProductItems((prev) => [...prev, item]);
 
+            setProductItemsError('');
             clearItemInput();
         }
     };
@@ -205,19 +281,21 @@ function ProductsCreate() {
             image: item.image,
             imagePreview: item.image,
         });
+
+        setActiveCollapse(['1']);
     };
 
     const handleUpdateProductItem = (e) => {
         e.preventDefault();
-
-        selectedItem.sku = itemSku;
-        selectedItem.qtyInStock = itemQty;
-        selectedItem.optionsId = itemProperties;
-        selectedItem.price = itemPrice;
-        selectedItem.costPrice = itemCostPrice;
-        selectedItem.image = itemImage.image;
-
-        clearItemInput();
+        if (handleValidateSku() && handleValidateQty() && handleValidateOptionIds() && handleValidatePrice()) {
+            selectedItem.sku = itemSku;
+            selectedItem.qtyInStock = itemQty;
+            selectedItem.optionsId = itemProperties;
+            selectedItem.price = itemPrice;
+            selectedItem.costPrice = itemCostPrice;
+            selectedItem.image = itemImage.image;
+            clearItemInput();
+        }
     };
 
     // Generate data
@@ -263,7 +341,7 @@ function ProductsCreate() {
     const handleCreateProduct = async (e) => {
         e.preventDefault();
 
-        if (action === 'create' && productNameInput && productItems.length > 0) {
+        if (action === 'create' && handleValidateProductName() && handleValidateProductItems()) {
             dispatch(notificationsSlice.actions.showLoading('Đang tạo sản phẩm'));
 
             const data = await generateData();
@@ -291,7 +369,7 @@ function ProductsCreate() {
     // ------ Handle update ------
     const handleUpdateProduct = async (e) => {
         e.preventDefault();
-        if (action === 'update' && productNameInput && productItems.length > 0) {
+        if (action === 'update' && handleValidateProductName() && handleValidateProductItems()) {
             dispatch(notificationsSlice.actions.showLoading('Đang cập nhật sản phẩm'));
 
             const data = await generateData();
@@ -349,8 +427,20 @@ function ProductsCreate() {
         setItemPrice('');
         setItemCostPrice('');
         setSelectedItem({});
+        setItemImage({ image: null, imagePreview: '' });
+
+        setSkuError('');
+        setQtyError('');
+        setPriceError('');
+        setOptionIdsError('');
     };
     // ------ End Handle clear input ------
+
+    // ------ Handle active collapse ------
+    const handleActiveCollapse = (value) => {
+        setActiveCollapse(value);
+    };
+    // ------ End Handle active collapse ------
 
     return (
         <>
@@ -387,12 +477,14 @@ function ProductsCreate() {
                                     <label htmlFor="exampleInputName1">Tên sản phẩm</label>
                                     <input
                                         onChange={handleProductNameChange}
+                                        onBlur={handleValidateProductName}
                                         value={productNameInput}
                                         type="text"
                                         className={cx('form-control', 'form-control-sm', 'border-secondary')}
                                         id="exampleInputName1"
                                         placeholder="Nhập tên sản phẩm"
                                     />
+                                    <span className={cx('text-danger', 'fs-14')}>{productNameError}</span>
                                 </div>
                                 {/* End Product name */}
 
@@ -442,12 +534,17 @@ function ProductsCreate() {
                                 <Divider />
 
                                 {/* Product Options*/}
-
                                 <div className={cx('form-group')}>
                                     <h4 className={cx('card-title', 'd-flex', 'justify-between', 'align-items-center')}>
                                         Phiên bản
                                     </h4>
-                                    <Collapse ghost>
+                                    <Collapse
+                                        onChange={handleActiveCollapse}
+                                        activeKey={activeCollapse}
+                                        ghost
+                                        size="small"
+                                        expandIconPosition="end"
+                                    >
                                         <Panel header="Thêm phiên bản sản phẩm" key="1">
                                             <div className={cx('row', 'g-4')}>
                                                 {/* Options information */}
@@ -458,6 +555,7 @@ function ProductsCreate() {
                                                             <label htmlFor="intputSku">SKU</label>
                                                             <input
                                                                 onChange={handleItemSkuChange}
+                                                                onBlur={handleValidateSku}
                                                                 value={itemSku}
                                                                 type="text"
                                                                 className={cx(
@@ -468,6 +566,9 @@ function ProductsCreate() {
                                                                 id="intputSku"
                                                                 placeholder="Nhập mã SKU"
                                                             />
+                                                            <span className={cx('text-danger', 'fs-14')}>
+                                                                {skuError}
+                                                            </span>
                                                         </div>
                                                         {/* End SKU input */}
 
@@ -476,6 +577,7 @@ function ProductsCreate() {
                                                             <label htmlFor="inputQty">Số lượng</label>
                                                             <input
                                                                 onChange={handleItemQtyChange}
+                                                                onBlur={handleValidateQty}
                                                                 value={itemQty}
                                                                 type="number"
                                                                 className={cx(
@@ -486,6 +588,9 @@ function ProductsCreate() {
                                                                 id="inputQty"
                                                                 placeholder="Nhập số lượng"
                                                             />
+                                                            <span className={cx('text-danger', 'fs-14')}>
+                                                                {qtyError}
+                                                            </span>
                                                         </div>
                                                         {/* End Quantity input */}
 
@@ -494,6 +599,7 @@ function ProductsCreate() {
                                                             <label htmlFor="inputPrice">Giá bán</label>
                                                             <input
                                                                 onChange={handleItemPriceChange}
+                                                                onBlur={handleValidatePrice}
                                                                 value={itemPrice}
                                                                 type="number"
                                                                 className={cx(
@@ -504,6 +610,9 @@ function ProductsCreate() {
                                                                 id="inputPrice"
                                                                 placeholder="Nhập giá bán"
                                                             />
+                                                            <span className={cx('text-danger', 'fs-14')}>
+                                                                {priceError}
+                                                            </span>
                                                         </div>
                                                         {/* End Price input */}
 
@@ -530,6 +639,7 @@ function ProductsCreate() {
                                                             <label htmlFor="inputProperties">Thuộc tính</label>
                                                             <Select
                                                                 onChange={handleItemPropertiesChange}
+                                                                onBlur={handleValidateOptionIds}
                                                                 value={itemProperties}
                                                                 mode="multiple"
                                                                 placeholder="Chọn thuộc tính"
@@ -537,6 +647,9 @@ function ProductsCreate() {
                                                                 options={productOptionsPreview}
                                                                 id="inputProperties"
                                                             />
+                                                            <span className={cx('text-danger', 'fs-14')}>
+                                                                {optionIdsError}
+                                                            </span>
                                                         </div>
                                                         {/* End Select properties */}
 
@@ -605,8 +718,14 @@ function ProductsCreate() {
                                                                 itemImageInputRef.current &&
                                                                     itemImageInputRef.current.click();
                                                             }}
-                                                            className={cx('btn', 'btn-sm', 'btn-inverse-info', 'mt-4')}
+                                                            className={cx(
+                                                                'btn',
+                                                                'btn-sm',
+                                                                'btn-outline-secondary',
+                                                                'mt-4',
+                                                            )}
                                                         >
+                                                            <Unicons.UilUpload size="14" className={cx('me-1')} />
                                                             Tải lên
                                                         </button>
                                                     </div>
@@ -624,6 +743,7 @@ function ProductsCreate() {
                                             handleRemoveItem={handleRemoveProductItem}
                                             handleSelectItem={handleSetSelectProductItem}
                                         />
+                                        <span className={cx('text-danger', 'fs-14')}>{productItemsError}</span>
                                     </div>
                                     {/* End Options table */}
                                 </div>

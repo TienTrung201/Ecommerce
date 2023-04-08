@@ -151,7 +151,7 @@ function Profile() {
 
     return (
         <>
-            <div className={cx('page-header', 'align-middle')}>
+            <div className={cx('page-header', 'align-middle', 'mt-2')}>
                 <h3 className={cx('page-title', 'mt-0')}>Cài đặt tài khoản</h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
@@ -162,7 +162,7 @@ function Profile() {
                     </ol>
                 </nav>
             </div>
-            <div className={cx('card')}>
+            <div className={cx('card', 'shadow-sm')}>
                 <div className={cx('card-body')}>
                     <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
                         <h4 className={cx('card-title', 'mb-0')}>Thông tin của tôi</h4>

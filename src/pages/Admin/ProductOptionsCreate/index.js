@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { api } from '@/api';
 import { deleteData, getData, postData, updateData } from '@/api/service';
+import Validator from '@/Validator/Validator';
 
 const cx = classNames.bind(styles);
 
@@ -15,6 +16,11 @@ function ProductOptionsCreate() {
     const [typeNameInput, setTypeNameInput] = useState('');
     const [optionNameInput, setOptionNameInput] = useState('');
     const [optionValueInput, setOptionValueInput] = useState('');
+
+    const [typeNameError, setTypeNameError] = useState('');
+    const [optionNameError, setOptionNameError] = useState('');
+    const [optionValueError, setOptionValueError] = useState('');
+    const [optionsError, setOptionsError] = useState('');
 
     const [options, setOptions] = useState([]);
     const [selectedOption, setSelectedOption] = useState({});
@@ -37,17 +43,58 @@ function ProductOptionsCreate() {
         }
     }, [action, id]);
 
+    // ---------- Handle validate input ----------
+    const handleValidateTypeName = () => {
+        const isValidate = Validator({
+            setErrorMessage: setTypeNameError,
+            rules: [Validator.isRequired(typeNameInput, 'Bạn chưa nhập tên loại thuộc tính')],
+        });
+
+        return isValidate;
+    };
+
+    const handleValidateOptionName = () => {
+        const isValidate = Validator({
+            setErrorMessage: setOptionNameError,
+            rules: [Validator.isRequired(optionNameInput, 'Bạn chưa nhập tên thuộc tính')],
+        });
+
+        return isValidate;
+    };
+
+    const handleValidateOptionValue = () => {
+        const isValidate = Validator({
+            setErrorMessage: setOptionValueError,
+            rules: [Validator.isRequired(optionValueInput, 'Bạn chưa nhập giá trị')],
+        });
+
+        return isValidate;
+    };
+
+    const handleValidateOptions = () => {
+        const isValidate = Validator({
+            setErrorMessage: setOptionsError,
+            rules: [Validator.isRequired(options, 'Bạn chưa thêm thuộc tính')],
+        });
+
+        return isValidate;
+    };
+    // ---------- End Handle validate input ----------
+
     // ---------- Handle input change ----------
     const handleTypeNameInputChange = (e) => {
         setTypeNameInput(e.target.value);
+        setTypeNameError('');
     };
 
     const handleOptionNameInputChange = (e) => {
         setOptionNameInput(e.target.value);
+        setOptionNameError('');
     };
 
     const handleOptionValueInputChange = (e) => {
         setOptionValueInput(e.target.value);
+        setOptionValueError('');
     };
     // ---------- End Handle input change ----------
 
@@ -55,7 +102,7 @@ function ProductOptionsCreate() {
     const handleAddOption = (e) => {
         e.preventDefault();
 
-        if (optionNameInput && optionValueInput) {
+        if (handleValidateOptionName() && handleValidateOptionValue()) {
             const option = {
                 name: optionNameInput,
                 value: optionValueInput,
@@ -63,6 +110,7 @@ function ProductOptionsCreate() {
 
             setOptions((prev) => [...prev, option]);
 
+            setOptionsError('');
             clearOptionInput();
         }
     };
@@ -82,7 +130,7 @@ function ProductOptionsCreate() {
     const handleUpdateOption = (e) => {
         e.preventDefault();
 
-        if (optionNameInput && optionValueInput) {
+        if (handleValidateOptionName() && handleValidateOptionValue()) {
             selectedOption.name = optionNameInput;
             selectedOption.value = optionValueInput;
 
@@ -99,10 +147,10 @@ function ProductOptionsCreate() {
         };
     };
 
-    const handleSubmit = (e) => {
+    const handleCreate = (e) => {
         e.preventDefault();
 
-        if (typeNameInput && options.length > 0) {
+        if (handleValidateTypeName() && handleValidateOptions()) {
             dispatch(notificationsSlice.actions.showLoading('Đang tạo thuộc tính'));
 
             const data = generateData();
@@ -131,7 +179,7 @@ function ProductOptionsCreate() {
     const handleUpdate = (e) => {
         e.preventDefault();
 
-        if (typeNameInput && options.length > 0) {
+        if (handleValidateTypeName() && handleValidateOptions()) {
             dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
 
             const data = generateData();
@@ -184,6 +232,9 @@ function ProductOptionsCreate() {
         setOptionNameInput('');
         setOptionValueInput('');
         setSelectedOption({});
+
+        setOptionNameError('');
+        setOptionValueError('');
     };
 
     return (
@@ -216,12 +267,14 @@ function ProductOptionsCreate() {
                                     <label htmlFor="optionsType">Tên loại thuộc tính</label>
                                     <input
                                         onChange={handleTypeNameInputChange}
+                                        onBlur={handleValidateTypeName}
                                         value={typeNameInput}
                                         type="text"
                                         className={cx('form-control', 'form-control-sm', 'border-secondary')}
                                         id="optionsType"
                                         placeholder="Vd: Màu sắc, Kích thước"
                                     />
+                                    <span className={cx('text-danger', 'fs-14')}>{typeNameError}</span>
                                 </div>
                                 {/* ------ End Option type input ------ */}
 
@@ -235,12 +288,14 @@ function ProductOptionsCreate() {
                                             <label htmlFor="optionName">Tên thuộc tính</label>
                                             <input
                                                 onChange={handleOptionNameInputChange}
+                                                onBlur={handleValidateOptionName}
                                                 value={optionNameInput}
                                                 type="text"
                                                 className={cx('form-control', 'form-control-sm', 'border-secondary')}
                                                 id="optionName"
                                                 placeholder="Vd: Đỏ"
                                             />
+                                            <span className={cx('text-danger', 'fs-14')}>{optionNameError}</span>
                                         </div>
                                     </div>
                                     <div className={cx('col-md-6')}>
@@ -248,12 +303,14 @@ function ProductOptionsCreate() {
                                             <label htmlFor="optionValue">Giá trị</label>
                                             <input
                                                 onChange={handleOptionValueInputChange}
+                                                onBlur={handleValidateOptionValue}
                                                 value={optionValueInput}
                                                 type="text"
                                                 className={cx('form-control', 'form-control-sm', 'border-secondary')}
                                                 id="optionValue"
                                                 placeholder="Vd: #EA5455"
                                             />
+                                            <span className={cx('text-danger', 'fs-14')}>{optionValueError}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -352,6 +409,7 @@ function ProductOptionsCreate() {
                                             ))}
                                         </tbody>
                                     </table>
+                                    <span className={cx('text-danger', 'fs-14')}>{optionsError}</span>
                                 </div>
                                 {/* ------ End Options table ------ */}
 
@@ -385,7 +443,7 @@ function ProductOptionsCreate() {
                                         </>
                                     ) : (
                                         <button
-                                            onClick={handleSubmit}
+                                            onClick={handleCreate}
                                             className={cx('btn', 'btn-gradient-primary', 'me-2')}
                                         >
                                             Tạo thuộc tính

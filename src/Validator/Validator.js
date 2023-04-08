@@ -25,7 +25,11 @@ Validator.isRequired = (inputValue, message) => {
     return {
         inputValue,
         test: (value) => {
-            return value ? undefined : message || 'Vui lòng nhập trường này';
+            if (Array.isArray(value)) {
+                return value.length ? undefined : message || 'Vui lòng nhập trường này';
+            } else {
+                return value ? undefined : message || 'Vui lòng nhập trường này';
+            }
         },
     };
 };
