@@ -1,13 +1,8 @@
 import { api } from '@/api';
 import { getData } from '@/api/service';
+import { convertVnd } from '@/components/GlobalStyles/fuction';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
-import {
-    faArrowUpWideShort,
-    faCartPlus,
-    faChevronDown,
-    faChevronRight,
-    faFilter,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCartPlus, faChevronDown, faChevronRight, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -347,9 +342,11 @@ function Shop() {
                                         </div>
                                         <div className="product-price">
                                             {product.discountRate === 0 ? (
-                                                <span>${product.items[0].price}</span>
+                                                <span>{convertVnd(product.items[0].price)}</span>
                                             ) : (
-                                                <span>${(product.items[0].price * product.discountRate) / 100}</span>
+                                                <span>
+                                                    {convertVnd((product.items[0].price * product.discountRate) / 100)}
+                                                </span>
                                             )}
                                         </div>
                                         <div className="product-bottom-group">

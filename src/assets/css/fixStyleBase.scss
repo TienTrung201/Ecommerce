@@ -525,21 +525,45 @@ label.mail {
 //cart
 .order_wrapper {
     padding: 10px 20px;
-    .address-phone,
-    .address-name {
-        font-weight: 600;
-        color: #2c2c2c;
+    label {
         margin-bottom: 0;
     }
+    .address-form__group {
+        margin-bottom: 5px;
+        .address-phone,
+        .address-name {
+            font-weight: 600;
+            color: #2c2c2c;
+            margin-bottom: 0;
+            // padding-bottom: 0;
+        }
+        .address {
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+    }
+
     .header__cart-list-items {
         max-height: 200px !important;
     }
-    .total {
+    .total-product {
         display: flex;
         justify-content: flex-end;
         padding-bottom: 0;
+        color: #666666;
         p {
             font-weight: 500;
+            font-size: 1.6rem;
+        }
+    }
+    .total-order {
+        display: flex;
+        justify-content: flex-end;
+        padding-bottom: 0;
+        color: #272727;
+        padding-top: 5px;
+        p {
+            font-weight: 600;
             font-size: 1.8rem;
         }
     }

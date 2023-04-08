@@ -3,6 +3,7 @@ export const categoriesSelector = (state) => state.categories.categories;
 export const optionsSelector = (state) => state.options.options;
 export const userSelector = (state) => state.user;
 export const cartSelector = (state) => state.cart;
+export const shippingMethodsSelector = (state) => state.shippingMethods.shippingMethods;
 // ============= Admin interface =============
 export const notificationsSelector = (state) => {
     return state.notifications;

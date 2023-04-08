@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import cartSlice from '../Cart/CartSlice';
+import { convertVnd } from '@/components/GlobalStyles/fuction';
 
 function Product() {
     const dispatch = useDispatch();
@@ -142,8 +143,8 @@ function Product() {
                         getData(api.shoppingCarts + '/' + user.uid)
                             .then((response) => {
                                 console.log(response);
-                                dispatch(cartSlice.actions.setCartId(response.cartId));
-                                const cartUser = response.items.reduce((acc, item) => {
+                                dispatch(cartSlice.actions.setCartId(response.data.cartId));
+                                const cartUser = response.data.items.reduce((acc, item) => {
                                     const { cartItemId, qty } = item;
                                     const { productId, image, name, items } = item.product;
                                     const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
@@ -360,31 +361,31 @@ function Product() {
                                     <Link to="#">{product.name}</Link>
                                 </h3>
                                 <div className="product-price">
-                                    <span className="old thin">${maxProductPrice.current}</span>
+                                    <span className="old thin">{convertVnd(maxProductPrice.current)}</span>
                                     <span>
                                         {productItem !== null
                                             ? product.discountRate === 0
-                                                ? productItem.price + '$'
-                                                : (productItem.price * product.discountRate) / 100 + '$'
+                                                ? convertVnd(productItem.price)
+                                                : convertVnd((productItem.price * product.discountRate) / 100)
                                             : priceRangeProduct.length > 1
                                             ? product.discountRate === 0
-                                                ? `$${priceRangeProduct.slice(-1)[0].price} - $${
-                                                      priceRangeProduct.slice(0, 1)[0].price
-                                                  }`
-                                                : `$${
+                                                ? `${convertVnd(priceRangeProduct.slice(-1)[0].price)} - ${convertVnd(
+                                                      priceRangeProduct.slice(0, 1)[0].price,
+                                                  )}`
+                                                : `${convertVnd(
                                                       (priceRangeProduct.slice(-1)[0].price * product.discountRate) /
-                                                      100
-                                                  } - $${
+                                                          100,
+                                                  )} - ${convertVnd(
                                                       (priceRangeProduct.slice(0, 1)[0].price * product.discountRate) /
-                                                      100
-                                                  }`
+                                                          100,
+                                                  )}`
                                             : priceRangeProduct.length === 1
                                             ? product.discountRate === 0
-                                                ? priceRangeProduct.slice(-1)[0].price + '$'
-                                                : `$${
+                                                ? convertVnd(priceRangeProduct.slice(-1)[0].price)
+                                                : `${convertVnd(
                                                       (priceRangeProduct.slice(-1)[0].price * product.discountRate) /
-                                                      100
-                                                  }`
+                                                          100,
+                                                  )}`
                                             : ''}
                                     </span>
                                 </div>

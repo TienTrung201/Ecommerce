@@ -9,6 +9,7 @@ import userSlice from '@/pages/MyAccount/UserSlice';
 import Notification from '@/components/Admin/Notification';
 import CartHeader from '@/pages/Cart/CartHeader';
 import cartSlice from '@/pages/Cart/CartSlice';
+import shippingSlice from '@/pages/ShippingMethod/ShippingSlice';
 function UserAccount({ onOpenSearch, onOpenCart }) {
     //userAccount
     const user = useSelector(userSelector);
@@ -34,8 +35,8 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
         getData(api.shoppingCarts + '/' + user.uid)
             .then((response) => {
                 console.log(response);
-                dispatch(cartSlice.actions.setCartId(response.cartId));
-                const cartUser = response.items.reduce((acc, item) => {
+                dispatch(cartSlice.actions.setCartId(response.data.cartId));
+                const cartUser = response.data.items.reduce((acc, item) => {
                     const { cartItemId, qty } = item;
                     const { productId, image, name, items } = item.product;
                     const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
@@ -62,6 +63,12 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                 console.log(error);
             });
     }, [user.uid, dispatch]);
+    useEffect(() => {
+        getData(api.shippingMethods).then((response) => {
+            console.log(response);
+            dispatch(shippingSlice.actions.setShippingMethods(response));
+        });
+    }, [dispatch]);
     return (
         <div className="topbar-left">
             <Notification />

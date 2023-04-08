@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import cartSlice from './CartSlice';
 import Modal from '@/components/Layout/Modal';
 import Order from './order';
+import { convertVnd } from '@/components/GlobalStyles/fuction';
 
 function Cart() {
     const dispatch = useDispatch();
@@ -250,7 +251,7 @@ function Cart() {
                                                     </td>
 
                                                     <td className="product-same total-price">
-                                                        <p className="price">{item.costPrice} đ</p>
+                                                        <p className="price">{convertVnd(item.costPrice)}</p>
                                                     </td>
                                                     <td className="bcart-quantity single-product-detail">
                                                         <div className="autoCenter">
@@ -290,7 +291,7 @@ function Cart() {
                                                         </div>
                                                     </td>
                                                     <td className="total-price">
-                                                        <p className="price">{item.qty * item.costPrice} đ</p>
+                                                        <p className="price">{convertVnd(item.qty * item.costPrice)}</p>
                                                     </td>
                                                     <td
                                                         onClick={() => {
@@ -342,15 +343,15 @@ function Cart() {
                                         <div className="cart-text">
                                             <div className="cart-element">
                                                 <p>Total products:</p>
-                                                <p>{totalCart} đ</p>
+                                                <p>{convertVnd(totalCart)}</p>
                                             </div>
                                             <div className="cart-element">
                                                 <p>Estimated shipping costs:</p>
-                                                <p>$0.00</p>
+                                                <p>{convertVnd(0)}</p>
                                             </div>
                                             <div className="cart-element text-bold">
                                                 <p>Total:</p>
-                                                <p>{totalCart} đ</p>
+                                                <p>{convertVnd(totalCart)}</p>
                                             </div>
                                         </div>
                                         <Link
