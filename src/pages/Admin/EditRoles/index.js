@@ -1,3 +1,4 @@
+import Validator from '@/Validator/Validator';
 import { api } from '@/api';
 import { deleteData, getData, postData, updateData } from '@/api/service';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
@@ -12,6 +13,8 @@ const cx = classNames.bind(styles);
 
 function EditRoles() {
     const [roleNameInput, setRoleNameInput] = useState('');
+
+    const [roleNameError, setRoleNameError] = useState('');
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -30,9 +33,21 @@ function EditRoles() {
         }
     }, [action, id]);
 
+    // ---------- Handle validate input ----------
+    const handleValidateRoleName = () => {
+        const isValidate = Validator({
+            setErrorMessage: setRoleNameError,
+            rules: [Validator.isRequired(roleNameInput, 'Bạn chưa nhập tên vai trò')],
+        });
+
+        return isValidate;
+    };
+    // ---------- Handle validate input ----------
+
     // ---------- Handle input change ----------
     const handleRoleNameInputChange = (e) => {
         setRoleNameInput(e.target.value);
+        setRoleNameError('');
     };
     // ---------- End Handle input change ----------
 
@@ -44,7 +59,7 @@ function EditRoles() {
             name: roleNameInput,
         };
 
-        if (roleNameInput) {
+        if (handleValidateRoleName()) {
             dispatch(notificationsSlice.actions.showLoading('Đang tạo role'));
 
             postData(api.roles, data)
@@ -59,11 +74,6 @@ function EditRoles() {
                     console.warn(error);
                     dispatch(notificationsSlice.actions.showError('Tạo role không thành công'));
                 });
-        } else {
-            dispatch(notificationsSlice.actions.showError('Tạo role không thành công'));
-            setTimeout(() => {
-                dispatch(notificationsSlice.actions.destroy());
-            }, 1000);
         }
     };
     // ---------- End Handle create ----------
@@ -75,7 +85,7 @@ function EditRoles() {
             name: roleNameInput,
         };
 
-        if (roleNameInput) {
+        if (handleValidateRoleName()) {
             dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
 
             updateData(api.roles + '/' + id, data)
@@ -90,11 +100,6 @@ function EditRoles() {
                     console.warn(error);
                     dispatch(notificationsSlice.actions.showError('Cập nhật không thành công'));
                 });
-        } else {
-            dispatch(notificationsSlice.actions.showError('Cập nhật không thành công'));
-            setTimeout(() => {
-                dispatch(notificationsSlice.actions.destroy());
-            }, 1000);
         }
     };
     // ---------- End Handle update ----------
@@ -150,12 +155,14 @@ function EditRoles() {
                                     <label htmlFor="exampleInputName1">Tên vai trò</label>
                                     <input
                                         onChange={handleRoleNameInputChange}
+                                        onBlur={handleValidateRoleName}
                                         value={roleNameInput}
                                         type="text"
                                         className={cx('form-control', 'form-control-sm', 'border-secondary')}
                                         id="exampleInputName1"
                                         placeholder="Nhập tên vai trò"
                                     />
+                                    <span className={cx('text-danger', 'fs-14')}>{roleNameError}</span>
                                 </div>
 
                                 <div>

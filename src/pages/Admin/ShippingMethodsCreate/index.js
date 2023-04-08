@@ -1,3 +1,4 @@
+import Validator from '@/Validator/Validator';
 import { api } from '@/api';
 import { deleteData, getData, postData, updateData } from '@/api/service';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
@@ -13,6 +14,9 @@ const cx = classNames.bind(styles);
 function ShippingMethodsCreate() {
     const [nameInput, setNameInput] = useState('');
     const [priceInput, setPriceInput] = useState('');
+
+    const [nameError, setNameError] = useState('');
+    const [priceError, setPriceError] = useState('');
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -31,13 +35,35 @@ function ShippingMethodsCreate() {
             });
     }, [action, id]);
 
+    // --------- Handle validate input ---------
+    const handleValidateName = () => {
+        const isValidate = Validator({
+            setErrorMessage: setNameError,
+            rules: [Validator.isRequired(nameInput, 'Bạn chưa nhập tên đơn vị vận chuyển')],
+        });
+
+        return isValidate;
+    };
+
+    const handleValidatePrice = () => {
+        const isValidate = Validator({
+            setErrorMessage: setPriceError,
+            rules: [Validator.isRequired(priceInput, 'Bạn chưa nhập giá vận chuyển')],
+        });
+
+        return isValidate;
+    };
+    // --------- End Handle validate input ---------
+
     // --------- Handle input change ---------
     const handleNameInputChange = (e) => {
         setNameInput(e.target.value);
+        setNameError('');
     };
 
     const handlePriceInputChange = (e) => {
         setPriceInput(e.target.value);
+        setPriceError('');
     };
     // --------- End Handle input change ---------
 
@@ -53,7 +79,7 @@ function ShippingMethodsCreate() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (nameInput && priceInput) {
+        if (handleValidateName() && handleValidatePrice()) {
             dispatch(notificationsSlice.actions.showLoading('Đang thêm vận chuyển'));
 
             const data = generateData();
@@ -72,11 +98,6 @@ function ShippingMethodsCreate() {
                     console.warn(error);
                     dispatch(notificationsSlice.actions.showError('Thêm thất bại'));
                 });
-        } else {
-            dispatch(notificationsSlice.actions.showError('Thêm thất bại'));
-            setTimeout(() => {
-                dispatch(notificationsSlice.actions.destroy());
-            }, 1000);
         }
     };
     // --------- End Handle submit ---------
@@ -85,7 +106,7 @@ function ShippingMethodsCreate() {
     const handleUpdate = (e) => {
         e.preventDefault();
 
-        if (nameInput && priceInput) {
+        if (handleValidateName() && handleValidatePrice()) {
             dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
 
             const data = generateData();
@@ -102,11 +123,6 @@ function ShippingMethodsCreate() {
                     console.warn(error);
                     dispatch(notificationsSlice.actions.showError('Cập nhật thất bại'));
                 });
-        } else {
-            dispatch(notificationsSlice.actions.showError('cập nhật thất bại'));
-            setTimeout(() => {
-                dispatch(notificationsSlice.actions.destroy());
-            }, 1000);
         }
     };
     // --------- End handle update ---------
@@ -167,24 +183,28 @@ function ShippingMethodsCreate() {
                                     <label htmlFor="exampleInputName1">Tên đơn vị vận chuyển</label>
                                     <input
                                         onChange={handleNameInputChange}
+                                        onBlur={handleValidateName}
                                         value={nameInput}
                                         type="text"
                                         className={cx('form-control', 'form-control-sm', 'border-secondary')}
                                         id="exampleInputName1"
                                         placeholder="Nhập tên đơn vị vận chuyển"
                                     />
+                                    <span className={cx('text-danger', 'fs-14')}>{nameError}</span>
                                 </div>
 
                                 <div className={cx('form-group')}>
                                     <label htmlFor="promotionValue">Giá cước</label>
                                     <input
                                         onChange={handlePriceInputChange}
+                                        onBlur={handleValidatePrice}
                                         value={priceInput}
                                         type="number"
                                         className={cx('form-control', 'form-control-sm', 'border-secondary')}
                                         id="promotionValue"
                                         placeholder="Nhập giá cước"
                                     />
+                                    <span className={cx('text-danger', 'fs-14')}>{priceError}</span>
                                 </div>
 
                                 {action === 'update' ? (

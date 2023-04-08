@@ -4327,7 +4327,7 @@ progress {
 }
 
 .table-hover > tbody > tr:hover > * {
-    --bs-table-accent-bg: var(--bs-table-hover-bg);
+    --bs-table-accent-bg: var(--active-bg);
     color: var(--bs-table-hover-color);
 }
 
@@ -5387,13 +5387,13 @@ textarea.form-control.is-invalid {
 }
 
 .btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-weight: 400;
     line-height: 1;
     color: #343a40;
-    text-align: center;
     text-decoration: none;
-    vertical-align: middle;
     cursor: pointer;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -5809,11 +5809,11 @@ fieldset:disabled .btn {
 }
 
 .btn-outline-secondary {
-    color: #c3bdbd;
+    color: var(--text-black);
     border-color: #c3bdbd;
 }
 .btn-outline-secondary:hover {
-    color: #000;
+    color: var(--active-info);
     background-color: #c3bdbd;
     border-color: #c3bdbd;
 }
@@ -16112,9 +16112,11 @@ code {
 .btn-outline-secondary:hover,
 .btn-outline-secondary:focus,
 .btn-outline-secondary:active {
-    background: -webkit-gradient(linear, left top, right top, from(#e7ebf0), to(#868e96));
-    background: linear-gradient(to right, #e7ebf0, #868e96);
-    color: #000000;
+    // background: -webkit-gradient(linear, left top, right top, from(#e7ebf0), to(#868e96));
+    // background: linear-gradient(to right, #e7ebf0, #868e96);
+    background-color: #fff;
+    border-color: var(--active-info);
+    color: var(--active-info);
 }
 
 .btn-inverse-success {
@@ -19069,4 +19071,6 @@ svg:hover {
     --content-background-color: #fcf4f0;
     --active-bg: #f3f4fd;
     --unactive-color: #a19ea4;
+    --text-black: #343A40;
+    --active-info: #198ae3;
 }
