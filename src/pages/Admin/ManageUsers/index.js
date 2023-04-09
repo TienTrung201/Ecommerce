@@ -6,20 +6,18 @@ import * as Unicons from '@iconscout/react-unicons';
 import { Pagination } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function ManageAdminUsers() {
-    const [adminUsers, setAdminUser] = useState([]);
-    // test test test
-    const navigate = useNavigate();
+function ManageUsers() {
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        getData(api.adminUsers)
+        getData(api.users)
             .then((response) => {
                 console.log(response);
-                setAdminUser(response.data);
+                setUsers(response.data);
             })
             .catch((error) => {
                 console.warn(error);
@@ -29,20 +27,20 @@ function ManageAdminUsers() {
     return (
         <>
             <div className={cx('page-header', 'align-middle', 'mt-2')}>
-                <h3 className={cx('page-title', 'mt-0')}>Quản trị viên</h3>
+                <h3 className={cx('page-title', 'mt-0')}>Khách hàng</h3>
                 <nav aria-label="breadcrumb">
                     <ol className={cx('breadcrumb')}>
                         <li className={cx('breadcrumb-item')}></li>
-                        <li className={cx('breadcrumb-item', 'active')}>Quản trị viên</li>
+                        <li className={cx('breadcrumb-item', 'active')}>Khách hàng</li>
                     </ol>
                 </nav>
             </div>
             <div className={cx('card', 'shadow-sm')}>
                 <div className={cx('card-body')}>
                     <div className={cx('d-flex', 'justify-between', 'align-items-center', 'mb-5')}>
-                        <h4 className={cx('card-title', 'mb-0', 'mt-0')}>Tất cả quản trị viên</h4>
+                        <h4 className={cx('card-title', 'mb-0', 'mt-0')}>Tất cả khách hàng</h4>
                         <Link to="" className={cx('btn', 'btn-sm', 'btn-gradient-primary', 'btn-md')}>
-                            Thêm quản trị viên
+                            Thêm khách hàng
                         </Link>
                     </div>
 
@@ -52,42 +50,20 @@ function ManageAdminUsers() {
                                 <tr>
                                     <th> Ảnh </th>
                                     <th> Tên người dùng </th>
+                                    <th> Số điện thoại </th>
                                     <th> Email </th>
-                                    <th> Vai trò </th>
                                     <th> Hành động </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {adminUsers.map((item) => (
-                                    <tr key={item.adminUserId}>
+                                {users.map((item) => (
+                                    <tr key={item.userId}>
                                         <td className={cx('py-1')}>
                                             <img src={item.avatar || images.placeholder} alt="" />
                                         </td>
                                         <td>{item.fullName}</td>
                                         <td>{item.email}</td>
-                                        <td>
-                                            <div
-                                                onClick={() => {
-                                                    navigate(`/admin/manage-admins/edit-roles/${item.adminUserId}`);
-                                                }}
-                                                className={cx('pointer', 'text-wrap')}
-                                            >
-                                                {item?.roles?.map((role) => (
-                                                    <span
-                                                        key={role.roleId}
-                                                        className={cx('badge', 'badge-info', 'm-1')}
-                                                    >
-                                                        {role.name}
-                                                    </span>
-                                                ))}
-
-                                                {item?.roles?.length === 0 && (
-                                                    <span className={cx('badge', 'badge-info', 'm-1')}>
-                                                        + Phân quyền
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </td>
+                                        <td>{'-'}</td>
                                         <td className={cx('')}>
                                             <button
                                                 className={cx('btn', 'btn-light', 'btn-rounded', 'btn-icon')}
@@ -120,4 +96,4 @@ function ManageAdminUsers() {
     );
 }
 
-export default ManageAdminUsers;
+export default ManageUsers;

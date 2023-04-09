@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { getData } from '@/api/service';
 import { api } from '@/api';
 import dayjs from 'dayjs';
+import { Pagination } from 'antd';
 
 const cx = classNames.bind(styles);
 
@@ -81,18 +82,25 @@ function Promotions() {
                         </Link>
                     </div>
 
-                    <table className={cx('table', 'table-hover', 'overflow-x-auto')}>
-                        <thead>
-                            <tr>
-                                <th> Khuyến mãi </th>
-                                <th> Giảm giá </th>
-                                <th> Trạng thái </th>
-                                <th> Ngày bắt đầu </th>
-                                <th> Ngày kết thúc </th>
-                            </tr>
-                        </thead>
-                        <tbody>{renderPromotions}</tbody>
-                    </table>
+                    <div className={cx('overflow-x-auto', 'w-100')}>
+                        <table className={cx('table', 'table-hover', 'overflow-x-auto')}>
+                            <thead>
+                                <tr>
+                                    <th> Khuyến mãi </th>
+                                    <th> Giảm giá </th>
+                                    <th> Trạng thái </th>
+                                    <th> Ngày bắt đầu </th>
+                                    <th> Ngày kết thúc </th>
+                                </tr>
+                            </thead>
+                            <tbody>{renderPromotions}</tbody>
+                        </table>
+                    </div>
+
+                    {/* Paging */}
+                    <div className={cx('mt-5', 'd-flex', 'justify-content-end')}>
+                        <Pagination current={1} onChange={(page, pageSize) => {}} total={1} size="small" simple />
+                    </div>
                 </div>
             </div>
         </>
