@@ -5,6 +5,7 @@ import { api } from '@/api';
 import { useEffect, useState } from 'react';
 import { getData } from '@/api/service';
 import images from '@/assets/admin/images';
+import { Pagination } from 'antd';
 
 const cx = classNames.bind(styles);
 
@@ -102,6 +103,11 @@ function Products() {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+
+                    {/* Paging */}
+                    <div className={cx('mt-5', 'd-flex', 'justify-content-end')}>
+                        <Pagination current={1} onChange={(page, pageSize) => {}} total={1} size="small" simple />
                     </div>
                 </div>
             </div>

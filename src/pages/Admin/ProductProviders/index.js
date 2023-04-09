@@ -1,6 +1,7 @@
 import { api } from '@/api';
 import { getData } from '@/api/service';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
+import { Pagination } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -63,6 +64,7 @@ function ProductProviders() {
                                             navigate(`/admin/providers/update/${item.providerId}`);
                                         }}
                                         className={cx('pointer')}
+                                        key={item.providerId}
                                     >
                                         <td>{index + 1}</td>
                                         <td>{item.name}</td>
@@ -70,6 +72,11 @@ function ProductProviders() {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+
+                    {/* Paging */}
+                    <div className={cx('mt-5', 'd-flex', 'justify-content-end')}>
+                        <Pagination current={1} onChange={(page, pageSize) => {}} total={1} size="small" simple />
                     </div>
                 </div>
             </div>

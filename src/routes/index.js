@@ -42,6 +42,7 @@ import ProductProviders from '@/pages/Admin/ProductProviders';
 import ProductOptions from '@/pages/Admin/ProductOptions';
 import ProductProviderCreate from '@/pages/Admin/ProductProvidersCreate';
 import ProductOptionsCreate from '@/pages/Admin/ProductOptionsCreate';
+import ManageUsers from '@/pages/Admin/ManageUsers';
 
 const publicRoutes = [
     { path: '/', component: Home, layout: LayoutHome },
@@ -76,6 +77,7 @@ const privateRoutes = [
     { path: '/admin/promotions/:action/:id', component: PromotionsCreate, layout: LayoutAdmin },
     { path: '/admin/products', component: Products, layout: LayoutAdmin },
     { path: '/admin/products/:action/:id', component: ProductsCreate, layout: LayoutAdmin },
+    { path: '/admin/manage-users', component: ManageUsers, layout: LayoutAdmin },
     { path: '/admin/manage-admins', component: ManageAdminUsers, layout: LayoutAdmin },
     { path: '/admin/manage-admins/:action/:id', component: EditUserRoles, layout: LayoutAdmin },
     { path: '/admin/manage-roles', component: ManageRoles, layout: LayoutAdmin },

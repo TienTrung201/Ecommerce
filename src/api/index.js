@@ -19,6 +19,7 @@ const api = {
     shopOrders: domain + '/api/shoporders',
     providers: domain + '/api/providers',
     //user
+    users: domain + '/api/users',
     loginUser: domain + '/api/users/login',
     userAccount: domain + '/api/users/account',
     registerUser: domain + '/api/users/register',

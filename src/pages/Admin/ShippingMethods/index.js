@@ -1,6 +1,7 @@
 import { api } from '@/api';
 import { getData } from '@/api/service';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
+import { Pagination } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -48,28 +49,35 @@ function ShippingMethods() {
                         </Link>
                     </div>
 
-                    <table className={cx('table', 'table-hover', 'overflow-x-auto')}>
-                        <thead>
-                            <tr>
-                                <th>Tên đơn vị vận chuyển</th>
-                                <th>Giá cước</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {shippingMethods.map((item) => (
-                                <tr
-                                    onClick={() => {
-                                        navigate(`/admin/shipping-methods/update/${item.shippingMethodId}`);
-                                    }}
-                                    className={cx('pointer')}
-                                    key={item.shippingMethodId}
-                                >
-                                    <td className={cx('py-1')}>{item.name}</td>
-                                    <td>{item.price}đ</td>
+                    <div className={cx('w-100', 'overflow-x-auto')}>
+                        <table className={cx('table', 'table-hover', 'overflow-x-auto')}>
+                            <thead>
+                                <tr>
+                                    <th>Tên đơn vị vận chuyển</th>
+                                    <th>Giá cước</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {shippingMethods.map((item) => (
+                                    <tr
+                                        onClick={() => {
+                                            navigate(`/admin/shipping-methods/update/${item.shippingMethodId}`);
+                                        }}
+                                        className={cx('pointer')}
+                                        key={item.shippingMethodId}
+                                    >
+                                        <td className={cx('py-1')}>{item.name}</td>
+                                        <td>{item.price}đ</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Paging */}
+                    <div className={cx('mt-5', 'd-flex', 'justify-content-end')}>
+                        <Pagination current={1} onChange={(page, pageSize) => {}} total={1} size="small" simple />
+                    </div>
                 </div>
             </div>
         </>
