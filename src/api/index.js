@@ -1,4 +1,4 @@
-let domain = 'http://xuanphucspace-001-site1.atempurl.com';
+let domain = 'https://dotnetcoreapi.up.railway.app';
 
 if (window.location.hostname === 'localhost') {
     domain = 'https://localhost:7044';
