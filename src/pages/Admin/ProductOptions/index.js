@@ -4,6 +4,7 @@ import { api } from '@/api';
 import { getData } from '@/api/service';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Pagination } from 'antd';
 
 const cx = classNames.bind(styles);
 
@@ -84,6 +85,11 @@ function ProductOptions() {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+
+                    {/* Paging */}
+                    <div className={cx('mt-5', 'd-flex', 'justify-content-end')}>
+                        <Pagination current={1} onChange={(page, pageSize) => {}} total={1} size="small" simple />
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 import { api } from '@/api';
 import { getData } from '@/api/service';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
-import { Badge } from 'antd';
+import { Badge, Pagination } from 'antd';
 import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -17,8 +17,8 @@ function ShopOrders() {
         Promise.all([getData(api.shopOrders), getData(api.orderStatuses)])
             .then((response) => {
                 console.log(response);
-                setShopOrders(response[0]);
-                setOrderStatuses(response[1]);
+                setShopOrders(response[0].data);
+                setOrderStatuses(response[1].data);
             })
             .catch((error) => {
                 console.warn(error);
@@ -92,6 +92,11 @@ function ShopOrders() {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+
+                    {/* Paging */}
+                    <div className={cx('mt-5', 'd-flex', 'justify-content-end')}>
+                        <Pagination current={1} onChange={(page, pageSize) => {}} total={1} size="small" simple />
                     </div>
                 </div>
             </div>

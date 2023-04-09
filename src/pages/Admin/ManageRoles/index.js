@@ -1,6 +1,7 @@
 import { api } from '@/api';
 import { getData } from '@/api/service';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
+import { Pagination } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -61,6 +62,7 @@ function ManageRoles() {
                                             navigate(`/admin/manage-roles/update/${item.roleId}`);
                                         }}
                                         className={cx('pointer')}
+                                        key={item.roleId}
                                     >
                                         <td>{index + 1}</td>
                                         <td>{item.name}</td>
@@ -68,6 +70,11 @@ function ManageRoles() {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+
+                    {/* Paging */}
+                    <div className={cx('mt-5', 'd-flex', 'justify-content-end')}>
+                        <Pagination current={1} onChange={(page, pageSize) => {}} total={1} size="small" simple />
                     </div>
                 </div>
             </div>
