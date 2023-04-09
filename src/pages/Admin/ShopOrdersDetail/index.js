@@ -24,7 +24,7 @@ function ShopOrdersDetail() {
         Promise.all([getData(api.shopOrders + '/' + id), getData(api.shippingMethods)])
             .then((response) => {
                 console.log(response[0]);
-                setShopOrder(response[0]);
+                setShopOrder(response[0].data);
                 setOrderAddress(response[0].address);
                 setOrderItems(response[0].items);
 

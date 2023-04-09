@@ -2,6 +2,7 @@ import { api } from '@/api';
 import { getData } from '@/api/service';
 import images from '@/assets/admin/images';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
+import { Pagination } from 'antd';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -53,38 +54,46 @@ function ProductCategories() {
                         </Link>
                     </div>
 
-                    <table className={cx('table', 'table-hover')}>
-                        <thead>
-                            <tr>
-                                <th> Ảnh </th>
-                                <th> Tên danh mục </th>
-                                <th> Khuyến mãi </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {categories.map((category) => (
-                                <tr
-                                    onClick={() => {
-                                        navigate(`/admin/categories/update/${category.categoryId}`);
-                                    }}
-                                    className={cx('pointer')}
-                                    key={category.categoryId}
-                                >
-                                    <td className={cx('py-1')}>
-                                        <img
-                                            src={category.image || images.placeholder}
-                                            className={cx('rounded-6')}
-                                            alt=""
-                                        />
-                                    </td>
-                                    <td>{category.name}</td>
-                                    <td>
-                                        {promotions.find((p) => p.promotionId === category.promotionId)?.name || 'N/A'}
-                                    </td>
+                    <div className={cx('overflow-x-auto', 'w-100')}>
+                        <table className={cx('table', 'table-hover')}>
+                            <thead>
+                                <tr>
+                                    <th> Ảnh </th>
+                                    <th> Tên danh mục </th>
+                                    <th> Khuyến mãi </th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {categories.map((category) => (
+                                    <tr
+                                        onClick={() => {
+                                            navigate(`/admin/categories/update/${category.categoryId}`);
+                                        }}
+                                        className={cx('pointer')}
+                                        key={category.categoryId}
+                                    >
+                                        <td className={cx('py-1')}>
+                                            <img
+                                                src={category.image || images.placeholder}
+                                                className={cx('rounded-6')}
+                                                alt=""
+                                            />
+                                        </td>
+                                        <td>{category.name}</td>
+                                        <td>
+                                            {promotions.find((p) => p.promotionId === category.promotionId)?.name ||
+                                                'N/A'}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Paging */}
+                    <div className={cx('mt-5', 'd-flex', 'justify-content-end')}>
+                        <Pagination current={1} onChange={(page, pageSize) => {}} total={1} size="small" simple />
+                    </div>
                 </div>
             </div>
         </>

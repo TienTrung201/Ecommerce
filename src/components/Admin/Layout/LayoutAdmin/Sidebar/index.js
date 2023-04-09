@@ -62,7 +62,7 @@ function Sidebar({ active, iconOnly }) {
                         </Link>
                     </li>
 
-                    <li data-active="dashboard" className={cx('nav-item', { active: location.pathname === '/admin' })}>
+                    <li className={cx('nav-item', { active: location.pathname === '/admin' })}>
                         <Link to="/admin" className={cx('nav-link')} href="../../index.html">
                             <i className={cx('menu-icon')}>
                                 {/* <FontAwesomeIcon icon={faHouse} /> */}
@@ -165,7 +165,7 @@ function Sidebar({ active, iconOnly }) {
                     </CustomCollapse>
 
                     <li className={cx('nav-item', { active: location.pathname.includes('/admin/promotions') })}>
-                        <Link to="/admin/promotions" className={cx('nav-link')} href="#">
+                        <Link to="/admin/promotions" className={cx('nav-link')}>
                             <i className={cx('menu-icon')}>
                                 {/* <FontAwesomeIcon icon={faTags} /> */}
                                 <Unicons.UilTagAlt />
@@ -182,7 +182,7 @@ function Sidebar({ active, iconOnly }) {
                         icon={<Unicons.UilUsersAlt />}
                     >
                         <ul className={cx('nav', 'flex-column', 'sub-menu')}>
-                            <li onClick={handleStopBubble} data-active="product-list" className={cx('nav-item')}>
+                            <li onClick={handleStopBubble} className={cx('nav-item')}>
                                 <Link
                                     to="/admin/manage-admins"
                                     className={cx('nav-link', {
@@ -192,7 +192,7 @@ function Sidebar({ active, iconOnly }) {
                                     Quản trị viên
                                 </Link>
                             </li>
-                            <li onClick={handleStopBubble} data-active="product-category" className={cx('nav-item')}>
+                            <li onClick={handleStopBubble} className={cx('nav-item')}>
                                 <Link
                                     to="/admin/manage-roles"
                                     className={cx('nav-link', {
@@ -202,8 +202,13 @@ function Sidebar({ active, iconOnly }) {
                                     Quản lý vai trò
                                 </Link>
                             </li>
-                            <li onClick={handleStopBubble} data-active="product-list" className={cx('nav-item')}>
-                                <Link to="" className={cx('nav-link')}>
+                            <li onClick={handleStopBubble} className={cx('nav-item')}>
+                                <Link
+                                    to="/admin/manage-users"
+                                    className={cx('nav-link', {
+                                        active: location.pathname.includes('/admin/manage-users'),
+                                    })}
+                                >
                                     Khách hàng
                                 </Link>
                             </li>
