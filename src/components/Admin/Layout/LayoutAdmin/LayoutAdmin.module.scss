@@ -2839,7 +2839,7 @@ progress {
     color: #6c757d;
 }
 .blockquote-footer::before {
-    content: '\2014\00A0';
+    // content: '\2014\00A0';
 }
 
 .img-fluid {
@@ -17236,7 +17236,7 @@ code {
     filter: alpha(opacity=0);
     -webkit-transform: scale(0);
     transform: scale(0);
-    content: '\F12C';
+    // content: '\F12C';
     font-size: 1.5rem;
     font-weight: bold;
     color: #ffffff;
@@ -17607,17 +17607,17 @@ dl li {
 }
 
 .list-ticked li:before {
-    content: '\F12D';
+    // content: '\F12D';
     color: #fe7c96;
 }
 
 .list-arrow li:before {
-    content: '\F142';
+    // content: '\F142';
     color: #1bcfb4;
 }
 
 .list-star li:before {
-    content: '\F4CE';
+    // content: '\F4CE';
     color: #fed713;
 }
 
