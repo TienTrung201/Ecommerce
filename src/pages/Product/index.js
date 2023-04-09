@@ -1,19 +1,24 @@
 import { api } from '@/api';
-import { getData } from '@/api/service';
-import { optionsSelector } from '@/redux/selector';
+import { getData, postData } from '@/api/service';
+import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
+import { optionsSelector, userSelector } from '@/redux/selector';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faCartPlus, faChevronRight, faMinus, faPlus, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
+import cartSlice from '../Cart/CartSlice';
+import { convertVnd } from '@/components/GlobalStyles/fuction';
 
 function Product() {
+    const dispatch = useDispatch();
     //filter product
     const maxProductPrice = useRef();
     const [productItem, setProductItem] = useState(null);
     const options = useSelector(optionsSelector);
+    const user = useSelector(userSelector);
     const [sizeOprion, setSizeOption] = useState(null);
     const [colorOption, setColorOption] = useState(null);
     const [ItemsProduct, setItemsProduct] = useState([{ optionsId: [] }]);
@@ -73,7 +78,6 @@ function Product() {
     const { id } = useParams();
     const [product, setProduct] = useState({});
     const [priceRangeProduct, setPriceRangeProduct] = useState([]);
-
     useEffect(() => {
         Promise.all([getData(api.products + `/${id}`), getData(api.categories), getData(api.promotions)])
             .then((values) => {
@@ -126,6 +130,63 @@ function Product() {
             });
     }, [id]);
     //get Product
+    //handle add product to cart
+    const handleAddToCart = () => {
+        if (message === null) {
+            const data = { items: [{ productItemId: productItem.productItemId, qty: productQuantity }] };
+            dispatch(notificationsSlice.actions.showLoading('Thêm vào giỏ hàng'));
+
+            postData(api.shoppingCarts, data)
+                .then((response) => {
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.showSuccess('thành công'));
+                        getData(api.shoppingCarts + '/' + user.uid)
+                            .then((response) => {
+                                console.log(response);
+                                dispatch(cartSlice.actions.setCartId(response.data.cartId));
+                                const cartUser = response.data.items.reduce((acc, item) => {
+                                    const { cartItemId, qty } = item;
+                                    const { productId, image, name, items } = item.product;
+                                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                                    acc.push({
+                                        cartItemId,
+                                        productId,
+                                        image,
+                                        name,
+                                        costPrice,
+                                        qtyInStock,
+                                        productItemId,
+                                        sku,
+                                        qty,
+                                        optionsId,
+                                        isChecked: false,
+                                    });
+                                    return acc;
+                                }, []);
+                                dispatch(cartSlice.actions.setCart(cartUser.reverse()));
+
+                                console.log(cartUser);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                    }, 1000);
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.destroy());
+                    }, 2000);
+
+                    console.log(response);
+                })
+                .catch((error) => {
+                    dispatch(notificationsSlice.actions.showError('Thất bại'));
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.destroy());
+                    }, 1000);
+                    console.log(error);
+                });
+        }
+    };
+    //handle add product to cart
 
     //Change Description and Review
     const [tabs, setTabs] = useState('Reviews');
@@ -206,14 +267,10 @@ function Product() {
         dots: false,
         speed: 300,
         slidesToShow: 5,
-        // centerPadding: "60px",
         slidesToScroll: 1,
         swipeToSlide: true,
         focusOnSelect: true,
-        // centerMode: true,
         infinite: false,
-        // row: 1,
-        // slidesPerRow: 1,
     };
     return (
         <>
@@ -227,7 +284,7 @@ function Product() {
                     </li>
 
                     <li>
-                        <Link to="/">Category</Link>
+                        <Link to="/shop">Shop</Link>
                         <i className="iconRight">
                             <FontAwesomeIcon icon={faChevronRight} />
                         </i>
@@ -238,8 +295,8 @@ function Product() {
             </div>
             <div className="container container-content">
                 <div className="single-product-detail">
-                    <div className="row">
-                        <div className="col-xs-12 col-sm-6 col-md-6">
+                    <div className="row align-items-stretch">
+                        <div className="col-xs-12 col-sm-6 col-md-6 slide-product">
                             <div className="flex product-img-slide">
                                 <div className="product-images">
                                     <div className="ribbon zoa-sale">
@@ -251,7 +308,7 @@ function Product() {
                                         {...settings}
                                         className="main-img js-product-slider"
                                     >
-                                        <Link to="#" className="hover-images effect">
+                                        <Link to="#" className="hover-images effect autoCenter">
                                             <img src={product.image} alt="" className="img-responsive" />
                                         </Link>
                                         {product.items &&
@@ -260,7 +317,11 @@ function Product() {
                                                     return false;
                                                 }
                                                 return (
-                                                    <Link key={p.productItemId} to="#" className="hover-images effect">
+                                                    <Link
+                                                        key={p.productItemId}
+                                                        to="#"
+                                                        className="hover-images effect autoCenter"
+                                                    >
                                                         <img src={p.image} alt="" className="img-responsive" />
                                                     </Link>
                                                 );
@@ -300,31 +361,31 @@ function Product() {
                                     <Link to="#">{product.name}</Link>
                                 </h3>
                                 <div className="product-price">
-                                    <span className="old thin">${maxProductPrice.current}</span>
+                                    <span className="old thin">{convertVnd(maxProductPrice.current)}</span>
                                     <span>
                                         {productItem !== null
                                             ? product.discountRate === 0
-                                                ? productItem.price + '$'
-                                                : (productItem.price * product.discountRate) / 100 + '$'
+                                                ? convertVnd(productItem.price)
+                                                : convertVnd((productItem.price * product.discountRate) / 100)
                                             : priceRangeProduct.length > 1
                                             ? product.discountRate === 0
-                                                ? `$${priceRangeProduct.slice(-1)[0].price} - $${
-                                                      priceRangeProduct.slice(0, 1)[0].price
-                                                  }`
-                                                : `$${
+                                                ? `${convertVnd(priceRangeProduct.slice(-1)[0].price)} - ${convertVnd(
+                                                      priceRangeProduct.slice(0, 1)[0].price,
+                                                  )}`
+                                                : `${convertVnd(
                                                       (priceRangeProduct.slice(-1)[0].price * product.discountRate) /
-                                                      100
-                                                  } - $${
+                                                          100,
+                                                  )} - ${convertVnd(
                                                       (priceRangeProduct.slice(0, 1)[0].price * product.discountRate) /
-                                                      100
-                                                  }`
+                                                          100,
+                                                  )}`
                                             : priceRangeProduct.length === 1
                                             ? product.discountRate === 0
-                                                ? priceRangeProduct.slice(-1)[0].price + '$'
-                                                : `$${
+                                                ? convertVnd(priceRangeProduct.slice(-1)[0].price)
+                                                : `${convertVnd(
                                                       (priceRangeProduct.slice(-1)[0].price * product.discountRate) /
-                                                      100
-                                                  }`
+                                                          100,
+                                                  )}`
                                             : ''}
                                     </span>
                                 </div>
@@ -448,7 +509,10 @@ function Product() {
                                             </button>
                                         </div>
                                         <Link
-                                            to=""
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                handleAddToCart();
+                                            }}
                                             className={
                                                 message !== null
                                                     ? 'button-unauthorized zoa-btn zoa-addcart'
@@ -456,11 +520,11 @@ function Product() {
                                             }
                                         >
                                             <i className="zoa-icon-cart" />
-                                            add to cart
+                                            Thêm vào giỏ hàng
                                         </Link>
                                     </div>
                                     <Link to="" className="btn-wishlist">
-                                        + Add to wishlist
+                                        + Thêm vào danh sách yêu thích
                                     </Link>
                                 </div>
                             </div>

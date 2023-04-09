@@ -9462,10 +9462,10 @@ span.star:last-child {
 .element span {
     font-size: 12px;
 }
-.element a:hover,
+/* .element a:hover,
 .element span:hover {
     color: #dd2a2a;
-}
+} */
 .element img {
     vertical-align: middle;
     margin-top: -2px;

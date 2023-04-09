@@ -1,14 +1,19 @@
 import { Link, useNavigate } from 'react-router-dom';
 import images from '@/assets/image';
 import { useDispatch, useSelector } from 'react-redux';
-import { userSelector } from '@/redux/selector';
+import { cartSelector, userSelector } from '@/redux/selector';
 import { useEffect } from 'react';
 import { getData } from '@/api/service';
 import { api } from '@/api';
 import userSlice from '@/pages/MyAccount/UserSlice';
 import Notification from '@/components/Admin/Notification';
+import CartHeader from '@/pages/Cart/CartHeader';
+import cartSlice from '@/pages/Cart/CartSlice';
+import shippingSlice from '@/pages/ShippingMethod/ShippingSlice';
 function UserAccount({ onOpenSearch, onOpenCart }) {
+    //userAccount
     const user = useSelector(userSelector);
+    const cartItems = useSelector(cartSelector);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
@@ -25,6 +30,45 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                 }
             });
     }, [navigate, dispatch]);
+    //userAccount
+    useEffect(() => {
+        getData(api.shoppingCarts + '/' + user.uid)
+            .then((response) => {
+                console.log(response);
+                dispatch(cartSlice.actions.setCartId(response.data.cartId));
+                const cartUser = response.data.items.reduce((acc, item) => {
+                    const { cartItemId, qty } = item;
+                    const { productId, image, name, items } = item.product;
+                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                    acc.push({
+                        cartItemId,
+                        productId,
+                        image,
+                        name,
+                        costPrice,
+                        qtyInStock,
+                        productItemId,
+                        sku,
+                        qty,
+                        optionsId,
+                        isChecked: false,
+                    });
+                    return acc;
+                }, []);
+                dispatch(cartSlice.actions.setCart(cartUser.reverse()));
+
+                console.log(cartUser);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [user.uid, dispatch]);
+    useEffect(() => {
+        getData(api.shippingMethods).then((response) => {
+            console.log(response);
+            dispatch(shippingSlice.actions.setShippingMethods(response));
+        });
+    }, [dispatch]);
     return (
         <div className="topbar-left">
             <Notification />
@@ -37,8 +81,9 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
             <div onClick={onOpenCart} className="element element-cart">
                 <Link className="zoa-icon icon-cart">
                     <img src={images.cart} alt="menubar" />
-                    <span className="count cart-count">0</span>
+                    <span className="count cart-count">{cartItems.cartItems.length}</span>
                 </Link>
+                <CartHeader />
             </div>
             {user.uid !== '' ? (
                 <div className="user-account element element-user hidden-xs hidden-sm">

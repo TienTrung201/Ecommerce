@@ -2,6 +2,7 @@ import { api } from '@/api';
 import { getData } from '@/api/service';
 import sliderImg1 from '@/assets/image/slide/slider-1-home-1.png';
 import sliderImg2 from '@/assets/image/slide/slider-2-home-1.png';
+import { convertVnd } from '@/components/GlobalStyles/fuction';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -107,7 +108,7 @@ function Home() {
                             <div className="col-md-7 col-sm-6 col-xs-12">
                                 <div className="row engoc-row-equal">
                                     {products.map((product, index) => {
-                                        if (index >= 5) {
+                                        if (index >= 6) {
                                             return false;
                                         }
 
@@ -148,12 +149,17 @@ function Home() {
                                                 <div className="product-info text-center">
                                                     <h3 className="product-title">{product.name}</h3>
                                                     <div className="product-price">
-                                                        <span className="old">${product.items[0].price}</span>
+                                                        <span className="old">
+                                                            {convertVnd(product.items[0].price)}
+                                                        </span>
                                                         {product.discountRate === 0 ? (
-                                                            <span>${product.items[0].price}</span>
+                                                            <span>{convertVnd(product.items[0].price)}</span>
                                                         ) : (
                                                             <span>
-                                                                ${(product.items[0].price * product.discountRate) / 100}
+                                                                {convertVnd(
+                                                                    (product.items[0].price * product.discountRate) /
+                                                                        100,
+                                                                )}
                                                             </span>
                                                         )}
                                                     </div>
