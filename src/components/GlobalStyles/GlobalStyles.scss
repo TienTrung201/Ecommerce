@@ -57,7 +57,17 @@ input::-webkit-inner-spin-button {
     appearance: none;
 }
 .autoCenter {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
+}
+.button-unauthorized {
+    opacity: 0.5;
+    cursor: auto !important;
+    color: #fff !important;
+    &:hover {
+        background: #222222;
+        color: #fff;
+        border-color: #222222;
+    }
 }

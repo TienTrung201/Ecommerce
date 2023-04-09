@@ -7,7 +7,7 @@ function CommingSoon() {
     return (
         <div className="wrapper-comingson">
             <div className=" logo">
-                <Link href="#">
+                <Link to="/">
                     <img src={logo} alt="" className="img-reponsive" />
                 </Link>
             </div>

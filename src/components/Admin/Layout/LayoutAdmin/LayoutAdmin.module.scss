@@ -2839,7 +2839,7 @@ progress {
     color: #6c757d;
 }
 .blockquote-footer::before {
-    content: '\2014\00A0';
+    // content: '\2014\00A0';
 }
 
 .img-fluid {
@@ -9967,7 +9967,7 @@ fieldset:disabled .btn {
 
 .border,
 .loader-demo-box {
-    border: 1px solid rgba(195,207,216, 0.38) !important;
+    border: 1px solid rgba(195, 207, 216, 0.38) !important;
 }
 
 .border-0 {
@@ -14536,7 +14536,7 @@ h1,
 h2,
 .h2,
 .h2 {
-    font-size: 3.0rem;
+    font-size: 3rem;
 }
 
 h3,
@@ -15425,7 +15425,7 @@ code {
     flex-direction: column;
     -webkit-box-align: end;
     -ms-flex-align: end;
-    align-items: end;
+    align-items: flex-end;
 }
 
 .sales-mini-tabs {
@@ -17236,7 +17236,7 @@ code {
     filter: alpha(opacity=0);
     -webkit-transform: scale(0);
     transform: scale(0);
-    content: '\F12C';
+    // content: '\F12C';
     font-size: 1.5rem;
     font-weight: bold;
     color: #ffffff;
@@ -17607,17 +17607,17 @@ dl li {
 }
 
 .list-ticked li:before {
-    content: '\F12D';
+    // content: '\F12D';
     color: #fe7c96;
 }
 
 .list-arrow li:before {
-    content: '\F142';
+    // content: '\F142';
     color: #1bcfb4;
 }
 
 .list-star li:before {
-    content: '\F4CE';
+    // content: '\F4CE';
     color: #fed713;
 }
 
@@ -18578,7 +18578,7 @@ dl li {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2.0rem;
+    font-size: 2rem;
     width: 2.2rem;
     height: 2.2rem;
     line-height: 1;
@@ -19029,8 +19029,6 @@ svg:hover {
     transition: all 0.2s ease;
 }
 
-
-
 @keyframes scaleVertical {
     from {
         transform: scaleY(0);
@@ -19063,7 +19061,6 @@ svg:hover {
     background: #888;
 }
 
-
 :root {
     --primary-color: #b66dff;
     --active-color: #b66dff;
@@ -19071,6 +19068,6 @@ svg:hover {
     --content-background-color: #fcf4f0;
     --active-bg: #f3f4fd;
     --unactive-color: #a19ea4;
-    --text-black: #343A40;
+    --text-black: #343a40;
     --active-info: #198ae3;
 }
