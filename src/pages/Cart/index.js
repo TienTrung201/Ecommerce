@@ -1,5 +1,5 @@
 import { api } from '@/api';
-import { postData, updateData } from '@/api/service';
+import { getData, postData, updateData } from '@/api/service';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { cartSelector, optionsSelector, shippingMethodsSelector, userSelector } from '@/redux/selector';
 import { faClose, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -213,13 +213,70 @@ function Cart() {
                       items: dataItemsOrder,
                   };
         console.log(dataOrder);
-        // postData(api.shopOrders, dataOrder)
-        //     .then((response) => {
-        //         console.log(response);
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
+        postData(api.shopOrders, dataOrder)
+            .then((response) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Đặt hàng thành công'));
+                }, 1000);
+                const convertDataOrder = itemsOrder.map((dataItem) => {
+                    return {
+                        cartItemId: dataItem.cartItemId,
+                        qty: dataItem.qty,
+                        cartId: cartUser.cartId,
+                        productItemId: dataItem.productItemId,
+                    };
+                });
+                updateData(api.shoppingCarts, { cartId: cartUser.cartId, userId: user.uid, items: convertDataOrder })
+                    .then((response) => {
+                        console.log(response);
+                        getData(api.shoppingCarts + '/' + user.uid)
+                            .then((response) => {
+                                console.log(response);
+                                dispatch(cartSlice.actions.setCartId(response.data.cartId));
+                                const cartUser = response.data.items.reduce((acc, item) => {
+                                    const { cartItemId, qty } = item;
+                                    const { productId, image, name, items } = item.product;
+                                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                                    acc.push({
+                                        cartItemId,
+                                        productId,
+                                        image,
+                                        name,
+                                        costPrice,
+                                        qtyInStock,
+                                        productItemId,
+                                        sku,
+                                        qty,
+                                        optionsId,
+                                        isChecked: false,
+                                    });
+                                    return acc;
+                                }, []);
+                                dispatch(cartSlice.actions.setCart(cartUser.reverse()));
+
+                                console.log(cartUser);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                console.log(response);
+            })
+            .catch((error) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showError('Thất bại'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 1000);
+                console.log(error);
+            });
     };
     return (
         <div className="container">

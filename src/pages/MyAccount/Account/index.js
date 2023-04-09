@@ -52,13 +52,18 @@ function Account({ user }) {
         updateData(api.userAccount, data)
             .then((response) => {
                 setTimeout(() => {
-                    dispatch(notificationsSlice.actions.showSuccess('Cập nhập thành công'));
+                    dispatch(notificationsSlice.actions.showSuccess('Cập nhật thành công'));
                 }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
                 console.log(response);
             })
             .catch((err) => {
+                dispatch(notificationsSlice.actions.showError('Thất bại'));
+
                 setTimeout(() => {
-                    dispatch(notificationsSlice.actions.showError('Thất bại'));
+                    dispatch(notificationsSlice.actions.destroy());
                 }, 1000);
                 console.warn(err);
             });
