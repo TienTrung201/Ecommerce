@@ -11,23 +11,27 @@ const cx = classNames.bind(styles);
 
 function Products() {
     const [products, setProducts] = useState([]);
+    const [totalPages, setTotalPages] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
     const [categories, setCategories] = useState([]);
     const [providers, setProviders] = useState([]);
 
     const navigate = useNavigate();
+    // const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        Promise.all([getData(api.products), getData(api.categories), getData(api.providers)])
+        Promise.all([getData(api.products + `?page=${currentPage}`), getData(api.categories), getData(api.providers)])
             .then((values) => {
                 console.log(values);
                 setProducts(values[0].data);
+                setTotalPages(values[0].totalPages * 10);
                 setCategories(values[1]);
                 setProviders(values[2]);
             })
             .catch((error) => {
                 console.warn(error);
             });
-    }, []);
+    }, [currentPage]);
 
     return (
         <>
@@ -107,7 +111,15 @@ function Products() {
 
                     {/* Paging */}
                     <div className={cx('mt-5', 'd-flex', 'justify-content-end')}>
-                        <Pagination current={1} onChange={(page, pageSize) => {}} total={1} size="small" simple />
+                        <Pagination
+                            current={currentPage}
+                            onChange={(page) => {
+                                setCurrentPage(page);
+                            }}
+                            total={totalPages}
+                            size="small"
+                            simple
+                        />
                     </div>
                 </div>
             </div>
