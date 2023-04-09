@@ -26,6 +26,7 @@ function AdminRegister() {
     const handleFullNameInputChange = (e) => {
         setFullNameInput(e.target.value);
         setFullNameError('');
+
     };
 
     const handleUsernameInputChange = (e) => {
