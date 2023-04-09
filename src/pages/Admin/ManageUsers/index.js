@@ -62,8 +62,8 @@ function ManageUsers() {
                                             <img src={item.avatar || images.placeholder} alt="" />
                                         </td>
                                         <td>{item.fullName}</td>
-                                        <td>{item.email}</td>
                                         <td>{'-'}</td>
+                                        <td>{item.email}</td>
                                         <td className={cx('')}>
                                             <button
                                                 className={cx('btn', 'btn-light', 'btn-rounded', 'btn-icon')}
