@@ -39,9 +39,9 @@
             .header {
                 height: 50px;
                 text-align: center;
-                // padding: 10px 0;
+
                 font-size: 20px;
-                //   font-weight: 600;
+
                 border-bottom: 1px solid #ccc;
                 line-height: 1rem;
                 position: relative;
@@ -63,7 +63,6 @@
                     }
                     .iconClose {
                         font-size: 2rem;
-                        // color: var(--backGround-App);
                     }
                 }
             }
@@ -73,11 +72,9 @@
                 overflow-y: scroll;
             }
             .footer {
-                //   height: 50px;
                 padding: 8px 0;
                 button {
                     background-color: var(--backGround-App);
-                    // opacity: 0.9;
                     height: 35px;
                     width: 120px;
                     border-radius: 6px;
@@ -85,7 +82,6 @@
                     color: #fff;
                     transition: 0.2s ease;
                     border: none !important;
-                    // cursor: pointer;
                     @include mobile {
                         height: 35px;
                         width: 120px;
