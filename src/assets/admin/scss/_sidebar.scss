@@ -95,14 +95,6 @@
                     margin-right: auto;
                     margin-left: 1rem;
                 }
-
-                &[aria-expanded='true'] {
-                    .menu-arrow {
-                        &:before {
-                            // content: '\f140';
-                        }
-                    }
-                }
             }
 
             &.active {
