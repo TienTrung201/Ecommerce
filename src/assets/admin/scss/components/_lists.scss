@@ -29,7 +29,7 @@ dl {
 .list-ticked {
     li {
         &:before {
-            content: '\F12D';
+            // content: '\F12D';
             color: $danger;
         }
     }

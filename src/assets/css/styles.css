@@ -18594,7 +18594,7 @@ i.fa.fa-plus {
     align-items: center;
 }
 .zoa-qtt .quantity-left-minus:before {
-    content: '\f462';
+    /* content: '\f462'; */
 }
 .zoa-qtt .quantity-right-plus {
     right: 0;
@@ -18609,7 +18609,7 @@ i.fa.fa-plus {
     align-items: center;
 }
 .zoa-qtt .quantity-right-plus:before {
-    content: '\f489';
+    /* content: '\f489'; */
 }
 .zoa-qtt .btn {
     cursor: pointer;
