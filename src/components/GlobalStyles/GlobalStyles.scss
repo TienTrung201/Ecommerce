@@ -1,6 +1,3 @@
-// npm install --save normalize.css reset css
-// @import 'normalize.css'; // reset css
-
 @mixin mobile {
     @media screen and (max-width: 739px) {
         @content;
@@ -26,10 +23,7 @@ $active--Color: #31a24c;
     --backGround--page2--white: #fff;
 
     --backgroundTransparent: transparent;
-    // --backGround--page2--white: transparent;
-    // --backGround--page: transparent;
 
-    //defaultLayout
     --default-layout-Nav-height: 60px;
     --default-layout-Nav-height--mobile: 50px;
     --default-layout--mobile--bottom: 8px;

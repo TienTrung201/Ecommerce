@@ -1,55 +1,3 @@
-/**
-    Theme Name: Zoa - Minimalist HTML Template
-    Theme URI: http://engotheme.com/
-    Author: Engo Team
-    Author URI: http://engotheme.com/
-    Description: Engo ABC HTML Template
-    Version: 1.0
-    Last change:    2018/12/11 [Initial Release]
-    License: GNU General Public License v2 or later
-    Text Domain: Engotheme
- **/
-/*------------------------------------------------------------------
-[Table of contents]
-    components
-        1.Base
-        2.element
-        3.Layout
-        4.mixin
-        5.page
-        6.posttype
-        7.Reponsive
-        8.variables
-        9.var
-            9.1 element
-            9.2 form
-            9.3 layout
-            9.4 nav
-    
-
-
--------------------------------------------------------------------*/
-/** 1. Import vendor **/
-/** 1.1. Vendor **/
-/** 1.1.1.	Google fonts **/
-/** 1.1.2.	Icon Fonts **/
-/* @import url("@/assets/sass/components/Vendor/font-awesome/font-awesome.min.css");
-@import url("@/assets/sass/components/Vendor/simple-line-icon/css/simple-line-icons.css");
-@import url("@/assets/sass/components/Vendor/blanch/fonts.css");
-@import url("@/assets/sass/components/Vendor/Helvetica/fonts.css");
-@import url("@/assets/sass/components/Vendor/PlayfairDisplay/fonts.css");
-@import url("@/assets/sass/components/Vendor/ionicons/css/ionicons.min.css");
-@import url("@/assets/sass/components/Vendor/Eina03/fonts.css");
-@import url("@/assets/sass/components/Vendor/zoa/zoa-font.css");
-@import url("@/assets/sass/components/Vendor/bukan/fonts.css"); */
-/** 1.1.3. Vendor library **/
-/* EX: @import url('components/Vendor/owlcarousel/owlcarousel.css'); */
-/*!
- * Bootstrap v3.3.7 (http://getbootstrap.com)
- * Copyright 2011-2016 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- */
-/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 html {
     font-family: sans-serif;
     -ms-text-size-adjust: 100%;
@@ -198,7 +146,6 @@ button,
 html input[type='button'],
 input[type='reset'],
 input[type='submit'] {
-
     cursor: pointer;
 }
 
@@ -266,7 +213,6 @@ th {
     padding: 0;
 }
 
-/*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 @media print {
     *,
     *:before,
@@ -893,7 +839,6 @@ blockquote.pull-right small:before,
 blockquote.pull-right .small:before {
     content: '';
 }
-
 
 address {
     margin-bottom: 20px;
@@ -2330,8 +2275,6 @@ fieldset[disabled] .form-control {
 textarea.form-control {
     height: auto;
 }
-
-
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     input[type='date'].form-control,
@@ -8621,7 +8564,6 @@ span.star:last-child {
     background: #fff;
     border-right: 1px solid #ebebeb;
     border-top: 1px solid #ebebeb;
-
 }
 .header-search .input-group-btn {
     padding: 0;
@@ -10617,7 +10559,6 @@ span.star:last-child {
     position: relative;
     font-weight: 500;
     color: #fff;
-
 }
 
 .header-cate ul li a img {
@@ -10740,7 +10681,6 @@ span.star:last-child {
     background: #ffffff;
     border-right: 1px solid #ebebeb;
     border-top: 1px solid #ebebeb;
-
 }
 .list-product-search li {
     display: block;
@@ -15419,7 +15359,6 @@ i.fa.fa-plus {
     }
 }
 @media screen and (max-width: 768px) {
-
     .blog-col .gallery-isotope.blog-col-3 .item-isotope,
     .blog-col .gallery-isotope.blog-col-3 .item-size {
         width: 50% !important;
@@ -18284,8 +18223,6 @@ i.fa.fa-plus {
     }
 }
 
-
-
 .wrap-gallery {
     padding-bottom: 28px;
 }
@@ -18959,7 +18896,6 @@ i.fa.fa-plus {
     font-family: 'fontAwesome';
 }
 
-
 @media (min-width: 768px) {
     .nav-filter {
         position: absolute;
@@ -19032,15 +18968,14 @@ i.fa.fa-plus {
     border-top: 1px solid rgba(255, 255, 255, 0.09);
 }
 .nav-filter.boder-w-tlr-opc1 li:hover {
-    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&0.08+0,0.08+100 */
     background: -moz-linear-gradient(top, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.08) 100%);
-    /* FF3.6-15 */
+
     background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.08) 100%);
-    /* Chrome10-25,Safari5.1-6 */
+
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.08) 100%);
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#14ffffff', endColorstr='#14ffffff', GradientType=0);
-    /* IE6-9 */
+
     -webkit-transition: all 0.3s ease 0s;
     transition: all 0.3s ease 0s;
     -o-transition: all 0.3s ease 0s;
@@ -19834,7 +19769,6 @@ i.fa.fa-plus {
     top: 5px;
     color: #333;
     cursor: pointer;
-
 }
 .filter-product .filter-content .minus:after {
     /* content: '\f462'; */
