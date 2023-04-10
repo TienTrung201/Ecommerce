@@ -202,14 +202,12 @@ function Cart() {
                 ? {
                       addressId: addressDefault.addressId,
                       shippingMethodId: typeShipping.shippingMethodId,
-                      orderStatusId: 1,
                       items: dataItemsOrder,
                   }
                 : {
                       addressId: addressDefault.addressId,
                       shippingMethodId: typeShipping.shippingMethodId,
                       paymentMethodId: paymentMethodId,
-                      orderStatusId: 1,
                       items: dataItemsOrder,
                   };
         console.log(dataOrder);
@@ -218,7 +216,9 @@ function Cart() {
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.showSuccess('Đặt hàng thành công'));
                 }, 1000);
-                const convertDataOrder = itemsOrder.map((dataItem) => {
+                const remainingProductCart = cartUser.cartItems.filter((item) => item.isChecked === false);
+
+                const convertRemainingProductCartToUpdate = remainingProductCart.map((dataItem) => {
                     return {
                         cartItemId: dataItem.cartItemId,
                         qty: dataItem.qty,
@@ -226,7 +226,11 @@ function Cart() {
                         productItemId: dataItem.productItemId,
                     };
                 });
-                updateData(api.shoppingCarts, { cartId: cartUser.cartId, userId: user.uid, items: convertDataOrder })
+                updateData(api.shoppingCarts, {
+                    cartId: cartUser.cartId,
+                    userId: user.uid,
+                    items: convertRemainingProductCartToUpdate,
+                })
                     .then((response) => {
                         console.log(response);
                         getData(api.shoppingCarts + '/' + user.uid)

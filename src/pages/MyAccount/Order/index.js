@@ -30,7 +30,7 @@ function Order() {
                     ? dataOrder.map((order) => {
                           return (
                               <div key={order.orderId} className="table cart-table">
-                                  <div className="product-thumbnail">Mã đơn</div>
+                                  <div className="product-thumbnail">Mã đơn: {order.orderId}</div>
 
                                   <div>
                                       {order.items.map((item) => {
