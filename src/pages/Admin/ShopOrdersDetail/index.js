@@ -1,14 +1,14 @@
 import { api } from '@/api';
-import { getData } from '@/api/service';
+import { getData, updateData } from '@/api/service';
 import images from '@/assets/admin/images';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
-import { faCircleCheck } from '@fortawesome/free-regular-svg-icons';
-import { faShippingFast } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Badge, Divider, Timeline } from 'antd';
+import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
+import * as Unicons from '@iconscout/react-unicons';
+import { Divider, Popconfirm, Timeline } from 'antd';
 import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
@@ -17,25 +17,95 @@ function ShopOrdersDetail() {
     const [shopOrder, setShopOrder] = useState({});
     const [orderAddress, setOrderAddress] = useState({});
     const [orderItems, setOrderItems] = useState([]);
-    const [shippingMethods, setShippingMethods] = useState([]);
+    const [orderStatuses, setOrderStatuses] = useState([]);
+
+    const [toggleStatus, setToggleStatus] = useState('pending');
+
     const { id } = useParams();
 
-    useEffect(() => {
-        Promise.all([getData(api.shopOrders + '/' + id), getData(api.shippingMethods)])
-            .then((response) => {
-                console.log(response[0]);
-                setShopOrder(response[0].data);
-                setOrderAddress(response[0].address);
-                setOrderItems(response[0].items);
+    const dispatch = useDispatch();
 
-                // Shipping method
-                setShippingMethods(response[1]);
-                console.log('shipping: ', response[1]);
+    useEffect(() => {
+        Promise.all([getData(api.shopOrders + '/' + id), getData(api.shippingMethods), getData(api.orderStatuses)])
+            .then((response) => {
+                // console.log(response);
+                setShopOrder(response[0].data);
+                setOrderAddress(response[0].data.address);
+                setOrderItems(response[0].data.items);
+
+                // Order statuses
+                setOrderStatuses(response[2].data);
             })
             .catch((error) => {
                 console.warn(error);
             });
-    }, [id]);
+    }, [id, toggleStatus]);
+
+    const currentStatus = useMemo(() => {
+        const orderStatus = orderStatuses.find((os) => os.orderStatusId === shopOrder.orderStatusId);
+
+        let className = '';
+        switch (orderStatus?.status) {
+            case 'created':
+                className = 'badge-warning';
+                break;
+            case 'delivery':
+                className = 'badge-info';
+                break;
+            case 'canceled':
+                className = 'badge-light';
+                break;
+            default:
+                className = 'badge-info';
+                break;
+        }
+        console.log({
+            className: className,
+            status: orderStatus?.status,
+            name: orderStatus?.name || 'N/A',
+        });
+
+        return {
+            className: className,
+            status: orderStatus?.status,
+            name: orderStatus?.name || 'N/A',
+        };
+    }, [orderStatuses, shopOrder]);
+
+    // ---------- Cancel order ----------
+    const handleCancelOrder = () => {
+        dispatch(notificationsSlice.actions.showLoading('Đang huỷ đơn hàng'));
+        updateData(api.shopOrders + `/cancel/${id}`)
+            .then((response) => {
+                console.log(response);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Huỷ đơn thành công'));
+                    setToggleStatus('cancel');
+                }, 1000);
+            })
+            .catch((error) => {
+                console.warn(error);
+                dispatch(notificationsSlice.actions.showError('Huỷ đơn thất bại'));
+            });
+    };
+
+    const handleDeliveryOrder = () => {
+        dispatch(notificationsSlice.actions.showLoading('Đang xác nhận giao hàng'));
+        updateData(api.shopOrders + `/delivery/${id}`)
+            .then((response) => {
+                console.log(response);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Đã xác nhận giao hàng'));
+                    setToggleStatus('delivery');
+                }, 1000);
+            })
+            .catch((error) => {
+                console.warn(error);
+                dispatch(notificationsSlice.actions.showError('Xác nhận giao hàng thất bại'));
+            });
+    };
+
+    console.log(orderItems);
 
     return (
         <>
@@ -51,7 +121,7 @@ function ShopOrdersDetail() {
                 </nav>
             </div>
             <div className={cx('page-header', 'align-middle')}>
-                <p>{dayjs(shopOrder.orderDate).format('YYYY/MM/DD HH:MM')}</p>
+                <p>{dayjs(shopOrder.orderDate).format('DD/MM/YYYY HH:MM')}</p>
             </div>
             <div className={cx('row', 'gx-4', 'gy-4')}>
                 <div className={cx('col-md-8')}>
@@ -60,28 +130,23 @@ function ShopOrdersDetail() {
                             {/* Card title */}
                             <h4 className={cx('card-title')}>
                                 Chi tiết đơn hàng
-                                <Badge
-                                    count={'Chưa giao hàng'}
-                                    style={{
-                                        marginLeft: 12,
-                                        color: '#333',
-                                        backgroundColor: '#fed713',
-                                    }}
-                                />
+                                <span className={cx('badge', `${currentStatus.className}`, 'm-1', 'ms-2')}>
+                                    {currentStatus.name}
+                                </span>
                             </h4>
                             {/* End card title */}
 
-                            <Divider />
+                            <Divider className={cx('mb-0')} />
                             <div className={cx('w-100', 'overflow-x-auto')}>
                                 <table className={cx('table')}>
                                     <tbody>
                                         {/* Order items */}
                                         {orderItems.map((item) => (
-                                            <tr>
+                                            <tr key={item.orderItemId}>
                                                 <td className={cx('py-1', 'ps-0', 'vertical-align-top')}>
                                                     <img
                                                         style={{ width: 42, height: 42 }}
-                                                        className={cx('rounded')}
+                                                        className={cx('rounded', 'border')}
                                                         src={item?.product?.image || images.placeholder}
                                                         alt=""
                                                     />
@@ -89,13 +154,28 @@ function ShopOrdersDetail() {
                                                 <td className={cx('py-1')}>
                                                     <p className={cx('mb-0', 'small')}>{item.product.name}</p>
                                                     <p className={cx('mb-0', 'small')}>25cm / Xanh</p>
-                                                    <p className={cx('mb-0', 'small')}>SKU: SP001</p>
+                                                    <p className={cx('mb-0', 'small')}>
+                                                        SKU: {item?.product?.items[0]?.sku || 'N/A'}
+                                                    </p>
                                                 </td>
                                                 <td className={cx('py-1')}>
-                                                    {item.price}đ x {item.qty}
+                                                    <p
+                                                        className={cx(
+                                                            'mb-0',
+                                                            'fs-12',
+                                                            'text-decoration-line-through',
+                                                            'text-secondary',
+                                                        )}
+                                                    >
+                                                        {item.price}đ
+                                                    </p>
+                                                    <p className={cx('mb-0', 'fs-14')}>
+                                                        {item.price - (item.price * item.discountRate) / 100}đ x{' '}
+                                                        {item.qty}
+                                                    </p>
                                                 </td>
                                                 <td className={cx('py-1', 'pe-0', 'text-end')}>
-                                                    {item.price * item.qty}đ
+                                                    {(item.price - (item.price * item.discountRate) / 100) * item.qty}đ
                                                 </td>
                                             </tr>
                                         ))}
@@ -107,8 +187,16 @@ function ShopOrdersDetail() {
                                                 className={cx('py-1', 'ps-0', 'border-hide', 'vertical-align-top')}
                                             ></td>
                                             <td className={cx('py-1', 'border-hide')}></td>
-                                            <td className={cx('py-1', 'border-hide')}>Giá</td>
-                                            <td className={cx('py-1', 'pe-0', 'border-hide', 'text-end')}>0đ</td>
+                                            <td className={cx('py-1', 'pt-5', 'border-hide')}>Tổng tiền</td>
+                                            <td className={cx('py-1', 'pt-5', 'pe-0', 'border-hide', 'text-end')}>
+                                                {orderItems.reduce((total, item) => {
+                                                    return (
+                                                        total +
+                                                        (item.price - (item.price * item.discountRate) / 100) * item.qty
+                                                    );
+                                                }, 0)}
+                                                đ
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td
@@ -124,22 +212,16 @@ function ShopOrdersDetail() {
                                             ></td>
                                             <td className={cx('py-1', 'border-hide')}></td>
                                             <td className={cx('py-1', 'border-hide')}>
-                                                <p className={cx('mb-0', 'small')}>Vận chuyển</p>
-                                                <p className={cx('mb-0', 'small', 'text-secondary')}>Shopee Express</p>
+                                                <p className={cx('mb-0', 'fs-14')}>Vận chuyển</p>
                                             </td>
                                             <td className={cx('py-1', 'pe-0', 'border-hide', 'text-end')}>
-                                                {
-                                                    shippingMethods.find(
-                                                        (s) => s.shippingMethodId === shopOrder.shippingMethodId,
-                                                    )?.price
-                                                }
-                                                đ
+                                                {shopOrder.shippingCost}đ
                                             </td>
                                         </tr>
                                         <tr>
                                             <td className={cx('py-1', 'border-hide')}></td>
                                             <td className={cx('py-1', 'border-hide')}></td>
-                                            <td className={cx('py-1', 'border-hide', 'fw-semibold')}>Tổng cộng</td>
+                                            <td className={cx('py-1', 'border-hide', 'fw-semibold')}>Thành tiền</td>
                                             <td
                                                 className={cx('py-1', 'pe-0', 'border-hide', 'text-end', 'fw-semibold')}
                                             >
@@ -153,24 +235,71 @@ function ShopOrdersDetail() {
                             <Divider />
                             <div className={cx('d-flex', 'justify-content-between', 'align-items-center')}>
                                 <div className={cx('d-flex', 'justify-content-between', 'align-items-center')}>
-                                    <FontAwesomeIcon className={cx('text-success', 'fs-5')} icon={faCircleCheck} />
-                                    <p className={cx('mb-0', 'ms-2', 'small', 'fw-semibold', 'text-uppercase')}>
-                                        Đơn hàng đã xác nhận thanh toán
+                                    <>
+                                        {currentStatus.status === 'canceled' ? (
+                                            <Unicons.UilTimesCircle
+                                                size="20"
+                                                className={cx('text-secondary', 'fs-13')}
+                                            />
+                                        ) : (
+                                            <Unicons.UilCheckCircle size="20" className={cx('text-success', 'fs-13')} />
+                                        )}
+                                    </>
+                                    <p className={cx('mb-0', 'ms-2', 'fs-13', 'font-weight-bold', 'text-uppercase')}>
+                                        {currentStatus.status === 'canceled'
+                                            ? 'Đã huỷ đơn'
+                                            : 'Đơn hàng đã xác nhận thanh toán'}
                                     </p>
                                 </div>
-                                <button className={cx('btn', 'btn-light')}>Hoàn trả</button>
+                                <Popconfirm
+                                    title="Xác nhận huỷ đơn"
+                                    description="Bạn chắc chắn muốn huỷ đơn?"
+                                    onConfirm={handleCancelOrder}
+                                    okText="Xác nhận"
+                                    cancelText="Huỷ"
+                                >
+                                    <button
+                                        className={cx('btn', 'btn-light', {
+                                            disabled: currentStatus.status === 'canceled',
+                                        })}
+                                    >
+                                        Hoàn trả
+                                    </button>
+                                </Popconfirm>
                             </div>
 
                             <Divider className={cx('mt-4', 'mb-4')} />
 
                             <div className={cx('d-flex', 'justify-content-between', 'align-items-center')}>
                                 <div className={cx('d-flex', 'justify-content-between', 'align-items-center')}>
-                                    <FontAwesomeIcon className={cx('text-secondary', 'fs-5')} icon={faShippingFast} />
-                                    <p className={cx('mb-0', 'ms-2', 'small', 'fw-semibold', 'text-uppercase')}>
-                                        Giao hàng
+                                    <Unicons.UilTruck
+                                        size="20"
+                                        className={cx(
+                                            `${
+                                                currentStatus.status === 'delivery' ? 'text-success' : 'text-secondary'
+                                            }`,
+                                            'fs-5',
+                                        )}
+                                    />
+                                    <p className={cx('mb-0', 'ms-2', 'fs-13', 'font-weight-bold', 'text-uppercase')}>
+                                        {currentStatus.status === 'delivery' ? 'Đang giao hàng' : 'Giao hàng'}
                                     </p>
                                 </div>
-                                <button className={cx('btn', 'btn-gradient-primary')}>Giao hàng</button>
+                                <Popconfirm
+                                    title="Xác nhận giao hàng"
+                                    description="Bạn chắc chắn muốn giao hàng?"
+                                    onConfirm={handleDeliveryOrder}
+                                    okText="Xác nhận"
+                                    cancelText="Huỷ"
+                                >
+                                    <button
+                                        className={cx('btn', 'btn-gradient-primary', {
+                                            disabled: currentStatus.status === 'delivery',
+                                        })}
+                                    >
+                                        Giao hàng
+                                    </button>
+                                </Popconfirm>
                             </div>
                         </div>
                     </div>

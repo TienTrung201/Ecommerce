@@ -5,7 +5,8 @@ import { api } from '@/api';
 import { useEffect, useState } from 'react';
 import { getData } from '@/api/service';
 import images from '@/assets/admin/images';
-import { Pagination } from 'antd';
+import * as Unicons from '@iconscout/react-unicons';
+import { Button, Input, Pagination, Popover } from 'antd';
 
 const cx = classNames.bind(styles);
 
@@ -56,6 +57,17 @@ function Products() {
                         </Link>
                     </div>
 
+                    <div className={cx('active-bg', 'w-100', 'd-flex', 'justify-content-end', 'p-2', 'rounded')}>
+                        <Input style={{ width: 200 }} placeholder="Tìm kiếm" prefix={<Unicons.UilSearch size="16" />} />
+                        <Popover title="Filter" placement="bottom" trigger="click">
+                            <Button
+                                className={cx('ms-2', 'd-flex', 'align-items-center')}
+                                icon={<Unicons.UilFilter size="16" />}
+                            >
+                                <span className={cx('ps-1')}>Filter</span>
+                            </Button>
+                        </Popover>
+                    </div>
                     <div className={cx('overflow-x-auto', 'w-100')}>
                         <table className={cx('table', 'table-hover')}>
                             <thead>

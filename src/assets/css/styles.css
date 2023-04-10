@@ -6887,10 +6887,6 @@ button {
     -o-transition: all 0.3s ease 0s;
 }
 
-svg:hover {
-    fill: #dd2a2a;
-}
-
 @keyframes myAnimation {
     from {
         right: 50px;

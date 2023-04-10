@@ -49,7 +49,7 @@ function Promotions() {
                         ) : status === 'expired' ? (
                             <span className={cx('badge', 'badge-light')}>Đã hết hạn</span>
                         ) : (
-                            <span className={cx('badge', 'badge-warning')}>Chưa áp dụng</span>
+                            <span className={cx('badge', 'badge-info')}>Chưa áp dụng</span>
                         )}
                     </td>
                     <td>{dayjs(promotion.startDate).format('DD/MM/YYYY')}</td>
