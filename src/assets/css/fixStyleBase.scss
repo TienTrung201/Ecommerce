@@ -134,6 +134,11 @@ label.mail {
     }
 }
 .my-account {
+    .address {
+        li a {
+            font-size: 1.4rem;
+        }
+    }
     .product-name {
         .product-img {
             margin-right: 20px !important;
@@ -252,8 +257,8 @@ label.mail {
         justify-content: flex-end;
         .order-total-box {
             display: flex;
-            width: 200px;
-            justify-content: flex-end;
+            width: 250px;
+            justify-content: space-between;
             padding-right: 20px;
             align-items: center;
             .total-title {
@@ -348,7 +353,7 @@ label.mail {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    // border-radius: 5px;
     appearance: none;
     &::placeholder {
         font-weight: 400;
@@ -750,6 +755,44 @@ label.mail {
     text-decoration: underline !important;
 }
 .shopping-cart {
+    .product-thumbnail {
+        display: flex;
+        justify-content: space-between;
+        .order-code {
+            font-weight: 600;
+            color: #555;
+        }
+        .order-status {
+            color: #26aa99;
+        }
+    }
+    .order__items-footer {
+        display: flex;
+        justify-content: flex-end;
+        padding-bottom: 30px;
+        padding-top: 20px;
+        .order__items-btn {
+            padding: 8px 20px;
+            margin-left: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        }
+        a {
+            &:hover {
+                color: #222;
+            }
+        }
+        .feedback {
+            background-color: #222;
+            a {
+                color: #fff !important;
+            }
+        }
+        .contact {
+        }
+        .buyProduct {
+        }
+    }
+
     .checkbox {
         width: 18px !important;
         height: 18px !important;

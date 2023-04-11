@@ -11,6 +11,7 @@ import { Link, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import cartSlice from '../Cart/CartSlice';
 import { convertVnd } from '@/components/GlobalStyles/fuction';
+import TextEditorParagraph from '@/components/Admin/TextEditorParagraph';
 
 function Product() {
     const dispatch = useDispatch();
@@ -131,62 +132,73 @@ function Product() {
     }, [id]);
     //get Product
     //handle add product to cart
-    const handleAddToCart = () => {
-        if (message === null) {
-            const data = { items: [{ productItemId: productItem.productItemId, qty: productQuantity }] };
-            dispatch(notificationsSlice.actions.showLoading('Thêm vào giỏ hàng'));
+    const handleAddToCart = async () => {
+        try {
+            if (message === null) {
+                const data = { items: [{ productItemId: productItem.productItemId, qty: productQuantity }] };
+                const cartResponse = await postData(api.shoppingCarts, data);
+                console.log(cartResponse);
+                const newDataCartReponse = await getData(api.shoppingCarts + '/' + user.uid);
+                console.log(newDataCartReponse);
+                dispatch(cartSlice.actions.setCartId(newDataCartReponse.data.cartId));
+                const cartUserRespones = newDataCartReponse.data.items.reduce((acc, item) => {
+                    const { cartItemId, qty } = item;
+                    const { productId, image, name, items } = item.product;
+                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                    acc.push({
+                        cartItemId,
+                        productId,
+                        image,
+                        name,
+                        costPrice,
+                        qtyInStock,
+                        productItemId,
+                        sku,
+                        qty,
+                        optionsId,
+                        isChecked: false,
+                    });
+                    return acc;
+                }, []);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Sản phẩm đã được thêm vào giỏ'));
+                }, 1000);
+                dispatch(cartSlice.actions.setCart(cartUserRespones.reverse()));
+            }
+        } catch (error) {
+            dispatch(notificationsSlice.actions.showError('Thất bại'));
 
-            postData(api.shoppingCarts, data)
-                .then((response) => {
-                    setTimeout(() => {
-                        dispatch(notificationsSlice.actions.showSuccess('thành công'));
-                        getData(api.shoppingCarts + '/' + user.uid)
-                            .then((response) => {
-                                console.log(response);
-                                dispatch(cartSlice.actions.setCartId(response.data.cartId));
-                                const cartUser = response.data.items.reduce((acc, item) => {
-                                    const { cartItemId, qty } = item;
-                                    const { productId, image, name, items } = item.product;
-                                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
-                                    acc.push({
-                                        cartItemId,
-                                        productId,
-                                        image,
-                                        name,
-                                        costPrice,
-                                        qtyInStock,
-                                        productItemId,
-                                        sku,
-                                        qty,
-                                        optionsId,
-                                        isChecked: false,
-                                    });
-                                    return acc;
-                                }, []);
-                                dispatch(cartSlice.actions.setCart(cartUser.reverse()));
-
-                                console.log(cartUser);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
-                    }, 1000);
-                    setTimeout(() => {
-                        dispatch(notificationsSlice.actions.destroy());
-                    }, 2000);
-
-                    console.log(response);
-                })
-                .catch((error) => {
-                    dispatch(notificationsSlice.actions.showError('Thất bại'));
-                    setTimeout(() => {
-                        dispatch(notificationsSlice.actions.destroy());
-                    }, 1000);
-                    console.log(error);
-                });
+            console.log(error);
+        } finally {
+            setTimeout(() => {
+                dispatch(notificationsSlice.actions.destroy());
+            }, 1000);
         }
     };
     //handle add product to cart
+    //handle add wishlist
+    const handleAddWishList = () => {
+        postData(api.wishLists, { productId: id })
+            .then((response) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Đã thêm vào danh sách yêu thích'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                console.log(response);
+            })
+            .catch((err) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showError('Thất bại'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                console.log(err);
+            });
+    };
+    //handle add wishlist
 
     //Change Description and Review
     const [tabs, setTabs] = useState('Reviews');
@@ -410,7 +422,9 @@ function Product() {
                                     <div className="number-rating">( 02 reviews )</div>
                                 </div>
                                 <div className="short-desc">
-                                    <p className="product-desc">{product.description}</p>
+                                    <div className="product-desc">
+                                        <TextEditorParagraph value={product.description} />
+                                    </div>
                                 </div>
                                 {message !== null ? <p className="notification">{message}</p> : false}
 
@@ -523,7 +537,13 @@ function Product() {
                                             Thêm vào giỏ hàng
                                         </Link>
                                     </div>
-                                    <Link to="" className="btn-wishlist">
+                                    <Link
+                                        onClick={() => {
+                                            handleAddWishList();
+                                        }}
+                                        to=""
+                                        className="btn-wishlist"
+                                    >
                                         + Thêm vào danh sách yêu thích
                                     </Link>
                                 </div>

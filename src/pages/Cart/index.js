@@ -12,6 +12,7 @@ import cartSlice from './CartSlice';
 import Modal from '@/components/Layout/Modal';
 import Order from './order';
 import { convertVnd } from '@/components/GlobalStyles/fuction';
+import WishList from './wishList';
 
 function Cart() {
     const dispatch = useDispatch();
@@ -186,101 +187,88 @@ function Cart() {
         return typeShipping.price;
     }, [shippingMethods, shippingMethodId]);
 
-    const handleOrderCart = () => {
-        const typeShipping = shippingMethods.find(
-            (shippingMethod) => shippingMethod.shippingMethodId === user.shippingMethodId,
-        );
-        const itemsOrder = cartUser.cartItems.filter((item) => item.isChecked === true);
-        const dataItemsOrder = itemsOrder.map((item) => {
-            return {
-                productItemId: item.productItemId,
-                qty: item.qty,
-            };
-        });
-        const dataOrder =
-            paymentMethodId === 0
-                ? {
-                      addressId: addressDefault.addressId,
-                      shippingMethodId: typeShipping.shippingMethodId,
-                      items: dataItemsOrder,
-                  }
-                : {
-                      addressId: addressDefault.addressId,
-                      shippingMethodId: typeShipping.shippingMethodId,
-                      paymentMethodId: paymentMethodId,
-                      items: dataItemsOrder,
-                  };
-        console.log(dataOrder);
-        postData(api.shopOrders, dataOrder)
-            .then((response) => {
-                setTimeout(() => {
-                    dispatch(notificationsSlice.actions.showSuccess('Đặt hàng thành công'));
-                }, 1000);
-                const remainingProductCart = cartUser.cartItems.filter((item) => item.isChecked === false);
-
-                const convertRemainingProductCartToUpdate = remainingProductCart.map((dataItem) => {
-                    return {
-                        cartItemId: dataItem.cartItemId,
-                        qty: dataItem.qty,
-                        cartId: cartUser.cartId,
-                        productItemId: dataItem.productItemId,
-                    };
-                });
-                updateData(api.shoppingCarts, {
-                    cartId: cartUser.cartId,
-                    userId: user.uid,
-                    items: convertRemainingProductCartToUpdate,
-                })
-                    .then((response) => {
-                        console.log(response);
-                        getData(api.shoppingCarts + '/' + user.uid)
-                            .then((response) => {
-                                console.log(response);
-                                dispatch(cartSlice.actions.setCartId(response.data.cartId));
-                                const cartUser = response.data.items.reduce((acc, item) => {
-                                    const { cartItemId, qty } = item;
-                                    const { productId, image, name, items } = item.product;
-                                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
-                                    acc.push({
-                                        cartItemId,
-                                        productId,
-                                        image,
-                                        name,
-                                        costPrice,
-                                        qtyInStock,
-                                        productItemId,
-                                        sku,
-                                        qty,
-                                        optionsId,
-                                        isChecked: false,
-                                    });
-                                    return acc;
-                                }, []);
-                                dispatch(cartSlice.actions.setCart(cartUser.reverse()));
-
-                                console.log(cartUser);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-                setTimeout(() => {
-                    dispatch(notificationsSlice.actions.destroy());
-                }, 2000);
-                console.log(response);
-            })
-            .catch((error) => {
-                setTimeout(() => {
-                    dispatch(notificationsSlice.actions.showError('Thất bại'));
-                }, 1000);
-                setTimeout(() => {
-                    dispatch(notificationsSlice.actions.destroy());
-                }, 1000);
-                console.log(error);
+    const handleOrderCart = async () => {
+        try {
+            const typeShipping = shippingMethods.find(
+                (shippingMethod) => shippingMethod.shippingMethodId === user.shippingMethodId,
+            );
+            const itemsOrder = cartUser.cartItems.filter((item) => item.isChecked === true);
+            const dataItemsOrder = itemsOrder.map((item) => {
+                return {
+                    productItemId: item.productItemId,
+                    qty: item.qty,
+                };
             });
+            const dataOrder =
+                paymentMethodId === 0
+                    ? {
+                          addressId: addressDefault.addressId,
+                          shippingMethodId: typeShipping.shippingMethodId,
+                          items: dataItemsOrder,
+                      }
+                    : {
+                          addressId: addressDefault.addressId,
+                          shippingMethodId: typeShipping.shippingMethodId,
+                          paymentMethodId: paymentMethodId,
+                          items: dataItemsOrder,
+                      };
+            console.log(dataOrder);
+            const orderResponse = await postData(api.shopOrders, dataOrder);
+            console.log(orderResponse);
+            const remainingProductCart = cartUser.cartItems.filter((item) => item.isChecked === false);
+
+            const convertRemainingProductCartToUpdate = remainingProductCart.map((dataItem) => {
+                return {
+                    cartItemId: dataItem.cartItemId,
+                    qty: dataItem.qty,
+                    cartId: cartUser.cartId,
+                    productItemId: dataItem.productItemId,
+                };
+            });
+            const cartOrderReponse = await updateData(api.shoppingCarts, {
+                cartId: cartUser.cartId,
+                userId: user.uid,
+                items: convertRemainingProductCartToUpdate,
+            });
+            console.log(cartOrderReponse);
+
+            const newDataCartReponse = await getData(api.shoppingCarts + '/' + user.uid);
+            console.log(newDataCartReponse);
+            dispatch(cartSlice.actions.setCartId(newDataCartReponse.data.cartId));
+            const cartUserRespones = newDataCartReponse.data.items.reduce((acc, item) => {
+                const { cartItemId, qty } = item;
+                const { productId, image, name, items } = item.product;
+                const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                acc.push({
+                    cartItemId,
+                    productId,
+                    image,
+                    name,
+                    costPrice,
+                    qtyInStock,
+                    productItemId,
+                    sku,
+                    qty,
+                    optionsId,
+                    isChecked: false,
+                });
+                return acc;
+            }, []);
+            setTimeout(() => {
+                dispatch(notificationsSlice.actions.showSuccess('Đặt hàng thành công'));
+            }, 1000);
+            dispatch(cartSlice.actions.setCart(cartUserRespones.reverse()));
+        } catch (error) {
+            setTimeout(() => {
+                dispatch(notificationsSlice.actions.showError('Thất bại'));
+            }, 1000);
+
+            console.log(error);
+        } finally {
+            setTimeout(() => {
+                dispatch(notificationsSlice.actions.destroy());
+            }, 1000);
+        }
     };
     return (
         <div className="container">
@@ -497,97 +485,7 @@ function Cart() {
                         </div>
                     </div>
                     <div ref={wishlist} id="wishlist" className="tab-pane fade">
-                        <div className="shopping-cart">
-                            <div className="table-responsive">
-                                <table className="table cart-table">
-                                    <tbody>
-                                        <tr className="item_cart">
-                                            <td className="product-remove pd-right-30">
-                                                <Link href="#" className="btn-del">
-                                                    <FontAwesomeIcon icon={faClose} />
-                                                </Link>
-                                            </td>
-                                            <td className=" product-name">
-                                                <div className="product-img">
-                                                    <img
-                                                        src={require('@/assets/image/product/cart_product_1.jpg')}
-                                                        alt="Product"
-                                                    />
-                                                </div>
-                                            </td>
-                                            <td className="product-desc">
-                                                <div className="product-info">
-                                                    <Link href="#" title="">
-                                                        Harman Kardon Onyx Studio{' '}
-                                                    </Link>
-                                                    <span>#SKU: 113106</span>
-                                                </div>
-                                            </td>
-                                            <td className="wl total-price">
-                                                <p className="price">$19.00</p>
-                                            </td>
-                                            <td>
-                                                <Link href="" className="zoa-select">
-                                                    Select Options
-                                                </Link>
-                                            </td>
-                                            <td>
-                                                <Link href="" className="zoa-btn zoa-wl-addcart">
-                                                    ADD TO CART
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                        <tr className="item_cart">
-                                            <td className="product-remove pd-right-30">
-                                                <Link href="#" className="btn-del">
-                                                    <FontAwesomeIcon icon={faClose} />
-                                                </Link>
-                                            </td>
-                                            <td className=" product-name">
-                                                <div className="product-img">
-                                                    <img
-                                                        src={require('@/assets/image/product/cart_product_3.jpg')}
-                                                        alt="Product"
-                                                    />
-                                                </div>
-                                            </td>
-                                            <td className="product-desc">
-                                                <div className="product-info">
-                                                    <Link href="#" title="">
-                                                        Harman Kardon Onyx Studio{' '}
-                                                    </Link>
-                                                    <span>#SKU: 113106</span>
-                                                </div>
-                                            </td>
-                                            <td className="wl total-price">
-                                                <p className="price">$19.00</p>
-                                            </td>
-                                            <td>
-                                                <Link href="" className="zoa-select">
-                                                    Select Options
-                                                </Link>
-                                            </td>
-                                            <td>
-                                                <Link href="" className="zoa-btn zoa-wl-addcart">
-                                                    ADD TO CART
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="table-cart-bottom v2">
-                                <div className="cart-btn-group v2">
-                                    <Link href="" className="btn-continue">
-                                        Continue shopping
-                                    </Link>
-                                    <Link href="" className="btn-clear">
-                                        Share my wishlist via mail{' '}
-                                        <img src={require('@/assets/image/Icon_mail.png')} alt="" />
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
+                        <WishList />
                     </div>
                 </div>
             </div>

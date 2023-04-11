@@ -134,12 +134,17 @@ function Home() {
                                                     )}
 
                                                     <div className="product-button-group">
-                                                        <Link href="#" className="zoa-btn zoa-wishlist">
+                                                        <Link className="zoa-btn zoa-wishlist">
                                                             <span className="zoa-icon-heart">
                                                                 <FontAwesomeIcon icon={faHeart} />
                                                             </span>
                                                         </Link>
-                                                        <Link href="#" className="zoa-btn zoa-addcart">
+                                                        <Link
+                                                            to={`/product/${product.name.replace(/ /g, '-')}/${
+                                                                product.productId
+                                                            }`}
+                                                            className="zoa-btn zoa-addcart"
+                                                        >
                                                             <span className="zoa-icon-cart">
                                                                 <FontAwesomeIcon icon={faCartPlus} />
                                                             </span>

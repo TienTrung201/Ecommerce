@@ -355,7 +355,10 @@ function Shop() {
                                                     <FontAwesomeIcon icon={faHeart} />
                                                 </span>
                                             </Link>
-                                            <Link to="#" className="zoa-btn zoa-addcart">
+                                            <Link
+                                                to={`/product/${product.name.replace(/ /g, '-')}/${product.productId}`}
+                                                className="zoa-btn zoa-addcart"
+                                            >
                                                 <span className="zoa-icon-cart">
                                                     <FontAwesomeIcon icon={faCartPlus} />
                                                 </span>
