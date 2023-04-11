@@ -2838,9 +2838,6 @@ progress {
     font-size: 0.875em;
     color: #6c757d;
 }
-.blockquote-footer::before {
-    // content: '\2014\00A0';
-}
 
 .img-fluid {
     max-width: 100%;
@@ -19024,9 +19021,8 @@ td {
     padding-right: 16px !important;
 }
 
-svg:hover {
-    fill: var(--active-color) !important;
-    transition: all 0.2s ease;
+.active-bg {
+    background-color: var(--active-bg);
 }
 
 @keyframes scaleVertical {
