@@ -1,17 +1,19 @@
 import { api } from '@/api';
 import { getData } from '@/api/service';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
-import { Badge, Pagination } from 'antd';
+import { Pagination } from 'antd';
 import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function ShopOrders() {
     const [shopOrders, setShopOrders] = useState([]);
     const [orderStatuses, setOrderStatuses] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         Promise.all([getData(api.shopOrders), getData(api.orderStatuses)])
@@ -24,6 +26,34 @@ function ShopOrders() {
                 console.warn(error);
             });
     }, []);
+
+    const getCurrentStatus = useCallback(
+        (shopOrder) => {
+            const orderStatus = orderStatuses.find((os) => os.orderStatusId === shopOrder.orderStatusId);
+
+            let className = '';
+            switch (orderStatus?.status) {
+                case 'created':
+                    className = 'badge-warning';
+                    break;
+                case 'delivery':
+                    className = 'badge-info';
+                    break;
+                case 'canceled':
+                    className = 'badge-light';
+                    break;
+                default:
+                    className = 'badge-info';
+                    break;
+            }
+
+            return {
+                className: className,
+                name: orderStatus?.name || 'N/A',
+            };
+        },
+        [orderStatuses],
+    );
 
     return (
         <>
@@ -46,7 +76,7 @@ function ShopOrders() {
                     </div>
 
                     <div className={cx('w-100', 'overflow-x-auto')}>
-                        <table className={cx('table', 'table-striped', 'overflow-x-auto')}>
+                        <table className={cx('table', 'table-hover')}>
                             <thead>
                                 <tr>
                                     <th>Đơn hàng</th>
@@ -59,33 +89,29 @@ function ShopOrders() {
                             </thead>
                             <tbody>
                                 {shopOrders.map((shopOrder) => (
-                                    <tr key={shopOrder.orderId}>
-                                        <td className={cx('py-1')}>
-                                            <Link to={`/admin/orders/detail/${shopOrder.orderId}`}>
-                                                #{shopOrder.orderId}
-                                            </Link>
-                                        </td>
-                                        <td>{dayjs(shopOrder.orderDate).format('YYYY/MM/DD HH:MM')}</td>
-                                        <td>{shopOrder.userId}</td>
+                                    <tr
+                                        key={shopOrder.orderId}
+                                        className={cx('pointer')}
+                                        onClick={() => {
+                                            navigate(`/admin/orders/detail/${shopOrder.orderId}`);
+                                        }}
+                                    >
+                                        <td className={cx('py-1')}>#{shopOrder.orderId}</td>
+                                        <td>{dayjs(shopOrder.orderDate).format('DD/MM/YYYY HH:MM')}</td>
+                                        <td>{shopOrder?.address?.fullName || 'N/A'}</td>
                                         <td>
-                                            <Badge count={'Đã thanh toán'} style={{ backgroundColor: '#c3bdbd' }} />
+                                            <span className={cx('badge', 'badge-light', 'm-1')}>Đã thanh toán</span>
                                         </td>
                                         <td>
-                                            <Badge
-                                                count={
-                                                    orderStatuses.find(
-                                                        (os) => os.orderStatusId === shopOrder.orderStatusId,
-                                                    )?.status || 'N/A'
-                                                }
-                                                style={{
-                                                    backgroundColor:
-                                                        shopOrder.orderStatusId === 1
-                                                            ? '#fed713'
-                                                            : shopOrder.orderStatusId === 2
-                                                            ? '#1bcfb4'
-                                                            : '#c3bdbd',
-                                                }}
-                                            />
+                                            <span
+                                                className={cx(
+                                                    'badge',
+                                                    `${getCurrentStatus(shopOrder).className}`,
+                                                    'm-1',
+                                                )}
+                                            >
+                                                {getCurrentStatus(shopOrder).name}
+                                            </span>
                                         </td>
                                         <td>{shopOrder.orderTotal}đ</td>
                                     </tr>

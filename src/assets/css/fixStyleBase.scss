@@ -281,7 +281,6 @@ label.mail {
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
-
     margin: 20px 0;
     border-bottom: 1px solid #ddd;
     padding-bottom: 20px;
@@ -322,7 +321,6 @@ label.mail {
     max-width: 500px;
     margin: 0 auto;
     padding: 20px;
-
     border-radius: 5px;
 }
 
@@ -695,7 +693,6 @@ label.mail {
     font-weight: 500;
     color: var(--text-color);
     max-width: 200px;
-
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -837,7 +834,6 @@ label.mail {
 .pagination a:hover:not(.active) {
     background-color: #ddd;
 }
-
 .shop-top {
     @media (max-width: 600px) {
         flex-direction: column;
@@ -845,7 +841,6 @@ label.mail {
             margin-right: 0 !important;
         }
     }
-
     .shop-element.left .dropdown-menu.fullw {
         display: flex !important;
         width: auto;
@@ -927,7 +922,6 @@ label.mail {
         align-items: center;
         .number-rating {
             font-size: 1.4rem;
-
             padding-top: 3px;
         }
     }

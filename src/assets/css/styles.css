@@ -146,6 +146,7 @@ button,
 html input[type='button'],
 input[type='reset'],
 input[type='submit'] {
+    appearance: button;
     cursor: pointer;
 }
 
@@ -176,12 +177,13 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 input[type='search'] {
+    appearance: textfield;
     box-sizing: content-box;
 }
 
 input[type='search']::-webkit-search-cancel-button,
 input[type='search']::-webkit-search-decoration {
-    -webkit-appearance: none;
+    appearance: none;
 }
 
 fieldset {
@@ -298,15 +300,7 @@ th {
         border: 1px solid #ddd !important;
     }
 }
-/* @font-face {
-    font-family: 'Glyphicons Halflings';
-    src: url('../fonts/bootstrap/glyphicons-halflings-regular.eot');
-    src: url('../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
-        url('../fonts/bootstrap/glyphicons-halflings-regular.woff2') format('woff2'),
-        url('../fonts/bootstrap/glyphicons-halflings-regular.woff') format('woff'),
-        url('../fonts/bootstrap/glyphicons-halflings-regular.ttf') format('truetype'),
-        url('../fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
-} */
+
 .glyphicon {
     position: relative;
     top: 1px;
@@ -2274,6 +2268,10 @@ fieldset[disabled] .form-control {
 
 textarea.form-control {
     height: auto;
+}
+
+input[type='search'] {
+    appearance: none;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
@@ -6848,9 +6846,7 @@ button.close {
         display: none !important;
     }
 }
-/**
- * Import component variables
- */
+
 body {
     padding: 0px;
     font-weight: 400;
@@ -6886,10 +6882,6 @@ button {
     -webkit-transition: all 0.3s ease 0s;
     transition: all 0.3s ease 0s;
     -o-transition: all 0.3s ease 0s;
-}
-
-svg:hover {
-    fill: #dd2a2a;
 }
 
 @keyframes myAnimation {
@@ -7549,6 +7541,13 @@ span.star:last-child {
 }
 .form-customer .checkbox input {
     margin-left: 0;
+    transform: scale(1.5);
+    
+    -moz-transform: scale(1.5);
+ 
+    -webkit-transform: scale(1.5);
+   
+    -o-transform: scale(1.5);
 }
 
 .form_newsletter input {
@@ -8468,6 +8467,7 @@ span.star:last-child {
     -webkit-border-radius: none;
     -moz-border-radius: none;
     border-radius: none;
+    box-shadow: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -8488,6 +8488,7 @@ span.star:last-child {
     -webkit-border-radius: none;
     -moz-border-radius: none;
     border-radius: none;
+    box-shadow: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -8564,6 +8565,8 @@ span.star:last-child {
     background: #fff;
     border-right: 1px solid #ebebeb;
     border-top: 1px solid #ebebeb;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
 }
 .header-search .input-group-btn {
     padding: 0;
@@ -10543,15 +10546,15 @@ span.star:last-child {
 }
 .header-cate ul li a {
     display: -webkit-box;
-    /* OLD - iOS 6-, Safari 3.1-6 */
+  
     display: -moz-box;
-    /* OLD - Firefox 19- (buggy but mostly works) */
+   
     display: -ms-flexbox;
-    /* TWEENER - IE 10 */
+   
     display: -webkit-flex;
-    /* NEW - Chrome */
+  
     display: flex;
-    /* NEW, Spec - Opera 12.1, Firefox 20+ */
+  
     -webkit-flex-direction: column;
     -moz-flex-direction: column;
     -ms-flex-direction: column;
@@ -10681,6 +10684,8 @@ span.star:last-child {
     background: #ffffff;
     border-right: 1px solid #ebebeb;
     border-top: 1px solid #ebebeb;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
 }
 .list-product-search li {
     display: block;
@@ -11483,11 +11488,8 @@ span.star:last-child {
         min-height: 150px;
     }
 }
-/* #breadcrumb .breadcrumb-content.bg-breadcrumb-01 {
-    /* background: url('../image/banner/img-banner-head01.jpg') no-repeat; */
-/* } */
 
-*/ #breadcrumb .breadcrumb-content .title {
+#breadcrumb .breadcrumb-content .title {
     font-weight: 500;
     margin-bottom: 12px;
     text-transform: uppercase;
@@ -16077,15 +16079,15 @@ i.fa.fa-plus {
 
 .product-button-group {
     display: -webkit-box;
-    /* OLD - iOS 6-, Safari 3.1-6 */
+
     display: -moz-box;
-    /* OLD - Firefox 19- (buggy but mostly works) */
+   
     display: -ms-flexbox;
-    /* TWEENER - IE 10 */
+  
     display: -webkit-flex;
-    /* NEW - Chrome */
+  
     display: flex;
-    /* NEW, Spec - Opera 12.1, Firefox 20+ */
+  
     -webkit-align-items: center;
     -moz-align-items: center;
     -ms-align-items: center;
@@ -16672,7 +16674,7 @@ i.fa.fa-plus {
     box-shadow: none;
     background-color: #fff;
     height: 40px;
-
+    appearance: none;
     display: block;
     width: 100%;
     padding: 6px 15px;
@@ -17394,7 +17396,7 @@ i.fa.fa-plus {
     text-align: center;
     padding: 0 35px;
     font-size: 18px;
-
+    appearance: textfield;
     border: 0;
 }
 .zoa-qtt .quantity-left-minus {
@@ -18473,6 +18475,7 @@ i.fa.fa-plus {
     transition: all 0.35s ease;
     cursor: pointer;
     box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3);
+    animation: pulse 1.5s infinite;
 }
 .lookbitem_price span {
     font-size: 16px;
@@ -18505,6 +18508,7 @@ i.fa.fa-plus {
     transition: all 0.35s ease;
     cursor: pointer;
     box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3);
+    animation: pulse 1.5s infinite;
 }
 .lookbitem_price2 span {
     color: #fff;
@@ -18640,7 +18644,14 @@ i.fa.fa-plus {
         height: 14px;
     }
 }
-
+@keyframes pulse {
+    70% {
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2);
+    }
+}
 .btn-shoplook {
     background: #000;
     font-size: 16px;
@@ -19004,7 +19015,7 @@ i.fa.fa-plus {
 }
 @media (max-width: 767px) {
     .wrap-filter .wrap-filter-box {
-        display: inline-block;
+        display: block;
         width: 33.333333%;
         padding: 10px;
         line-height: 40px;
@@ -19769,6 +19780,9 @@ i.fa.fa-plus {
     top: 5px;
     color: #333;
     cursor: pointer;
+    transition: all 0.1s ease 0s;
+    -webkit-transition: all 0.1s ease 0s;
+    -o-transition: all 0.1s ease 0s;
 }
 .filter-product .filter-content .minus:after {
     /* content: '\f462'; */
@@ -19780,6 +19794,9 @@ i.fa.fa-plus {
     top: 5px;
     color: #333;
     cursor: pointer;
+    transition: all 0.1s ease 0s;
+    -webkit-transition: all 0.1s ease 0s;
+    -o-transition: all 0.1s ease 0s;
 }
 .filter-product .filter-color .filter-content > li > a {
     font-weight: 600;
@@ -19833,15 +19850,15 @@ i.fa.fa-plus {
 .product-tab-sw {
     margin-bottom: 53px;
     display: -webkit-box;
-    /* OLD - iOS 6-, Safari 3.1-6 */
+
     display: -moz-box;
-    /* OLD - Firefox 19- (buggy but mostly works) */
+  
     display: -ms-flexbox;
-    /* TWEENER - IE 10 */
+
     display: -webkit-flex;
-    /* NEW - Chrome */
+
     display: flex;
-    /* NEW, Spec - Opera 12.1, Firefox 20+ */
+
 }
 @media (min-width: 480px) {
     .product-tab-sw {
@@ -19890,15 +19907,14 @@ i.fa.fa-plus {
     border-radius: 999px;
     border: 1px solid #e6e6e7;
     display: -webkit-box;
-    /* OLD - iOS 6-, Safari 3.1-6 */
+
     display: -moz-box;
-    /* OLD - Firefox 19- (buggy but mostly works) */
+  
     display: -ms-flexbox;
-    /* TWEENER - IE 10 */
+  
     display: -webkit-flex;
-    /* NEW - Chrome */
+  
     display: flex;
-    /* NEW, Spec - Opera 12.1, Firefox 20+ */
     -webkit-justify-content: center;
     -moz-justify-content: center;
     -ms-justify-content: center;
@@ -20185,6 +20201,7 @@ i.fa.fa-plus {
     box-shadow: none;
     background-color: transparent;
     height: 55px;
+    appearance: none;
     padding: 0 18px 0 25px;
     text-align: left;
 }

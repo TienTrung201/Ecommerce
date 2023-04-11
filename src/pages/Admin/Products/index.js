@@ -5,29 +5,36 @@ import { api } from '@/api';
 import { useEffect, useState } from 'react';
 import { getData } from '@/api/service';
 import images from '@/assets/admin/images';
-import { Pagination } from 'antd';
+import * as Unicons from '@iconscout/react-unicons';
+import { Button, Collapse, Input, Pagination, Popover, Radio, Space } from 'antd';
 
 const cx = classNames.bind(styles);
 
+const { Panel } = Collapse;
+
 function Products() {
     const [products, setProducts] = useState([]);
+    const [totalPages, setTotalPages] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
     const [categories, setCategories] = useState([]);
     const [providers, setProviders] = useState([]);
 
     const navigate = useNavigate();
+    // const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        Promise.all([getData(api.products), getData(api.categories), getData(api.providers)])
+        Promise.all([getData(api.products + `?page=${currentPage}`), getData(api.categories), getData(api.providers)])
             .then((values) => {
                 console.log(values);
                 setProducts(values[0].data);
+                setTotalPages(values[0].totalPages * 10);
                 setCategories(values[1]);
                 setProviders(values[2]);
             })
             .catch((error) => {
                 console.warn(error);
             });
-    }, []);
+    }, [currentPage]);
 
     return (
         <>
@@ -51,6 +58,42 @@ function Products() {
                             Thêm sản phẩm
                         </Link>
                     </div>
+
+                    {/* Search and filter */}
+                    <div className={cx('w-100', 'pt-2', 'pb-2')}>
+                        <Space.Compact block>
+                            <Input placeholder="Tìm kiếm" prefix={<Unicons.UilSearch size="16" />} />
+                            <Popover
+                                title="Filter"
+                                placement="bottom"
+                                trigger="click"
+                                content={
+                                    <Collapse defaultActiveKey={1} size="small" ghost expandIconPosition="end">
+                                        <Panel header="Sắp xếp" key="1">
+                                            <Radio.Group>
+                                                <Space size="small" direction="vertical">
+                                                    <Radio value={1}>Giá giảm dần</Radio>
+                                                    <Radio value={2}>Giá tăng dần</Radio>
+                                                    <Radio value={3}>Mới hơn</Radio>
+                                                    <Radio value={4}>Cũ hơn</Radio>
+                                                    <Radio value={5}>Tên A - Z</Radio>
+                                                    <Radio value={6}>Tên Z - A</Radio>
+                                                </Space>
+                                            </Radio.Group>
+                                        </Panel>
+                                    </Collapse>
+                                }
+                            >
+                                <Button
+                                    className={cx('d-flex', 'align-items-center')}
+                                    icon={<Unicons.UilFilter size="16" />}
+                                >
+                                    <span className={cx('ps-1')}>Filter</span>
+                                </Button>
+                            </Popover>
+                        </Space.Compact>
+                    </div>
+                    {/* End Search and filter */}
 
                     <div className={cx('overflow-x-auto', 'w-100')}>
                         <table className={cx('table', 'table-hover')}>
@@ -107,7 +150,15 @@ function Products() {
 
                     {/* Paging */}
                     <div className={cx('mt-5', 'd-flex', 'justify-content-end')}>
-                        <Pagination current={1} onChange={(page, pageSize) => {}} total={1} size="small" simple />
+                        <Pagination
+                            current={currentPage}
+                            onChange={(page) => {
+                                setCurrentPage(page);
+                            }}
+                            total={totalPages}
+                            size="small"
+                            simple
+                        />
                     </div>
                 </div>
             </div>
