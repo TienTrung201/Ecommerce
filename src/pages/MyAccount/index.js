@@ -2,7 +2,6 @@ import { userSelector } from '@/redux/selector';
 import { faAddressCard, faMoneyBill1, faUser } from '@fortawesome/free-regular-svg-icons';
 import { faChevronRight, faListUl } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import Account from './Account';
@@ -37,11 +36,8 @@ function MyAccount() {
             <div className="my-account">
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-4 col-sm-4 howday">
+                        <div className="col-md-3 col-sm-3 howday">
                             <div className="titlelt">
-                                <h2>
-                                    Howdy, <strong> Felix!</strong>
-                                </h2>
                                 <div className="address">
                                     <ul className="nav ">
                                         <li className={infoManagerment === 'account' ? 'active' : ''}>
@@ -91,7 +87,7 @@ function MyAccount() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-8 col-sm-8 porfolio">
+                        <div className="col-md-9 col-sm-9 porfolio">
                             {infoManagerment === 'account' || infoManagerment === undefined ? (
                                 <Account user={user} />
                             ) : (

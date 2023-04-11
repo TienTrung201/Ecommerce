@@ -1,14 +1,21 @@
 import { api } from '@/api';
-import { getData } from '@/api/service';
+import { deleteData, getData, postData } from '@/api/service';
+import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { convertVnd } from '@/components/GlobalStyles/fuction';
+import { cartSelector, userSelector } from '@/redux/selector';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faCartPlus, faChevronDown, faChevronRight, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import cartSlice from '../Cart/CartSlice';
+import TextEditorParagraph from '@/components/Admin/TextEditorParagraph';
 
 function Shop() {
     //Products  FilterProduct and Paging
+    const user = useSelector(userSelector);
+    const cartUser = useSelector(cartSelector);
     const location = useLocation();
     const navigate = useNavigate();
     const [filterCategory, setFilterCategory] = useState(
@@ -128,7 +135,62 @@ function Shop() {
 
     //Products  FilterProduct and Paging
 
-    useEffect(() => {}, [filterCategory, filterProvider, minPrice, maxPrice]);
+    //handle add wichlist
+    const dispatch = useDispatch();
+
+    const getDataWishlist = () => {
+        getData(api.wishLists, user.uid)
+            .then((response) => {
+                dispatch(cartSlice.actions.setWishlist(response));
+
+                console.log('wishlist', response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+    const handleAddWishList = (productId) => {
+        postData(api.wishLists, { productId: productId })
+            .then((response) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Đã thêm vào danh sách yêu thích'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                getDataWishlist();
+                console.log(response);
+            })
+            .catch((err) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showError('Thất bại'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                console.log(err);
+            });
+    };
+    //handle add wichlist
+    //deletewishlist
+    const handleDeleteWishlist = (wishlistId) => {
+        deleteData(api.wishLists + '/' + wishlistId)
+            .then((response) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Đã xóa khỏi danh sách yêu thích'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                getDataWishlist();
+                console.log('delete wishlist', response);
+            })
+            .catch((err) => {
+                console.log('delete wishlist', err);
+            });
+    };
+    //deletewishlist
+
     //ViewProduct
     const listProduct = useRef();
     const activeView = useRef();
@@ -148,7 +210,7 @@ function Shop() {
     return (
         <>
             <div className="shop-heading text-center">
-                <h1>All Clothing</h1>
+                <h1>All Cosmetics</h1>
                 <ul className="breadcrumb">
                     <li>
                         <Link to="/">Home</Link>
@@ -298,6 +360,9 @@ function Shop() {
                 <div ref={listProduct} className="product-collection-grid product-grid bd-bottom ">
                     <div className="row engoc-row-equal">
                         {products.map((product) => {
+                            const isWishlist = cartUser.wishlist.find(
+                                (wishlist) => wishlist.productId === product.productId,
+                            );
                             return (
                                 <div
                                     key={product.productId}
@@ -316,12 +381,25 @@ function Shop() {
                                         )}
 
                                         <div className="product-button-group">
-                                            <Link to="#" className="zoa-btn zoa-wishlist">
+                                            <Link
+                                                style={{ background: isWishlist ? '#dd2a2a' : '' }}
+                                                onClick={() => {
+                                                    if (isWishlist) {
+                                                        handleDeleteWishlist(isWishlist.wishlistId);
+                                                    } else {
+                                                        handleAddWishList(product.productId);
+                                                    }
+                                                }}
+                                                className="zoa-btn zoa-wishlist"
+                                            >
                                                 <span className="zoa-icon-heart">
                                                     <FontAwesomeIcon icon={faHeart} />
                                                 </span>
                                             </Link>
-                                            <Link to="#" className="zoa-btn zoa-addcart">
+                                            <Link
+                                                to={`/product/${product.name.replace(/ /g, '-')}/${product.productId}`}
+                                                className="zoa-btn zoa-addcart"
+                                            >
                                                 <span className="zoa-icon-cart">
                                                     <FontAwesomeIcon icon={faCartPlus} />
                                                 </span>
@@ -338,7 +416,9 @@ function Shop() {
                                             </Link>
                                         </h3>
                                         <div className="short-desc">
-                                            <p className="product-desc">{product.description}</p>
+                                            <div className="product-desc">
+                                                <TextEditorParagraph value={product.description} />
+                                            </div>
                                         </div>
                                         <div className="product-price">
                                             {product.discountRate === 0 ? (
@@ -355,7 +435,10 @@ function Shop() {
                                                     <FontAwesomeIcon icon={faHeart} />
                                                 </span>
                                             </Link>
-                                            <Link to="#" className="zoa-btn zoa-addcart">
+                                            <Link
+                                                to={`/product/${product.name.replace(/ /g, '-')}/${product.productId}`}
+                                                className="zoa-btn zoa-addcart"
+                                            >
                                                 <span className="zoa-icon-cart">
                                                     <FontAwesomeIcon icon={faCartPlus} />
                                                 </span>

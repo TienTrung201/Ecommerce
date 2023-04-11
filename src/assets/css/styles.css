@@ -6927,11 +6927,7 @@ li {
     font-size: 15px;
 }
 
-@media (min-width: 1400px) {
-    .container-content {
-        width: 1430px;
-    }
-}
+
 @media (min-width: 1025px) and (max-width: 1200px) {
     .container {
         width: 100%;

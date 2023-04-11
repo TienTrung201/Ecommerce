@@ -16,10 +16,12 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
     const cartItems = useSelector(cartSelector);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    //get user
     useEffect(() => {
         getData(api.userAccount)
             .then((response) => {
                 dispatch(userSlice.actions.setUser(response.data));
+                console.log('userData', response);
             })
             .catch((error) => {
                 if (error.message === 'unauthorized') {
@@ -31,10 +33,11 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
             });
     }, [navigate, dispatch]);
     //userAccount
+    //get cart
     useEffect(() => {
         getData(api.shoppingCarts + '/' + user.uid)
             .then((response) => {
-                console.log(response);
+                console.log('cart', response);
                 dispatch(cartSlice.actions.setCartId(response.data.cartId));
                 const cartUser = response.data.items.reduce((acc, item) => {
                     const { cartItemId, qty } = item;
@@ -57,18 +60,30 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                 }, []);
                 dispatch(cartSlice.actions.setCart(cartUser.reverse()));
 
-                console.log(cartUser);
+                console.log('convert cart ', cartUser);
             })
             .catch((error) => {
                 console.log(error);
             });
     }, [user.uid, dispatch]);
+    //gett shipping methods
     useEffect(() => {
         getData(api.shippingMethods).then((response) => {
             console.log(response);
             dispatch(shippingSlice.actions.setShippingMethods(response));
         });
     }, [dispatch]);
+    //get wishlist
+    useEffect(() => {
+        getData(api.wishLists, user.uid)
+            .then((response) => {
+                dispatch(cartSlice.actions.setWishlist(response));
+                console.log('wishlist', response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [user.uid, dispatch]);
     return (
         <div className="topbar-left">
             <Notification />
@@ -79,7 +94,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
             </div>
 
             <div onClick={onOpenCart} className="element element-cart">
-                <Link className="zoa-icon icon-cart">
+                <Link to="/cart" className="zoa-icon icon-cart">
                     <img src={images.cart} alt="menubar" />
                     <span className="count cart-count">{cartItems.cartItems.length}</span>
                 </Link>

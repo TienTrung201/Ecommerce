@@ -1,20 +1,22 @@
 import { api } from '@/api';
-import { getData, postData } from '@/api/service';
+import { deleteData, getData, postData } from '@/api/service';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
-import { optionsSelector, userSelector } from '@/redux/selector';
+import { cartSelector, optionsSelector, userSelector } from '@/redux/selector';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faCartPlus, faChevronRight, faMinus, faPlus, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import cartSlice from '../Cart/CartSlice';
 import { convertVnd } from '@/components/GlobalStyles/fuction';
+import TextEditorParagraph from '@/components/Admin/TextEditorParagraph';
 
 function Product() {
     const dispatch = useDispatch();
     //filter product
+    const cartUser = useSelector(cartSelector);
     const maxProductPrice = useRef();
     const [productItem, setProductItem] = useState(null);
     const options = useSelector(optionsSelector);
@@ -131,63 +133,109 @@ function Product() {
     }, [id]);
     //get Product
     //handle add product to cart
-    const handleAddToCart = () => {
-        if (message === null) {
-            const data = { items: [{ productItemId: productItem.productItemId, qty: productQuantity }] };
-            dispatch(notificationsSlice.actions.showLoading('Thêm vào giỏ hàng'));
+    const handleAddToCart = async () => {
+        try {
+            if (message === null) {
+                const data = { items: [{ productItemId: productItem.productItemId, qty: productQuantity }] };
+                const cartResponse = await postData(api.shoppingCarts, data);
+                console.log(cartResponse);
+                const newDataCartReponse = await getData(api.shoppingCarts + '/' + user.uid);
+                console.log(newDataCartReponse);
+                dispatch(cartSlice.actions.setCartId(newDataCartReponse.data.cartId));
+                const cartUserRespones = newDataCartReponse.data.items.reduce((acc, item) => {
+                    const { cartItemId, qty } = item;
+                    const { productId, image, name, items } = item.product;
+                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                    acc.push({
+                        cartItemId,
+                        productId,
+                        image,
+                        name,
+                        costPrice,
+                        qtyInStock,
+                        productItemId,
+                        sku,
+                        qty,
+                        optionsId,
+                        isChecked: false,
+                    });
+                    return acc;
+                }, []);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Sản phẩm đã được thêm vào giỏ'));
+                }, 1000);
+                dispatch(cartSlice.actions.setCart(cartUserRespones.reverse()));
+            }
+        } catch (error) {
+            dispatch(notificationsSlice.actions.showError('Thất bại'));
 
-            postData(api.shoppingCarts, data)
-                .then((response) => {
-                    setTimeout(() => {
-                        dispatch(notificationsSlice.actions.showSuccess('thành công'));
-                        getData(api.shoppingCarts + '/' + user.uid)
-                            .then((response) => {
-                                console.log(response);
-                                dispatch(cartSlice.actions.setCartId(response.data.cartId));
-                                const cartUser = response.data.items.reduce((acc, item) => {
-                                    const { cartItemId, qty } = item;
-                                    const { productId, image, name, items } = item.product;
-                                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
-                                    acc.push({
-                                        cartItemId,
-                                        productId,
-                                        image,
-                                        name,
-                                        costPrice,
-                                        qtyInStock,
-                                        productItemId,
-                                        sku,
-                                        qty,
-                                        optionsId,
-                                        isChecked: false,
-                                    });
-                                    return acc;
-                                }, []);
-                                dispatch(cartSlice.actions.setCart(cartUser.reverse()));
-
-                                console.log(cartUser);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
-                    }, 1000);
-                    setTimeout(() => {
-                        dispatch(notificationsSlice.actions.destroy());
-                    }, 2000);
-
-                    console.log(response);
-                })
-                .catch((error) => {
-                    dispatch(notificationsSlice.actions.showError('Thất bại'));
-                    setTimeout(() => {
-                        dispatch(notificationsSlice.actions.destroy());
-                    }, 1000);
-                    console.log(error);
-                });
+            console.log(error);
+        } finally {
+            setTimeout(() => {
+                dispatch(notificationsSlice.actions.destroy());
+            }, 1000);
         }
     };
     //handle add product to cart
+    //wishlist
+    const isWishlist = useMemo(() => {
+        return cartUser.wishlist.find((wishlist) => wishlist.productId === product.productId);
+    }, [cartUser.wishlist, product.productId]);
+    //handle add wishlist
+    const handleAddWishList = () => {
+        postData(api.wishLists, { productId: id })
+            .then((response) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Đã thêm vào danh sách yêu thích'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                getDataWishlist();
+                console.log(response);
+            })
+            .catch((err) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showError('Thất bại'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                console.log(err);
+            });
+    };
+    //handle add wishlist
+    const getDataWishlist = () => {
+        getData(api.wishLists, user.uid)
+            .then((response) => {
+                dispatch(cartSlice.actions.setWishlist(response));
 
+                console.log('wishlist', response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    //handle add wichlist
+    //deletewishlist
+    const handleDeleteWishlist = (wishlistId) => {
+        deleteData(api.wishLists + '/' + wishlistId)
+            .then((response) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Đã xóa khỏi danh sách yêu thích'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                getDataWishlist();
+                console.log('delete wishlist', response);
+            })
+            .catch((err) => {
+                console.log('delete wishlist', err);
+            });
+    };
+    //deletewishlist
     //Change Description and Review
     const [tabs, setTabs] = useState('Reviews');
     const handleChangeTab = (e) => {
@@ -410,7 +458,9 @@ function Product() {
                                     <div className="number-rating">( 02 reviews )</div>
                                 </div>
                                 <div className="short-desc">
-                                    <p className="product-desc">{product.description}</p>
+                                    <div className="product-desc">
+                                        <TextEditorParagraph value={product.description} />
+                                    </div>
                                 </div>
                                 {message !== null ? <p className="notification">{message}</p> : false}
 
@@ -523,8 +573,21 @@ function Product() {
                                             Thêm vào giỏ hàng
                                         </Link>
                                     </div>
-                                    <Link to="" className="btn-wishlist">
-                                        + Thêm vào danh sách yêu thích
+                                    <Link
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            if (isWishlist) {
+                                                handleDeleteWishlist(isWishlist.wishlistId);
+                                            } else {
+                                                handleAddWishList();
+                                            }
+                                        }}
+                                        to=""
+                                        className="btn-wishlist"
+                                    >
+                                        {isWishlist
+                                            ? '- Xóa khỏi danh sách yêu thích'
+                                            : ' + Thêm vào danh sách yêu thích'}
                                     </Link>
                                 </div>
                             </div>
