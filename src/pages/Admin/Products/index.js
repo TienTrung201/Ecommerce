@@ -6,9 +6,11 @@ import { useEffect, useState } from 'react';
 import { getData } from '@/api/service';
 import images from '@/assets/admin/images';
 import * as Unicons from '@iconscout/react-unicons';
-import { Button, Input, Pagination, Popover } from 'antd';
+import { Button, Collapse, Input, Pagination, Popover, Radio, Space } from 'antd';
 
 const cx = classNames.bind(styles);
+
+const { Panel } = Collapse;
 
 function Products() {
     const [products, setProducts] = useState([]);
@@ -57,17 +59,42 @@ function Products() {
                         </Link>
                     </div>
 
-                    <div className={cx('active-bg', 'w-100', 'd-flex', 'justify-content-end', 'p-2', 'rounded')}>
-                        <Input style={{ width: 200 }} placeholder="Tìm kiếm" prefix={<Unicons.UilSearch size="16" />} />
-                        <Popover title="Filter" placement="bottom" trigger="click">
-                            <Button
-                                className={cx('ms-2', 'd-flex', 'align-items-center')}
-                                icon={<Unicons.UilFilter size="16" />}
+                    {/* Search and filter */}
+                    <div className={cx('w-100', 'pt-2', 'pb-2')}>
+                        <Space.Compact block>
+                            <Input placeholder="Tìm kiếm" prefix={<Unicons.UilSearch size="16" />} />
+                            <Popover
+                                title="Filter"
+                                placement="bottom"
+                                trigger="click"
+                                content={
+                                    <Collapse defaultActiveKey={1} size="small" ghost expandIconPosition="end">
+                                        <Panel header="Sắp xếp" key="1">
+                                            <Radio.Group>
+                                                <Space size="small" direction="vertical">
+                                                    <Radio value={1}>Giá giảm dần</Radio>
+                                                    <Radio value={2}>Giá tăng dần</Radio>
+                                                    <Radio value={3}>Mới hơn</Radio>
+                                                    <Radio value={4}>Cũ hơn</Radio>
+                                                    <Radio value={5}>Tên A - Z</Radio>
+                                                    <Radio value={6}>Tên Z - A</Radio>
+                                                </Space>
+                                            </Radio.Group>
+                                        </Panel>
+                                    </Collapse>
+                                }
                             >
-                                <span className={cx('ps-1')}>Filter</span>
-                            </Button>
-                        </Popover>
+                                <Button
+                                    className={cx('d-flex', 'align-items-center')}
+                                    icon={<Unicons.UilFilter size="16" />}
+                                >
+                                    <span className={cx('ps-1')}>Filter</span>
+                                </Button>
+                            </Popover>
+                        </Space.Compact>
                     </div>
+                    {/* End Search and filter */}
+
                     <div className={cx('overflow-x-auto', 'w-100')}>
                         <table className={cx('table', 'table-hover')}>
                             <thead>
