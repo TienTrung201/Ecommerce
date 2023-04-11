@@ -172,7 +172,10 @@ label.mail {
     border: 1px solid rgba(0, 0, 0, 0.2);
     .avatar-user-url {
         width: 100%;
-    
+        position: absolute;
+        top: 0;
+        right: 0;
+
         object-fit: cover;
     }
     .openChoseFile {
@@ -193,12 +196,10 @@ label.mail {
         .camera-icon {
             font-size: 2rem;
         }
-  
     }
 }
 
 .cart-table {
-
     border-bottom: 1px solid rgb(126, 126, 126);
     &:last-child {
         border: none;
@@ -271,10 +272,7 @@ label.mail {
     font-size: 18px;
 }
 
-
-
 .address-list-container {
-
     border-radius: 4px;
     padding: 20px;
 }
@@ -283,7 +281,6 @@ label.mail {
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
-   
     margin: 20px 0;
     border-bottom: 1px solid #ddd;
     padding-bottom: 20px;
@@ -519,7 +516,6 @@ label.mail {
             font-weight: 600;
             color: #2c2c2c;
             margin-bottom: 0;
-          
         }
         .address {
             padding-bottom: 0;
@@ -808,7 +804,6 @@ label.mail {
         right: 0;
     }
     .zoa-icon-sort {
-
         color: #000;
     }
     .filterPrice {
@@ -840,7 +835,6 @@ label.mail {
     background-color: #ddd;
 }
 .shop-top {
-
     @media (max-width: 600px) {
         flex-direction: column;
         .filter-static.filter {
@@ -863,7 +857,6 @@ label.mail {
         @media (max-width: 750px) {
             display: none !important;
         }
-
     }
     .shop-element.left {
         @media (max-width: 1024px) {
@@ -929,7 +922,6 @@ label.mail {
         align-items: center;
         .number-rating {
             font-size: 1.4rem;
-        
             padding-top: 3px;
         }
     }
@@ -955,7 +947,6 @@ label.mail {
         font-size: 1.2rem !important;
         color: #2c2c2c;
     }
-
 }
 .product-related {
     .slick-slider {
@@ -1021,7 +1012,6 @@ label.mail {
 .zoa-product-tabs .tabs li a {
     font-size: 25px !important;
 }
-
 .align-items-stretch {
     align-items: stretch;
 }

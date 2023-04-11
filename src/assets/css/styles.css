@@ -1,4 +1,3 @@
-
 html {
     font-family: sans-serif;
     -ms-text-size-adjust: 100%;
@@ -313,7 +312,6 @@ th {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-
 
 * {
     -webkit-box-sizing: border-box;
@@ -835,7 +833,6 @@ blockquote.pull-right small:before,
 blockquote.pull-right .small:before {
     content: '';
 }
-
 
 address {
     margin-bottom: 20px;
@@ -17418,9 +17415,7 @@ i.fa.fa-plus {
     -webkit-box-align: center;
     align-items: center;
 }
-.zoa-qtt .quantity-left-minus:before {
-    content: '\f462';
-}
+
 .zoa-qtt .quantity-right-plus {
     right: 0;
     text-align: left;
@@ -17433,9 +17428,7 @@ i.fa.fa-plus {
     -webkit-box-align: center;
     align-items: center;
 }
-.zoa-qtt .quantity-right-plus:before {
-    content: '\f489';
-}
+
 .zoa-qtt .btn {
     cursor: pointer;
     position: absolute;
@@ -18990,15 +18983,14 @@ i.fa.fa-plus {
     border-top: 1px solid rgba(255, 255, 255, 0.09);
 }
 .nav-filter.boder-w-tlr-opc1 li:hover {
-    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&0.08+0,0.08+100 */
     background: -moz-linear-gradient(top, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.08) 100%);
-    /* FF3.6-15 */
+
     background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.08) 100%);
-    /* Chrome10-25,Safari5.1-6 */
+
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.08) 100%);
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#14ffffff', endColorstr='#14ffffff', GradientType=0);
-    /* IE6-9 */
+
     -webkit-transition: all 0.3s ease 0s;
     transition: all 0.3s ease 0s;
     -o-transition: all 0.3s ease 0s;
@@ -19029,7 +19021,6 @@ i.fa.fa-plus {
     .wrap-filter .wrap-filter-box {
         display: block;
         width: 33.333333%;
-        float: left;
         padding: 10px;
         line-height: 40px;
         border-top: 1px solid #e0e0e0;
