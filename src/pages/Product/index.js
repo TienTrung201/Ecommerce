@@ -1,11 +1,11 @@
 import { api } from '@/api';
-import { getData, postData } from '@/api/service';
+import { deleteData, getData, postData } from '@/api/service';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
-import { optionsSelector, userSelector } from '@/redux/selector';
+import { cartSelector, optionsSelector, userSelector } from '@/redux/selector';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faCartPlus, faChevronRight, faMinus, faPlus, faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
@@ -16,6 +16,7 @@ import TextEditorParagraph from '@/components/Admin/TextEditorParagraph';
 function Product() {
     const dispatch = useDispatch();
     //filter product
+    const cartUser = useSelector(cartSelector);
     const maxProductPrice = useRef();
     const [productItem, setProductItem] = useState(null);
     const options = useSelector(optionsSelector);
@@ -176,6 +177,10 @@ function Product() {
         }
     };
     //handle add product to cart
+    //wishlist
+    const isWishlist = useMemo(() => {
+        return cartUser.wishlist.find((wishlist) => wishlist.productId === product.productId);
+    }, [cartUser.wishlist, product.productId]);
     //handle add wishlist
     const handleAddWishList = () => {
         postData(api.wishLists, { productId: id })
@@ -186,6 +191,7 @@ function Product() {
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
+                getDataWishlist();
                 console.log(response);
             })
             .catch((err) => {
@@ -199,7 +205,37 @@ function Product() {
             });
     };
     //handle add wishlist
+    const getDataWishlist = () => {
+        getData(api.wishLists, user.uid)
+            .then((response) => {
+                dispatch(cartSlice.actions.setWishlist(response));
 
+                console.log('wishlist', response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    //handle add wichlist
+    //deletewishlist
+    const handleDeleteWishlist = (wishlistId) => {
+        deleteData(api.wishLists + '/' + wishlistId)
+            .then((response) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Đã xóa khỏi danh sách yêu thích'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                getDataWishlist();
+                console.log('delete wishlist', response);
+            })
+            .catch((err) => {
+                console.log('delete wishlist', err);
+            });
+    };
+    //deletewishlist
     //Change Description and Review
     const [tabs, setTabs] = useState('Reviews');
     const handleChangeTab = (e) => {
@@ -538,13 +574,20 @@ function Product() {
                                         </Link>
                                     </div>
                                     <Link
-                                        onClick={() => {
-                                            handleAddWishList();
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            if (isWishlist) {
+                                                handleDeleteWishlist(isWishlist.wishlistId);
+                                            } else {
+                                                handleAddWishList();
+                                            }
                                         }}
                                         to=""
                                         className="btn-wishlist"
                                     >
-                                        + Thêm vào danh sách yêu thích
+                                        {isWishlist
+                                            ? '- Xóa khỏi danh sách yêu thích'
+                                            : ' + Thêm vào danh sách yêu thích'}
                                     </Link>
                                 </div>
                             </div>

@@ -92,7 +92,7 @@ function Order() {
                                                   <i style={{ color: '#eb5050' }}>
                                                       <FontAwesomeIcon icon={faMoneyBillAlt} />
                                                   </i>{' '}
-                                                  Thành tiền
+                                                  Thành tiền:
                                               </p>
                                               <p style={{ color: '#eb5050' }} className="total-price">
                                                   {convertVnd(order.orderTotal)}
@@ -105,10 +105,7 @@ function Order() {
                                           <Link to="">Đánh giá</Link>
                                       </button>
                                       <button className="order__items-btn contact">
-                                          <Link>Liên hệ người bán</Link>
-                                      </button>
-                                      <button className="order__items-btn buyProduct">
-                                          <Link>Mua lại</Link>
+                                          <Link to="/contact">Liên hệ người bán</Link>
                                       </button>
                                   </div>
                               </div>

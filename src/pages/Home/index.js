@@ -1,17 +1,26 @@
 import { api } from '@/api';
-import { getData } from '@/api/service';
-import sliderImg1 from '@/assets/image/slide/slider-1-home-1.png';
-import sliderImg2 from '@/assets/image/slide/slider-2-home-1.png';
+import { deleteData, getData, postData } from '@/api/service';
+// import sliderImg1 from '@/assets/image/slide/slider-1-home-1.png';
+import sliderImg2 from '@/assets/image/slide/slider4.jpg';
+import sliderImg1 from '@/assets/image/slide/slider3.jpg';
+import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { convertVnd } from '@/components/GlobalStyles/fuction';
+import { cartSelector, userSelector } from '@/redux/selector';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
+import cartSlice from '../Cart/CartSlice';
 
 function Home() {
     const [products, setProducts] = useState([]);
+    const dispatch = useDispatch();
+    const user = useSelector(userSelector);
+    const cartUser = useSelector(cartSelector);
+
     // const [categories, setCategories] = useState([]);
     // const [promotions, setPromotions] = useState([]);
     // const [discounts,setDiscounts] = useState([]);
@@ -55,6 +64,55 @@ function Home() {
                 console.warn(error);
             });
     }, []);
+    const getDataWishlist = () => {
+        getData(api.wishLists, user.uid)
+            .then((response) => {
+                dispatch(cartSlice.actions.setWishlist(response));
+
+                console.log('wishlist', response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+    const handleAddWishList = (productId) => {
+        postData(api.wishLists, { productId: productId })
+            .then((response) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Đã thêm vào danh sách yêu thích'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                getDataWishlist();
+                console.log(response);
+            })
+            .catch((err) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showError('Thất bại'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                console.log(err);
+            });
+    };
+    const handleDeleteWishlist = (wishlistId) => {
+        deleteData(api.wishLists + '/' + wishlistId)
+            .then((response) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess('Đã xóa khỏi danh sách yêu thích'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                getDataWishlist();
+                console.log('delete wishlist', response);
+            })
+            .catch((err) => {
+                console.log('delete wishlist', err);
+            });
+    };
     //setting slider
     var settings = {
         dots: true,
@@ -72,10 +130,10 @@ function Home() {
                     <div className="slide-img">
                         <img src={sliderImg1} alt="" className="img-responsive" />
                         <div className="box-center content2">
-                            <h3>Anna Collection</h3>
-                            <Link href="" className="slide-btn">
+                            {/* <h3>Anna Collection</h3> */}
+                            {/* <Link href="" className="slide-btn">
                                 Shop Now
-                            </Link>
+                            </Link> */}
                         </div>
                     </div>
                     <div className="slide-img">
@@ -95,7 +153,7 @@ function Home() {
                                 <div className="trend-img hover-images">
                                     <img
                                         className="img-responsive"
-                                        src={require('@/assets/image/home1/trend.png')}
+                                        src={require('@/assets/image/home1/trend2.png')}
                                         alt=""
                                     />
                                     <div className="box-center align-items-end">
@@ -111,7 +169,9 @@ function Home() {
                                         if (index >= 6) {
                                             return false;
                                         }
-
+                                        const isWishlist = cartUser.wishlist.find(
+                                            (wishlist) => wishlist.productId === product.productId,
+                                        );
                                         return (
                                             <div
                                                 key={product.productId}
@@ -134,7 +194,17 @@ function Home() {
                                                     )}
 
                                                     <div className="product-button-group">
-                                                        <Link className="zoa-btn zoa-wishlist">
+                                                        <Link
+                                                            style={{ background: isWishlist ? '#dd2a2a' : '' }}
+                                                            onClick={() => {
+                                                                if (isWishlist) {
+                                                                    handleDeleteWishlist(isWishlist.wishlistId);
+                                                                } else {
+                                                                    handleAddWishList(product.productId);
+                                                                }
+                                                            }}
+                                                            className="zoa-btn zoa-wishlist"
+                                                        >
                                                             <span className="zoa-icon-heart">
                                                                 <FontAwesomeIcon icon={faHeart} />
                                                             </span>
@@ -181,7 +251,7 @@ function Home() {
                     <div className="container container-content">
                         <div className="banner-img hover-images">
                             <img
-                                src={require('@/assets/image/home1/home-1-bg.png')}
+                                src={require('@/assets/image/home1/home-1-bg.jpg')}
                                 alt=""
                                 className="img-responsive"
                             />

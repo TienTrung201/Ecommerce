@@ -45,7 +45,7 @@ function Header() {
             {/* overlay */}
 
             {/* pushmenu-open */}
-            <div ref={menuBar} onClick={handleCloseMenuBar} className="pushmenu menu-home5">
+            <div ref={menuBar} className="pushmenu menu-home5">
                 <div className="menu-push">
                     <span onClick={handleCloseMenuBar} className="close-left js-close">
                         <i className="ion-ios-close-empty f-40">
@@ -92,35 +92,6 @@ function Header() {
                             <Link to="/blog">Blog</Link>
                         </li> */}
                     </ul>
-                    <ul className="mobile-account">
-                        <li>
-                            <Link to="/">
-                                <i className="fa fa-unlock-alt"></i>Login
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/">
-                                <i className="fa fa-user-plus"></i>Register
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/">
-                                <i className="fa fa-heart"></i>Wishlist
-                            </Link>
-                        </li>
-                    </ul>
-                    <h4 className="mb-title">connect and follow</h4>
-                    <div className="mobile-social mg-bottom-30">
-                        <Link to="/">
-                            <i className="fa fa-facebook"></i>
-                        </Link>
-                        <Link to="/">
-                            <i className="fa fa-twitter"></i>
-                        </Link>
-                        <Link to="/">
-                            <i className="fa fa-google-plus"></i>
-                        </Link>
-                    </div>
                 </div>
             </div>
             {/* pushmenu-open */}

@@ -257,7 +257,7 @@ label.mail {
         justify-content: flex-end;
         .order-total-box {
             display: flex;
-            width: 250px;
+            width: 300px;
             justify-content: space-between;
             padding-right: 20px;
             align-items: center;
@@ -787,10 +787,6 @@ label.mail {
                 color: #fff !important;
             }
         }
-        .contact {
-        }
-        .buyProduct {
-        }
     }
 
     .checkbox {
@@ -1069,5 +1065,11 @@ label.mail {
                 }
             }
         }
+    }
+}
+//slider
+.slide {
+    .img-responsive {
+        object-fit: cover;
     }
 }

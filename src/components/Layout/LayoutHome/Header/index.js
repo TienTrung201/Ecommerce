@@ -95,35 +95,6 @@ function Header({ isUser }) {
                             <Link to="/blog">Blog</Link>
                         </li> */}
                     </ul>
-                    <ul className="mobile-account">
-                        <li>
-                            <Link href="">
-                                <i className="fa fa-unlock-alt"></i>Login
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="">
-                                <i className="fa fa-user-plus"></i>Register
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="">
-                                <i className="fa fa-heart"></i>Wishlist
-                            </Link>
-                        </li>
-                    </ul>
-                    <h4 className="mb-title">connect and follow</h4>
-                    <div className="mobile-social mg-bottom-30">
-                        <Link href="">
-                            <i className="fa fa-facebook"></i>
-                        </Link>
-                        <Link href="">
-                            <i className="fa fa-twitter"></i>
-                        </Link>
-                        <Link href="">
-                            <i className="fa fa-google-plus"></i>
-                        </Link>
-                    </div>
                 </div>
             </div>
             {/* pushmenu-open */}
@@ -300,108 +271,7 @@ function Header({ isUser }) {
                                             Shop
                                         </Link>
                                     </li>
-                                    {/* <li className="level1 hassub dropdown">
-                                        <Link to="/collection" title="Collection">
-                                            Collection
-                                        </Link>
-                                        <div className="menu-level-1 dropdown-menu style3">
-                                            <div className="row">
-                                                <div className="cate-item col-md-4 col-sm-12">
-                                                    <div className="demo-img">
-                                                        <Link to="02-Shop_v1.html" className="effect-img3 plus-zoom">
-                                                            <img
-                                                                src={require('@/assets/image/collection_4.jpg')}
-                                                                alt="02-Shop_v2.html"
-                                                                className="img-reponsive"
-                                                            />
-                                                        </Link>
-                                                    </div>
-                                                    <div className="demo-text text-center">New Trending '18</div>
-                                                </div>
-                                                <div className="cate-item col-md-4 col-sm-12">
-                                                    <div className="demo-img">
-                                                        <Link className="effect-img3 plus-zoom" to="">
-                                                            <img
-                                                                src={require('@/assets/image/collection_4.jpg')}
-                                                                alt="02-Shop_v2.html"
-                                                                className="img-reponsive"
-                                                            />
-                                                        </Link>
-                                                    </div>
-                                                    <div className="demo-text text-center">New Lookbooks</div>
-                                                </div>
-                                                <div className="cate-item col-md-4 col-sm-12">
-                                                    <div className="demo-img">
-                                                        <Link className="effect-img3 plus-zoom" to="02-Shop_v3.html">
-                                                            <img
-                                                                src={require('@/assets/image/collection_4.jpg')}
-                                                                alt="02-Shop_v2.html"
-                                                                className="img-reponsive"
-                                                            />
-                                                        </Link>
-                                                    </div>
-                                                    <div className="demo-text text-center">Onsale</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li> */}
-                                    <li className="level1 dropdown hassub">
-                                        <Link to="#" title="Pages">
-                                            Pages
-                                        </Link>
-                                        <span className="plus js-plus-icon"></span>
-                                        <div className="menu-level-1 dropdown-menu style2">
-                                            <ul className="level1">
-                                                <li className="level2 col-6">
-                                                    {/* <Link to="#">Page Set 1</Link> */}
-                                                    <ul className="menu-level-2">
-                                                        <li className="level3">
-                                                            <Link to="/cart" title="Cart">
-                                                                Cart
-                                                            </Link>
-                                                        </li>
-                                                        <li className="level3">
-                                                            <Link to="/aboutUs" title="About Us">
-                                                                About Us
-                                                            </Link>
-                                                        </li>
 
-                                                        <li className="level3">
-                                                            <Link to="myAccount" title="My Account">
-                                                                My Account
-                                                            </Link>
-                                                        </li>
-                                                        <li className="level3">
-                                                            <Link to="Checkout" title="Check out">
-                                                                Check out
-                                                            </Link>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li className="level2 col-6">
-                                                    {/* <Link to="#">Page Set 2</Link> */}
-                                                    <ul className="menu-level-2">
-                                                        <li className="level3">
-                                                            <Link to="/commingSoon" title="Coming Soon">
-                                                                Coming Soon
-                                                            </Link>
-                                                        </li>
-                                                        <li className="level3">
-                                                            <Link to="/fAQs" title="FAQS">
-                                                                FAQs
-                                                            </Link>
-                                                        </li>
-                                                        <li className="level3">
-                                                            <Link to="page404" title="">
-                                                                404
-                                                            </Link>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                            <div className="clearfix"></div>
-                                        </div>
-                                    </li>
                                     <li className="level1 active dropdown">
                                         <Link to="/contact" title="Contact">
                                             Contact

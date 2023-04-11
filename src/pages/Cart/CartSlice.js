@@ -6,6 +6,7 @@ export const cartSlice = createSlice({
         cartItems: [],
         // dataCartUser: [],
         cartId: '',
+        wishlist: [],
     },
     reducers: {
         setCart: (state, action) => {
@@ -13,6 +14,9 @@ export const cartSlice = createSlice({
         },
         setCartId: (state, action) => {
             state.cartId = action.payload;
+        },
+        setWishlist: (state, action) => {
+            state.wishlist = action.payload;
         },
         // setDataCart: (state, action) => {
         //     state.dataCartUser = action.payload;
