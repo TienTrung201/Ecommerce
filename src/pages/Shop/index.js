@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import cartSlice from '../Cart/CartSlice';
+import TextEditorParagraph from '@/components/Admin/TextEditorParagraph';
 
 function Shop() {
     //Products  FilterProduct and Paging
@@ -209,7 +210,7 @@ function Shop() {
     return (
         <>
             <div className="shop-heading text-center">
-                <h1>All Clothing</h1>
+                <h1>All Cosmetics</h1>
                 <ul className="breadcrumb">
                     <li>
                         <Link to="/">Home</Link>
@@ -415,7 +416,9 @@ function Shop() {
                                             </Link>
                                         </h3>
                                         <div className="short-desc">
-                                            <p className="product-desc">{product.description}</p>
+                                            <div className="product-desc">
+                                                <TextEditorParagraph value={product.description} />
+                                            </div>
                                         </div>
                                         <div className="product-price">
                                             {product.discountRate === 0 ? (
