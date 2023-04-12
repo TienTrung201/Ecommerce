@@ -4,10 +4,10 @@ import notificationsSlice from '@/components/Admin/Notification/notificationsSli
 import { cartSelector, optionsSelector, shippingMethodsSelector, userSelector } from '@/redux/selector';
 import { faClose, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import cartSlice from './CartSlice';
 import Modal from '@/components/Layout/Modal';
 import Order from './order';
@@ -24,12 +24,7 @@ function Cart() {
     const cartItem = useRef();
     const wishlistItem = useRef();
     const [visible, setVisible] = useState(false);
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (user.uid === '') {
-            navigate('/user/signin');
-        }
-    }, [user.uid, navigate]);
+
     // set quantiti item cart
     const handeSetQuantity = (id, position, action) => {
         dispatch(notificationsSlice.actions.showLoading(''));
@@ -147,7 +142,10 @@ function Cart() {
     const totalCart = useMemo(() => {
         const total = cartUser.cartItems.reduce((acc, item) => {
             if (item.isChecked) {
-                return (acc += item.costPrice * item.qty);
+                if (item.discountRate === 0) {
+                    return (acc += item.price * item.qty);
+                }
+                return (acc += ((item.price * item.discountRate) / 100) * item.qty);
             }
             return (acc += 0);
         }, 0);
@@ -284,6 +282,7 @@ function Cart() {
                 setVisible={setVisible}
                 title={'Đơn đặt hàng'}
                 save={'Đặt hàng'}
+                checkedSubmit={addressDefault ? true : false}
             >
                 <Order
                     paymentMethodId={paymentMethodId}
@@ -369,7 +368,13 @@ function Cart() {
                                                     </td>
 
                                                     <td className="product-same total-price">
-                                                        <p className="price">{convertVnd(item.costPrice)}</p>
+                                                        {item.discountRate === 0 ? (
+                                                            <p className="price">{convertVnd(item.price)}</p>
+                                                        ) : (
+                                                            <p className="price">
+                                                                {convertVnd((item.price * item.discountRate) / 100)}
+                                                            </p>
+                                                        )}
                                                     </td>
                                                     <td className="bcart-quantity single-product-detail">
                                                         <div className="autoCenter">
@@ -409,7 +414,15 @@ function Cart() {
                                                         </div>
                                                     </td>
                                                     <td className="total-price">
-                                                        <p className="price">{convertVnd(item.qty * item.costPrice)}</p>
+                                                        {item.discountRate === 0 ? (
+                                                            <p className="price">{convertVnd(item.qty * item.price)}</p>
+                                                        ) : (
+                                                            <p className="price">
+                                                                {convertVnd(
+                                                                    item.qty * ((item.price * item.discountRate) / 100),
+                                                                )}
+                                                            </p>
+                                                        )}
                                                     </td>
                                                     <td
                                                         onClick={() => {

@@ -1,4 +1,8 @@
-function AddressForm({ formData, onChanceForm }) {
+import classNames from 'classnames/bind';
+import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
+const cx = classNames.bind(styles);
+
+function AddressForm({ formData, onChanceForm, messageError }) {
     return (
         <div className="address-form">
             <div className="address-form__group">
@@ -90,6 +94,7 @@ function AddressForm({ formData, onChanceForm }) {
                     required=""
                     value={formData.addressLine}
                 />
+                <span className={cx('text-danger', 'fs-14')}>{messageError}</span>
             </div>
         </div>
     );

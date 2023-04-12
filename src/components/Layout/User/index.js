@@ -31,6 +31,13 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
         return result;
     }, [categories, search]);
 
+    //filter products
+    const handleEnterInput = (event) => {
+        if (event.key === 'Enter') {
+            setSearch('');
+            navigate('/shop?search=' + search);
+        }
+    };
     //get user
     useEffect(() => {
         getData(api.userAccount)
@@ -59,7 +66,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                     const cartUser = response.data.items.reduce((acc, item) => {
                         const { cartItemId, qty } = item;
                         const { productId, image, name, items } = item.product;
-                        const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                        const { costPrice, qtyInStock, productItemId, sku, optionsId, price, discountRate } = items[0];
                         acc.push({
                             cartItemId,
                             productId,
@@ -71,6 +78,8 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                             sku,
                             qty,
                             optionsId,
+                            price,
+                            discountRate,
                             isChecked: false,
                         });
                         return acc;
@@ -114,26 +123,36 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                     className="zoa-icon wrapper-search search-toggle"
                 >
                     <img className="search-img" src={images.search} alt="menubar" />
-                    <input onChange={handleChangeSearch} className="search-input" type="text" value={search} />
+                    <input
+                        onChange={handleChangeSearch}
+                        onKeyDown={handleEnterInput}
+                        className="search-input"
+                        type="text"
+                        value={search}
+                    />
                 </Link>
-                <div className="wrapper-search-result">
-                    <ul>
-                        {searchResult.map((category) => {
-                            return (
-                                <li key={category.categoriesId}>
-                                    <Link
-                                        onClick={() => {
-                                            setSearch('');
-                                        }}
-                                        to={`/shop?page=1&category=${category.name}`}
-                                    >
-                                        {category.name}
-                                    </Link>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
+                {searchResult.length !== 0 ? (
+                    <div className="wrapper-search-result">
+                        <ul>
+                            {searchResult.map((category) => {
+                                return (
+                                    <li key={category.categoriesId}>
+                                        <Link
+                                            onClick={() => {
+                                                setSearch('');
+                                            }}
+                                            to={`/shop?page=1&category=${category.name}`}
+                                        >
+                                            {category.name}
+                                        </Link>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
+                ) : (
+                    false
+                )}
             </div>
 
             <div className="element element-cart">

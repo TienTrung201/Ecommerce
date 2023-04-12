@@ -54,6 +54,7 @@ function Modal({ children, title, save, visible, setVisible, haldleSendModal, ch
                                         }}
                                         className={cx(
                                             checkedSubmit === false ? 'opacity05' : 'opacity1',
+                                            'poiter-none',
                                             checkedSubmit === false ? 'opacity05' : 'poiter',
                                         )}
                                     >

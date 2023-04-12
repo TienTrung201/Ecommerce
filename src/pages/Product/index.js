@@ -145,7 +145,7 @@ function Product() {
                 const cartUserRespones = newDataCartReponse.data.items.reduce((acc, item) => {
                     const { cartItemId, qty } = item;
                     const { productId, image, name, items } = item.product;
-                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                    const { costPrice, qtyInStock, productItemId, sku, optionsId, price, discountRate } = items[0];
                     acc.push({
                         cartItemId,
                         productId,
@@ -157,6 +157,8 @@ function Product() {
                         sku,
                         qty,
                         optionsId,
+                        price,
+                        discountRate,
                         isChecked: false,
                     });
                     return acc;
