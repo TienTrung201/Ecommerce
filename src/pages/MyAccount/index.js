@@ -40,7 +40,13 @@ function MyAccount() {
                             <div className="titlelt">
                                 <div className="address">
                                     <ul className="nav ">
-                                        <li className={infoManagerment === 'account' ? 'active' : ''}>
+                                        <li
+                                            className={
+                                                infoManagerment === 'account' || infoManagerment === undefined
+                                                    ? 'active'
+                                                    : ''
+                                            }
+                                        >
                                             <Link to="/myAccount/account">
                                                 <i className="icon-menu-user">
                                                     <FontAwesomeIcon icon={faUser} />

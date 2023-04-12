@@ -519,7 +519,7 @@ function Product() {
                                                                     : 'size-button'
                                                             }
                                                         >
-                                                            {optionValue.value}ml
+                                                            {optionValue.name}
                                                         </button>
                                                     );
                                                 } else {

@@ -35,7 +35,7 @@ function Shop() {
         new URLSearchParams(location.search).get('max') ? new URLSearchParams(location.search).get('max') : '',
     );
     const [pageNumber, setPageNumber] = useState(
-        new URLSearchParams(location.search).get('page') ? new URLSearchParams(location.search).get('page') : 1,
+        new URLSearchParams(location.search).get('page') ? new URLSearchParams(location.search).get('page') : '1',
     );
     const [totalPages, setTotalPages] = useState([]);
     const [products, setProducts] = useState([]);

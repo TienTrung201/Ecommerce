@@ -19,7 +19,7 @@ function Order() {
         getData(api.shopOrders)
             .then((response) => {
                 dispatch(userOrderSlice.actions.setDataOrder(response.data.reverse()));
-                console.log(response);
+                console.log('my Order', response);
             })
             .catch((error) => {
                 console.log(error);
@@ -28,7 +28,7 @@ function Order() {
     useEffect(() => {
         getData(api.orderStatuses)
             .then((response) => {
-                console.log(response);
+                console.log('order Status', response);
                 setOrderStatus(response.data);
             })
             .catch((error) => {

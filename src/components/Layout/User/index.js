@@ -1,8 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import images from '@/assets/image';
 import { useDispatch, useSelector } from 'react-redux';
-import { cartSelector, userSelector } from '@/redux/selector';
-import { useEffect } from 'react';
+import { cartSelector, categoriesSelector, userSelector } from '@/redux/selector';
+import { useEffect, useMemo, useState } from 'react';
 import { getData } from '@/api/service';
 import { api } from '@/api';
 import userSlice from '@/pages/MyAccount/UserSlice';
@@ -16,6 +16,21 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
     const cartItems = useSelector(cartSelector);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const categories = useSelector(categoriesSelector);
+    const [search, setSearch] = useState('');
+    //handle change input
+    const handleChangeSearch = (e) => {
+        setSearch(e.target.value);
+    };
+    //filter categories
+    const searchResult = useMemo(() => {
+        const result = categories.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()));
+        if (result.length === categories.length) {
+            return [];
+        }
+        return result;
+    }, [categories, search]);
+
     //get user
     useEffect(() => {
         getData(api.userAccount)
@@ -88,9 +103,32 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
         <div className="topbar-left">
             <Notification />
             <div className="element element-search hidden-xs hidden-sm">
-                <Link onClick={onOpenSearch} to="#" className="zoa-icon search-toggle">
-                    <img src={images.search} alt="menubar" />
+                <Link
+                    // onClick={onOpenSearch}
+                    to=""
+                    className="zoa-icon wrapper-search search-toggle"
+                >
+                    <img className="search-img" src={images.search} alt="menubar" />
+                    <input onChange={handleChangeSearch} className="search-input" type="text" value={search} />
                 </Link>
+                <div className="wrapper-search-result">
+                    <ul>
+                        {searchResult.map((category) => {
+                            return (
+                                <li key={category.categoriesId}>
+                                    <Link
+                                        onClick={() => {
+                                            setSearch('');
+                                        }}
+                                        to={`/shop?page=1&category=${category.name}`}
+                                    >
+                                        {category.name}
+                                    </Link>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
             </div>
 
             <div onClick={onOpenCart} className="element element-cart">
