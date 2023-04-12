@@ -121,7 +121,7 @@ function ShopOrdersDetail() {
                 </nav>
             </div>
             <div className={cx('page-header', 'align-middle')}>
-                <p>{dayjs(shopOrder.orderDate).format('DD/MM/YYYY HH:MM')}</p>
+                <p>{dayjs(shopOrder.orderDate).utcOffset(7).tz('Asia/Bangkok').format('DD/MM/YYYY HH:mm')}</p>
             </div>
             <div className={cx('row', 'gx-4', 'gy-4')}>
                 <div className={cx('col-md-8')}>
@@ -152,7 +152,12 @@ function ShopOrdersDetail() {
                                                     />
                                                 </td>
                                                 <td className={cx('py-1')}>
-                                                    <p className={cx('mb-0', 'small')}>{item.product.name}</p>
+                                                    <p
+                                                        style={{ minWidth: '280px' }}
+                                                        className={cx('mb-0', 'small', 'text-wrap')}
+                                                    >
+                                                        {item.product.name}
+                                                    </p>
                                                     <p className={cx('mb-0', 'small')}>25cm / Xanh</p>
                                                     <p className={cx('mb-0', 'small')}>
                                                         SKU: {item?.product?.items[0]?.sku || 'N/A'}

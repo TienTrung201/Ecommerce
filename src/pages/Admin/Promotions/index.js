@@ -1,12 +1,13 @@
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
 import classNames from 'classnames/bind';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { getData } from '@/api/service';
 import { api } from '@/api';
 import dayjs from 'dayjs';
 import * as Unicons from '@iconscout/react-unicons';
 import { Button, Collapse, Pagination, Popover, Radio, Space, Input } from 'antd';
+import { debounce } from 'lodash';
 
 const cx = classNames.bind(styles);
 
@@ -15,14 +16,59 @@ const { Panel } = Collapse;
 function Promotions() {
     const [promotions, setPromotions] = useState([]);
 
+    const [queryParams, setQueryParams] = useSearchParams();
+    const [allQueryParams, setAllQueryParams] = useState({});
+
     const navigate = useNavigate();
 
+    // Get promotions
     useEffect(() => {
-        getData(api.promotions).then((data) => {
-            console.log(data);
-            setPromotions(data);
+        const search = queryParams.get('search');
+        const sort = queryParams.get('sort');
+        const status = queryParams.get('status');
+
+        getData(api.promotions + `?search=${search || ''}&sort=${sort || ''}&status=${status || ''}`)
+            .then((data) => {
+                console.log(data);
+                setPromotions(data);
+            })
+            .catch((error) => {
+                console.warn(error.message);
+            });
+    }, [queryParams]);
+
+    // Get all query params
+    useEffect(() => {
+        const allParams = {};
+        queryParams.forEach((value, key) => {
+            allParams[key] = value;
         });
-    }, []);
+
+        setAllQueryParams(allParams);
+    }, [queryParams]);
+
+    // --------- Input change ---------
+    // Delay search
+    const handleDebounceSearch = useMemo(() => {
+        return debounce((value) => {
+            setQueryParams({ ...allQueryParams, search: value });
+        }, 500);
+    }, [setQueryParams, allQueryParams]);
+
+    const handleSearchParamChange = (e) => {
+        handleDebounceSearch(e.target.value);
+    };
+
+    const handleSortParamChange = (e) => {
+        let value = e.target.value;
+        setQueryParams({ ...allQueryParams, sort: value });
+    };
+
+    const handleStatusParamChange = (e) => {
+        let value = e.target.value;
+        setQueryParams({ ...allQueryParams, status: value });
+    };
+    // --------- End Input change ---------
 
     const renderPromotions = useMemo(() => {
         const dateNow = new Date();
@@ -88,24 +134,47 @@ function Promotions() {
                     {/* Search and filter */}
                     <div className={cx('w-100', 'pt-2', 'pb-2')}>
                         <Space.Compact block>
-                            <Input placeholder="Tìm kiếm" prefix={<Unicons.UilSearch size="16" />} />
+                            <Input
+                                onChange={handleSearchParamChange}
+                                placeholder="Tìm kiếm"
+                                prefix={<Unicons.UilSearch size="16" />}
+                            />
                             <Popover
                                 title="Filter"
                                 placement="bottom"
                                 trigger="click"
                                 content={
-                                    <Collapse defaultActiveKey={1} size="small" ghost expandIconPosition="end">
-                                        <Panel header="Sắp xếp" key="1">
-                                            <Radio.Group>
-                                                <Space size="small" direction="vertical">
-                                                    <Radio value={3}>Mới hơn</Radio>
-                                                    <Radio value={4}>Cũ hơn</Radio>
-                                                    <Radio value={5}>Tên A - Z</Radio>
-                                                    <Radio value={6}>Tên Z - A</Radio>
-                                                </Space>
-                                            </Radio.Group>
-                                        </Panel>
-                                    </Collapse>
+                                    <>
+                                        <Collapse
+                                            defaultActiveKey={1}
+                                            size="small"
+                                            ghost
+                                            accordion
+                                            expandIconPosition="end"
+                                        >
+                                            <Panel header="Sắp xếp" key="1">
+                                                <Radio.Group onChange={handleSortParamChange}>
+                                                    <Space size="small" direction="vertical">
+                                                        <Radio value={'creationTimeDesc'}>Mới hơn</Radio>
+                                                        <Radio value={'creationTimeAsc'}>Cũ hơn</Radio>
+                                                        <Radio value={'discountDesc'}>Giá trị lớn - nhỏ</Radio>
+                                                        <Radio value={'discountAsc'}>Giá trị nhỏ - lớn</Radio>
+                                                        <Radio value={'nameAsc'}>Tên A - Z</Radio>
+                                                        <Radio value={'nameDesc'}>Tên Z - A</Radio>
+                                                    </Space>
+                                                </Radio.Group>
+                                            </Panel>
+                                            <Panel header="Trạng thái" key="2">
+                                                <Radio.Group onChange={handleStatusParamChange}>
+                                                    <Space size="small" direction="vertical">
+                                                        <Radio value={'active'}>Đang áp dụng</Radio>
+                                                        <Radio value={'comming'}>Chưa áp dụng</Radio>
+                                                        <Radio value={'expired'}>Đã hết hạn</Radio>
+                                                    </Space>
+                                                </Radio.Group>
+                                            </Panel>
+                                        </Collapse>
+                                    </>
                                 }
                             >
                                 <Button

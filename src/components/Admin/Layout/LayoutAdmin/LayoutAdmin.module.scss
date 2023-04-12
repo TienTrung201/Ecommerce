@@ -18970,6 +18970,11 @@ dl li {
     overflow-x: auto;
 }
 
+.overflow-y-auto {
+    overflow-y: auto;
+    overflow-y: overlay;
+}
+
 .table td.vertical-align-top {
     vertical-align: top;
 }
