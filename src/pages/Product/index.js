@@ -7,7 +7,7 @@ import { faCartPlus, faChevronRight, faMinus, faPlus, faStar } from '@fortawesom
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import cartSlice from '../Cart/CartSlice';
 import { convertVnd } from '@/components/GlobalStyles/fuction';
@@ -25,7 +25,7 @@ function Product() {
     const [colorOption, setColorOption] = useState(null);
     const [ItemsProduct, setItemsProduct] = useState([{ optionsId: [] }]);
     const [message, setMessage] = useState(null);
-
+    const navigate = useNavigate();
     useEffect(() => {
         if (ItemsProduct[0].optionsId.length === 2) {
             if (sizeOprion !== null && colorOption !== null) {
@@ -561,7 +561,11 @@ function Product() {
                                         <Link
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                handleAddToCart();
+                                                if (user.uid === '') {
+                                                    navigate('/user/signin');
+                                                } else {
+                                                    handleAddToCart();
+                                                }
                                             }}
                                             className={
                                                 message !== null
@@ -576,7 +580,9 @@ function Product() {
                                     <Link
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            if (isWishlist) {
+                                            if (user.uid === '') {
+                                                navigate('/user/signin');
+                                            } else if (isWishlist) {
                                                 handleDeleteWishlist(isWishlist.wishlistId);
                                             } else {
                                                 handleAddWishList();

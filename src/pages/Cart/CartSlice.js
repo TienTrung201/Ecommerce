@@ -12,6 +12,15 @@ export const cartSlice = createSlice({
         setCart: (state, action) => {
             state.cartItems = action.payload;
         },
+        deleteCart: (state) => {
+            state = {
+                status: 'idle',
+                cartItems: [],
+                // dataCartUser: [],
+                cartId: '',
+                wishlist: [],
+            };
+        },
         setCartId: (state, action) => {
             state.cartId = action.payload;
         },

@@ -3,7 +3,7 @@ import { updateData } from '@/api/service';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { cartSelector, optionsSelector, userSelector } from '@/redux/selector';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import cartSlice from '../CartSlice';
 
 function CartHeader() {
@@ -11,6 +11,7 @@ function CartHeader() {
     const cartUser = useSelector(cartSelector);
     const user = useSelector(userSelector);
     const optionProduct = useSelector(optionsSelector);
+    const navigate = useNavigate();
     //delete item in cart
     const handleDeleteCartItem = (id, position) => {
         console.log(cartUser);
@@ -94,7 +95,17 @@ function CartHeader() {
                     );
                 })}
             </ul>
-            <Link to="/cart" className="header__cart-view-cart btn btn--primary">
+            <Link
+                onClick={(e) => {
+                    e.preventDefault();
+                    if (user.uid === '') {
+                        navigate('/user/signin');
+                    } else {
+                        navigate('/cart');
+                    }
+                }}
+                className="header__cart-view-cart btn btn--primary"
+            >
                 Xem giỏ hàng
             </Link>
         </div>

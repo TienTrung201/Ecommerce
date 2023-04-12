@@ -11,7 +11,7 @@ import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import cartSlice from '../Cart/CartSlice';
 
@@ -20,7 +20,7 @@ function Home() {
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
     const cartUser = useSelector(cartSelector);
-
+    const navigate = useNavigate();
     // const [categories, setCategories] = useState([]);
     // const [promotions, setPromotions] = useState([]);
     // const [discounts,setDiscounts] = useState([]);
@@ -113,6 +113,12 @@ function Home() {
                 console.log('delete wishlist', err);
             });
     };
+    //checkuser login
+    // const checkLogin = () => {
+    //     if (user.uid === '') {
+    //         navigate('/user/signin');
+    //     }
+    // };
     //setting slider
     var settings = {
         dots: true,
@@ -196,8 +202,12 @@ function Home() {
                                                     <div className="product-button-group">
                                                         <Link
                                                             style={{ background: isWishlist ? '#dd2a2a' : '' }}
-                                                            onClick={() => {
-                                                                if (isWishlist) {
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+
+                                                                if (user.uid === '') {
+                                                                    navigate('/user/signin');
+                                                                } else if (isWishlist) {
                                                                     handleDeleteWishlist(isWishlist.wishlistId);
                                                                 } else {
                                                                     handleAddWishList(product.productId);

@@ -4,10 +4,10 @@ import notificationsSlice from '@/components/Admin/Notification/notificationsSli
 import { cartSelector, optionsSelector, shippingMethodsSelector, userSelector } from '@/redux/selector';
 import { faClose, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import cartSlice from './CartSlice';
 import Modal from '@/components/Layout/Modal';
 import Order from './order';
@@ -24,6 +24,12 @@ function Cart() {
     const cartItem = useRef();
     const wishlistItem = useRef();
     const [visible, setVisible] = useState(false);
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (user.uid === '') {
+            navigate('/user/signin');
+        }
+    }, [user.uid, navigate]);
     // set quantiti item cart
     const handeSetQuantity = (id, position, action) => {
         dispatch(notificationsSlice.actions.showLoading(''));
