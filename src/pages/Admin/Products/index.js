@@ -1,12 +1,13 @@
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
 import classNames from 'classnames/bind';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { api } from '@/api';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getData } from '@/api/service';
 import images from '@/assets/admin/images';
 import * as Unicons from '@iconscout/react-unicons';
 import { Button, Collapse, Input, Pagination, Popover, Radio, Space } from 'antd';
+import { debounce } from 'lodash';
 
 const cx = classNames.bind(styles);
 
@@ -19,11 +20,22 @@ function Products() {
     const [categories, setCategories] = useState([]);
     const [providers, setProviders] = useState([]);
 
+    const [queryParams, setQueryParams] = useSearchParams();
+    const [allQueryParams, setAllQueryParams] = useState({});
+
     const navigate = useNavigate();
     // const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        Promise.all([getData(api.products + `?page=${currentPage}`), getData(api.categories), getData(api.providers)])
+        const search = queryParams.get('search');
+        const sort = queryParams.get('sort');
+        const status = queryParams.get('status');
+
+        Promise.all([
+            getData(api.products + `?page=${currentPage}&search=${search || ''}&sort=${sort || ''}&status=${status}`),
+            getData(api.categories),
+            getData(api.providers),
+        ])
             .then((values) => {
                 console.log(values);
                 setProducts(values[0].data);
@@ -34,7 +46,40 @@ function Products() {
             .catch((error) => {
                 console.warn(error);
             });
-    }, [currentPage]);
+    }, [currentPage, queryParams]);
+
+    // Get all query params
+    useEffect(() => {
+        const allParams = {};
+        queryParams.forEach((value, key) => {
+            allParams[key] = value;
+        });
+
+        setAllQueryParams(allParams);
+    }, [queryParams]);
+
+    // --------- Input change ---------
+    // Delay search
+    const handleDebounceSearch = useMemo(() => {
+        return debounce((value) => {
+            setQueryParams({ ...allQueryParams, search: value });
+        }, 500);
+    }, [setQueryParams, allQueryParams]);
+
+    const handleSearchParamChange = (e) => {
+        handleDebounceSearch(e.target.value);
+    };
+
+    const handleSortParamChange = (e) => {
+        let value = e.target.value;
+        setQueryParams({ ...allQueryParams, sort: value });
+    };
+
+    const handleStatusParamChange = (e) => {
+        let value = e.target.value;
+        setQueryParams({ ...allQueryParams, status: value });
+    };
+    // --------- End Input change ---------
 
     return (
         <>
@@ -62,26 +107,44 @@ function Products() {
                     {/* Search and filter */}
                     <div className={cx('w-100', 'pt-2', 'pb-2')}>
                         <Space.Compact block>
-                            <Input placeholder="Tìm kiếm" prefix={<Unicons.UilSearch size="16" />} />
+                            <Input
+                                onChange={handleSearchParamChange}
+                                placeholder="Tìm kiếm"
+                                prefix={<Unicons.UilSearch size="16" />}
+                            />
                             <Popover
                                 title="Filter"
                                 placement="bottom"
                                 trigger="click"
                                 content={
-                                    <Collapse defaultActiveKey={1} size="small" ghost expandIconPosition="end">
-                                        <Panel header="Sắp xếp" key="1">
-                                            <Radio.Group>
-                                                <Space size="small" direction="vertical">
-                                                    <Radio value={1}>Giá giảm dần</Radio>
-                                                    <Radio value={2}>Giá tăng dần</Radio>
-                                                    <Radio value={3}>Mới hơn</Radio>
-                                                    <Radio value={4}>Cũ hơn</Radio>
-                                                    <Radio value={5}>Tên A - Z</Radio>
-                                                    <Radio value={6}>Tên Z - A</Radio>
-                                                </Space>
-                                            </Radio.Group>
-                                        </Panel>
-                                    </Collapse>
+                                    <>
+                                        <Collapse
+                                            defaultActiveKey={1}
+                                            size="small"
+                                            ghost
+                                            accordion
+                                            expandIconPosition="end"
+                                        >
+                                            <Panel header="Sắp xếp" key="1">
+                                                <Radio.Group onChange={handleSortParamChange}>
+                                                    <Space size="small" direction="vertical">
+                                                        <Radio value={'creationTimeDesc'}>Mới hơn</Radio>
+                                                        <Radio value={'creationTimeAsc'}>Cũ hơn</Radio>
+                                                        <Radio value={'nameAsc'}>Tên A - Z</Radio>
+                                                        <Radio value={'nameDesc'}>Tên Z - A</Radio>
+                                                    </Space>
+                                                </Radio.Group>
+                                            </Panel>
+                                            <Panel header="Trạng thái" key="2">
+                                                <Radio.Group onChange={handleStatusParamChange}>
+                                                    <Space size="small" direction="vertical">
+                                                        <Radio value={'inStock'}>Còn hàng</Radio>
+                                                        <Radio value={'soldOut'}>Hết hàng</Radio>
+                                                    </Space>
+                                                </Radio.Group>
+                                            </Panel>
+                                        </Collapse>
+                                    </>
                                 }
                             >
                                 <Button
