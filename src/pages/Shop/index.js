@@ -383,8 +383,12 @@ function Shop() {
                                         <div className="product-button-group">
                                             <Link
                                                 style={{ background: isWishlist ? '#dd2a2a' : '' }}
-                                                onClick={() => {
-                                                    if (isWishlist) {
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+
+                                                    if (user.uid === '') {
+                                                        navigate('/user/signin');
+                                                    } else if (isWishlist) {
                                                         handleDeleteWishlist(isWishlist.wishlistId);
                                                     } else {
                                                         handleAddWishList(product.productId);
