@@ -2,20 +2,25 @@ import { userSelector } from '@/redux/selector';
 import { faAddressCard, faMoneyBill1, faUser } from '@fortawesome/free-regular-svg-icons';
 import { faChevronRight, faListUl } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Account from './Account';
 import Address from './Address';
 import Order from './Order';
 import PaymentMethods from './PaymentMethods';
+import userSlice from './UserSlice';
+import cartSlice from '../Cart/CartSlice';
 
 function MyAccount() {
     const user = useSelector(userSelector);
+    const navigate = useNavigate();
     const { infoManagerment } = useParams();
-
+    const dispatch = useDispatch();
     const handleSignOut = (e) => {
         e.preventDefault();
-
+        dispatch(userSlice.actions.deleteUser());
+        dispatch(cartSlice.actions.deleteCart());
+        navigate('/');
         localStorage.setItem('token', '');
         window.location.reload();
     };

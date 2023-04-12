@@ -3,28 +3,38 @@ import { getData } from '@/api/service';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import userOrderSlice from './UserOrderSlice';
-import { optionsSelector, userOrderSelector } from '@/redux/selector';
+import { optionsSelector, userOrderSelector, userSelector } from '@/redux/selector';
 import { convertVnd } from '@/components/GlobalStyles/fuction';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTruckMoving } from '@fortawesome/free-solid-svg-icons';
 import { faMoneyBillAlt } from '@fortawesome/free-regular-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Order() {
     const dispatch = useDispatch();
     const dataOrder = useSelector(userOrderSelector);
     const optionItems = useSelector(optionsSelector);
+    const user = useSelector(userSelector);
+    const navigate = useNavigate();
     const [orderStatus, setOrderStatus] = useState([]);
     useEffect(() => {
-        getData(api.shopOrders)
-            .then((response) => {
-                dispatch(userOrderSlice.actions.setDataOrder(response.data.reverse()));
-                console.log('my Order', response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [dispatch]);
+        if (user.uid === '') {
+            navigate('/user/signin');
+        }
+    }, [user.uid, navigate]);
+    useEffect(() => {
+        console.log(user.uid !== '');
+        if (user.uid !== '') {
+            getData(api.shopOrders + '/myorders')
+                .then((response) => {
+                    dispatch(userOrderSlice.actions.setDataOrder(response.data.reverse()));
+                    console.log('my Order', response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [dispatch, user.uid]);
     useEffect(() => {
         getData(api.orderStatuses)
             .then((response) => {

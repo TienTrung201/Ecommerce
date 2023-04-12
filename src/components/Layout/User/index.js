@@ -39,47 +39,50 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                 console.log('userData', response);
             })
             .catch((error) => {
-                if (error.message === 'unauthorized') {
-                    navigate('/user/signin');
-                } else {
-                    const payload = JSON.parse(error.message);
-                    console.warn(payload);
-                }
+                // if (error.message === 'unauthorized') {
+                //     navigate('/user/signin');
+                // } else {
+                //     const payload = JSON.parse(error.message);
+                //     console.warn(payload);
+                // }
+                console.log(error.message);
             });
     }, [navigate, dispatch]);
     //userAccount
     //get cart
     useEffect(() => {
-        getData(api.shoppingCarts + '/' + user.uid)
-            .then((response) => {
-                console.log('cart', response);
-                dispatch(cartSlice.actions.setCartId(response.data.cartId));
-                const cartUser = response.data.items.reduce((acc, item) => {
-                    const { cartItemId, qty } = item;
-                    const { productId, image, name, items } = item.product;
-                    const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
-                    acc.push({
-                        cartItemId,
-                        productId,
-                        image,
-                        name,
-                        costPrice,
-                        qtyInStock,
-                        productItemId,
-                        sku,
-                        qty,
-                        optionsId,
-                        isChecked: false,
-                    });
-                    return acc;
-                }, []);
-                dispatch(cartSlice.actions.setCart(cartUser.reverse()));
+        if (user.uid !== '') {
+            getData(api.shoppingCarts + '/' + user.uid)
+                .then((response) => {
+                    console.log('cart', response);
+                    dispatch(cartSlice.actions.setCartId(response.data.cartId));
+                    const cartUser = response.data.items.reduce((acc, item) => {
+                        const { cartItemId, qty } = item;
+                        const { productId, image, name, items } = item.product;
+                        const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                        acc.push({
+                            cartItemId,
+                            productId,
+                            image,
+                            name,
+                            costPrice,
+                            qtyInStock,
+                            productItemId,
+                            sku,
+                            qty,
+                            optionsId,
+                            isChecked: false,
+                        });
+                        return acc;
+                    }, []);
+                    dispatch(cartSlice.actions.setCart(cartUser.reverse()));
 
-                console.log('convert cart ', cartUser);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+                    console.log('convert cart ', cartUser);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
     }, [user.uid, dispatch]);
     //gett shipping methods
     useEffect(() => {
@@ -90,14 +93,16 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
     }, [dispatch]);
     //get wishlist
     useEffect(() => {
-        getData(api.wishLists, user.uid)
-            .then((response) => {
-                dispatch(cartSlice.actions.setWishlist(response));
-                console.log('wishlist', response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        if (user.uid !== '') {
+            getData(api.wishLists + '/' + user.uid)
+                .then((response) => {
+                    dispatch(cartSlice.actions.setWishlist(response));
+                    console.log('wishlist', response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
     }, [user.uid, dispatch]);
     return (
         <div className="topbar-left">
@@ -131,8 +136,18 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                 </div>
             </div>
 
-            <div onClick={onOpenCart} className="element element-cart">
-                <Link to="/cart" className="zoa-icon icon-cart">
+            <div className="element element-cart">
+                <Link
+                    onClick={(e) => {
+                        e.preventDefault();
+                        if (user.uid === '') {
+                            navigate('/user/signin');
+                        } else {
+                            navigate('/cart');
+                        }
+                    }}
+                    className="zoa-icon icon-cart"
+                >
                     <img src={images.cart} alt="menubar" />
                     <span className="count cart-count">{cartItems.cartItems.length}</span>
                 </Link>

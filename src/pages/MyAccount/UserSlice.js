@@ -34,6 +34,25 @@ export const userSlice = createSlice({
             state.addresses = action.payload.addresses;
             state.paymentMethods = action.payload.paymentMethods;
         },
+        deleteUser: (state) => {
+            state = {
+                uid: '',
+                fullName: '',
+                phoneNumber: '',
+                gender: '',
+                birthDate: '',
+                password: '',
+                avatar: '',
+                email: '',
+                userName: '',
+                createdAt: null,
+                addresses: [],
+                paymentMethods: [],
+                positionAddress: '',
+                paymentMethodId: 0,
+                shippingMethodId: 1,
+            };
+        },
         addAdress: (state, action) => {
             state.addresses.push(action.payload);
         },
