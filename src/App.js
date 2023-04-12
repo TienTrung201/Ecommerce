@@ -25,7 +25,7 @@ function App() {
                         const result = values[1].find((promotion) => promotion.promotionId === categorie.promotionId);
                         return result !== undefined
                             ? {
-                                  name: result.name,
+                                  name: categorie.name,
                                   promotionId: result.promotionId,
                                   discountRate: result.discountRate,
                                   categoriesId: categorie.categoryId,

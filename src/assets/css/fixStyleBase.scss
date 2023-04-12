@@ -8,6 +8,72 @@
         @content;
     }
 }
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+.topbar-left {
+    align-items: center;
+    display: flex;
+    margin-left: 20px !important;
+
+    .element-search {
+        position: relative;
+        transition: all 0.5s e;
+        width: 200px;
+        .search-img {
+            position: absolute;
+            top: -5px;
+            right: 10px;
+            z-index: 1;
+            width: 1.3rem;
+        }
+        .search-input {
+            top: 50%;
+            transform: translateY(-50%);
+            right: 0;
+            color: #222;
+            position: absolute;
+            z-index: 0;
+            padding-right: 25px;
+            padding-left: 10px;
+            border-radius: 10px;
+            border: solid 1px #a5a5a5;
+            height: 28px;
+            width: 100%;
+        }
+        .wrapper-search-result {
+            position: absolute;
+            top: 20px;
+            width: 200px;
+            z-index: 1;
+            padding: 5px 0;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.14);
+            background-color: #fff;
+            border-radius: 2px;
+            ul {
+                max-height: 300px;
+                overflow-y: hidden;
+
+                li {
+                    padding: 0 10px;
+                    &:hover {
+                        background-color: #7e7e7e;
+                        cursor: pointer;
+                        color: #222 !important;
+                    }
+                    &:hover a {
+                        color: #222 !important;
+                    }
+                    a {
+                        font-size: 1.3rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
 .btn-app-primary {
     background-color: #bb9b7c !important;
     color: #fff !important;
@@ -170,7 +236,7 @@ label.mail {
     box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.05);
     cursor: pointer;
     border-radius: 50%;
-    margin-bottom: 20px;
+    margin-bottom: 60px;
     overflow: hidden;
     width: 150px !important;
     height: 150px !important;
