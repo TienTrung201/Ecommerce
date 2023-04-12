@@ -92,16 +92,6 @@ function Sidebar({ active, iconOnly }) {
                             </li>
                             <li onClick={handleStopBubble} className={cx('nav-item')}>
                                 <Link
-                                    to=""
-                                    className={cx('nav-link', {
-                                        active: false,
-                                    })}
-                                >
-                                    Đơn chưa hoàn tất
-                                </Link>
-                            </li>
-                            <li onClick={handleStopBubble} className={cx('nav-item')}>
-                                <Link
                                     to="/admin/shipping-methods"
                                     className={cx('nav-link', {
                                         active: location.pathname.includes('/admin/shipping-methods'),

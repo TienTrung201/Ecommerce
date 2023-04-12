@@ -1,22 +1,41 @@
 import { api } from '@/api';
 import { getData } from '@/api/service';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
-import { Pagination } from 'antd';
+import { Button, Collapse, Input, Pagination, Popover, Radio, Space } from 'antd';
 import classNames from 'classnames/bind';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import dayjs from 'dayjs';
-import { useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import * as Unicons from '@iconscout/react-unicons';
+import { debounce } from 'lodash';
 
 const cx = classNames.bind(styles);
+
+const { Panel } = Collapse;
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 function ShopOrders() {
     const [shopOrders, setShopOrders] = useState([]);
     const [orderStatuses, setOrderStatuses] = useState([]);
 
+    const [queryParams, setQueryParams] = useSearchParams();
+    const [allQueryParams, setAllQueryParams] = useState({});
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        Promise.all([getData(api.shopOrders), getData(api.orderStatuses)])
+        const search = queryParams.get('search');
+        const sort = queryParams.get('sort');
+        const status = queryParams.get('status');
+
+        Promise.all([
+            getData(api.shopOrders + `?search=${search || ''}&sort=${sort || ''}&status=${status || ''}`),
+            getData(api.orderStatuses),
+        ])
             .then((response) => {
                 console.log(response);
                 setShopOrders(response[0].data);
@@ -25,7 +44,40 @@ function ShopOrders() {
             .catch((error) => {
                 console.warn(error);
             });
-    }, []);
+    }, [queryParams]);
+
+    // Get all query params
+    useEffect(() => {
+        const allParams = {};
+        queryParams.forEach((value, key) => {
+            allParams[key] = value;
+        });
+
+        setAllQueryParams(allParams);
+    }, [queryParams]);
+
+    // --------- Input change ---------
+    // Delay search
+    const handleDebounceSearch = useMemo(() => {
+        return debounce((value) => {
+            setQueryParams({ ...allQueryParams, search: value });
+        }, 500);
+    }, [setQueryParams, allQueryParams]);
+
+    const handleSearchParamChange = (e) => {
+        handleDebounceSearch(e.target.value);
+    };
+
+    const handleSortParamChange = (e) => {
+        let value = e.target.value;
+        setQueryParams({ ...allQueryParams, sort: value });
+    };
+
+    const handleStatusParamChange = (e) => {
+        let value = e.target.value;
+        setQueryParams({ ...allQueryParams, status: value });
+    };
+    // --------- End Input change ---------
 
     const getCurrentStatus = useCallback(
         (shopOrder) => {
@@ -75,6 +127,61 @@ function ShopOrders() {
                         </Link>
                     </div>
 
+                    {/* Search and filter */}
+                    <div className={cx('w-100', 'pt-2', 'pb-2')}>
+                        <Space.Compact block>
+                            <Input
+                                onChange={handleSearchParamChange}
+                                placeholder="Tìm kiếm"
+                                prefix={<Unicons.UilSearch size="16" />}
+                            />
+                            <Popover
+                                title="Filter"
+                                placement="bottom"
+                                trigger="click"
+                                content={
+                                    <div style={{ maxHeight: '240px' }} className={cx('overflow-y-auto')}>
+                                        <Collapse
+                                            defaultActiveKey={1}
+                                            size="small"
+                                            ghost
+                                            accordion
+                                            expandIconPosition="end"
+                                        >
+                                            <Panel header="Sắp xếp" key="1">
+                                                <Radio.Group onChange={handleSortParamChange}>
+                                                    <Space size="small" direction="vertical">
+                                                        <Radio value={'creationTimeDesc'}>Mới hơn</Radio>
+                                                        <Radio value={'creationTimeAsc'}>Cũ hơn</Radio>
+                                                        <Radio value={'totalDesc'}>Tổng tiền lớn - nhỏ</Radio>
+                                                        <Radio value={'totalAsc'}>Tổng tiền nhỏ - lớn</Radio>
+                                                    </Space>
+                                                </Radio.Group>
+                                            </Panel>
+                                            <Panel header="Trạng thái" key="2">
+                                                <Radio.Group onChange={handleStatusParamChange}>
+                                                    <Space size="small" direction="vertical">
+                                                        <Radio value={'created'}>Đã tạo đơn hàng</Radio>
+                                                        <Radio value={'delivery'}>Đang giao hàng</Radio>
+                                                        <Radio value={'canceled'}>Đã huỷ đơn</Radio>
+                                                    </Space>
+                                                </Radio.Group>
+                                            </Panel>
+                                        </Collapse>
+                                    </div>
+                                }
+                            >
+                                <Button
+                                    className={cx('d-flex', 'align-items-center')}
+                                    icon={<Unicons.UilFilter size="16" />}
+                                >
+                                    <span className={cx('ps-1')}>Filter</span>
+                                </Button>
+                            </Popover>
+                        </Space.Compact>
+                    </div>
+                    {/* End Search and filter */}
+
                     <div className={cx('w-100', 'overflow-x-auto')}>
                         <table className={cx('table', 'table-hover')}>
                             <thead>
@@ -83,7 +190,7 @@ function ShopOrders() {
                                     <th>Ngày đặt</th>
                                     <th>Khách hàng</th>
                                     <th>Thanh toán</th>
-                                    <th>Giao hàng</th>
+                                    <th>Trạng thái</th>
                                     <th>Tổng tiền</th>
                                 </tr>
                             </thead>
@@ -97,19 +204,18 @@ function ShopOrders() {
                                         }}
                                     >
                                         <td className={cx('py-1')}>#{shopOrder.orderId}</td>
-                                        <td>{dayjs(shopOrder.orderDate).format('DD/MM/YYYY HH:MM')}</td>
+                                        <td>
+                                            {dayjs(shopOrder.orderDate)
+                                                .utcOffset(7)
+                                                .tz('Asia/Bangkok')
+                                                .format('DD/MM/YYYY HH:mm')}
+                                        </td>
                                         <td>{shopOrder?.address?.fullName || 'N/A'}</td>
                                         <td>
-                                            <span className={cx('badge', 'badge-light', 'm-1')}>Đã thanh toán</span>
+                                            <span className={cx('badge', 'badge-light')}>Đã thanh toán</span>
                                         </td>
                                         <td>
-                                            <span
-                                                className={cx(
-                                                    'badge',
-                                                    `${getCurrentStatus(shopOrder).className}`,
-                                                    'm-1',
-                                                )}
-                                            >
+                                            <span className={cx('badge', `${getCurrentStatus(shopOrder).className}`)}>
                                                 {getCurrentStatus(shopOrder).name}
                                             </span>
                                         </td>
