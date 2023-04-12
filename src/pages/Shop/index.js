@@ -6,7 +6,7 @@ import { cartSelector, userSelector } from '@/redux/selector';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faCartPlus, faChevronDown, faChevronRight, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import cartSlice from '../Cart/CartSlice';
@@ -37,6 +37,12 @@ function Shop() {
     const [pageNumber, setPageNumber] = useState(
         new URLSearchParams(location.search).get('page') ? new URLSearchParams(location.search).get('page') : '1',
     );
+
+    const search = useMemo(() => {
+        return new URLSearchParams(location.search).get('search')
+            ? new URLSearchParams(location.search).get('search')
+            : '';
+    }, [location.search]);
     const [totalPages, setTotalPages] = useState([]);
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -44,7 +50,9 @@ function Shop() {
     useEffect(() => {
         const dataQuery = `?${'page=' + pageNumber}${filterCategory !== '' ? '&category=' + filterCategory : ''}${
             filterProvider !== '' ? '&provider=' + filterProvider : ''
-        }${minPrice !== '' ? '&min=' + minPrice : ''}${maxPrice !== '' ? '&max=' + maxPrice : ''}`;
+        }${minPrice !== '' ? '&min=' + minPrice : ''}${maxPrice !== '' ? '&max=' + maxPrice : ''}${
+            search !== '' ? '&search=' + search : ''
+        }`;
         navigate(`/shop${dataQuery}`);
         Promise.all([
             getData(api.products + dataQuery),
@@ -97,7 +105,7 @@ function Shop() {
             .catch((error) => {
                 console.warn(error);
             });
-    }, [filterCategory, filterProvider, minPrice, maxPrice, navigate, pageNumber]);
+    }, [filterCategory, filterProvider, minPrice, maxPrice, navigate, pageNumber, search]);
     const handleFilterCategory = (name) => {
         if (name !== filterCategory) {
             setFilterCategory(name);
@@ -339,7 +347,6 @@ function Shop() {
                         </ul>
                     </div>
                     <div className="shop-element right">
-                        <span>Showing 1-15 of 69 products</span>
                         <div className="view-mode view-group">
                             <Link ref={activeView2} to="" onClick={handleViewProduct} className="list-icon list">
                                 <i className="fa fa-circle" aria-hidden="true">
@@ -434,7 +441,21 @@ function Shop() {
                                             )}
                                         </div>
                                         <div className="product-bottom-group">
-                                            <Link to="#" className="zoa-btn zoa-wishlist">
+                                            <Link
+                                                style={{ background: isWishlist ? '#dd2a2a' : '' }}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+
+                                                    if (user.uid === '') {
+                                                        navigate('/user/signin');
+                                                    } else if (isWishlist) {
+                                                        handleDeleteWishlist(isWishlist.wishlistId);
+                                                    } else {
+                                                        handleAddWishList(product.productId);
+                                                    }
+                                                }}
+                                                className="zoa-btn zoa-wishlist"
+                                            >
                                                 <span className="zoa-icon-heart">
                                                     <FontAwesomeIcon icon={faHeart} />
                                                 </span>

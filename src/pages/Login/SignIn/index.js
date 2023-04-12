@@ -12,11 +12,12 @@ function SignIn({ setOptionsLogin }) {
 
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
+    const [passwordError, setPasswordError] = useState('');
 
     const handleChangeForm = (setInput, e) => {
         setInput(e.target.value);
     };
-    const handleSubmitRegister = (e) => {
+    const handleSubmitLogin = (e) => {
         e.preventDefault();
 
         if (username && password) {
@@ -33,10 +34,14 @@ function SignIn({ setOptionsLogin }) {
                 })
                 .catch((error) => {
                     const payload = JSON.parse(error.message);
+                    setPasswordError('Sai tên đăng nhập hoặc mật khẩu');
                     console.warn(payload);
                 });
+        } else {
+            setPasswordError('Bạn chưa nhập thông tin đăng nhập');
         }
     };
+
     return (
         <>
             <LayoutAccount title="Đăng nhập vào Cosmetics shop" subTitle="Chào mừng quay trở lại">
@@ -65,9 +70,10 @@ function SignIn({ setOptionsLogin }) {
                         id="inputPassword"
                         placeholder=" Nhập mật khẩu"
                     />
+                    <span className={cx('text-danger', 'fs-14')}>{passwordError}</span>
                 </div>
                 <div className={cx('form-group')}>
-                    <button onClick={handleSubmitRegister} className={cx('btn', 'btn-app-primary', 'w-100')}>
+                    <button onClick={handleSubmitLogin} className={cx('btn', 'btn-app-primary', 'w-100')}>
                         Đăng nhập
                     </button>
                     <Link to={'/user/signup'} className={cx('btn', 'btn-light', 'w-100', 'mt-4')}>

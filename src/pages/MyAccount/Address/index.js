@@ -1,5 +1,5 @@
 import Modal from '@/components/Layout/Modal';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import AddressForm from './FormAddress';
 import { useDispatch } from 'react-redux';
 import { deleteData, postData, updateData } from '@/api/service';
@@ -37,7 +37,22 @@ function Address({ user }) {
         setFormData((prevState) => ({ ...prevState, [name]: value }));
     };
     //form change
-
+    //checksubmit
+    const checkedSubmit = useMemo(() => {
+        const { fullName, phoneNumber, city, district, ward, addressLine } = formData;
+        if (
+            fullName === '' ||
+            phoneNumber === '' ||
+            city === '' ||
+            district === '' ||
+            ward === '' ||
+            addressLine === ''
+        ) {
+            return false;
+        }
+        return true;
+    }, [formData]);
+    //checksubmit
     // handle add address
     const handleAddNewAddress = () => {
         dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
@@ -186,6 +201,7 @@ function Address({ user }) {
                 save={actionForm === 'edit' ? 'Cập nhật' : 'Thêm'}
                 haldleSendModal={actionForm === 'edit' ? handleEditAddress : handleAddNewAddress}
                 setVisible={setVisible}
+                checkedSubmit={checkedSubmit}
             >
                 <AddressForm formData={formData} onChanceForm={handleChange} />
             </Modal>

@@ -66,7 +66,14 @@ function CartHeader() {
                                 <div className="header__cart-item-head">
                                     <h5 className="header__cart-item-name">{item.name}</h5>
                                     <div className="header__cart-item-price-wrap">
-                                        <span className="header__cart-item-price">{item.costPrice}đ</span>
+                                        {item.discountRate !== 0 ? (
+                                            <span className="header__cart-item-price">
+                                                {(item.price * item.discountRate) / 100}đ
+                                            </span>
+                                        ) : (
+                                            <span className="header__cart-item-price">{item.price}đ</span>
+                                        )}
+
                                         <span className="header__cart-item-multiply">x</span>
                                         <span className="header__cart-item-qnt">{item.qty}</span>
                                     </div>

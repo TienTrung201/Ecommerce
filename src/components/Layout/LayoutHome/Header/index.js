@@ -254,8 +254,9 @@ function Header({ isUser }) {
                                 </div>
                             </div>
                             <div className="col-md-3 col-xs-4 col-sm-4 col2 justify-content-center">
-                                <Link to="/">
-                                    <img src={require('@/assets/image/logo2.png')} alt="" className="img-reponsive" />
+                                <Link className="header-logo" to="/">
+                                    {/* <img src={require('@/assets/image/logo2.png')} alt="" className="img-reponsive" /> */}
+                                    <img src={images.logo} alt="" className="img-reponsive" />
                                 </Link>
                             </div>
                             <div className="col-md-9 col-xs-4 col-sm-4 col2 flex justify-content-end">
