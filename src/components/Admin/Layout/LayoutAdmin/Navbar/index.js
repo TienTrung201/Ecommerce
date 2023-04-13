@@ -57,19 +57,11 @@ function Navbar({ onClickActiveSidebar, onClickIconOnly }) {
                     'select-none',
                 )}
             >
-                <div
-                    className={cx(
-                        'text-center',
-                        'navbar-brand-wrapper',
-                        'd-flex',
-                        'align-items-center',
-                        'justify-content-center',
-                    )}
-                >
-                    <Link to={'/admin'} className={cx('navbar-brand', 'brand-logo')}>
+                <div className={cx('navbar-brand-wrapper', 'd-flex', 'align-items-center', 'justify-content-center')}>
+                    <Link to={'/admin'} className={cx('navbar-brand', 'brand-logo')} style={{ padding: '0 40px' }}>
                         <img src={images.logo} alt="logo" />
                     </Link>
-                    <Link to={'/admin'} className={cx('navbar-brand', 'brand-logo-mini')}>
+                    <Link to={'/admin'} className={cx('navbar-brand', 'brand-logo-mini', 'text-center')}>
                         <img src={images.logoMini} alt="logo" />
                     </Link>
                 </div>
