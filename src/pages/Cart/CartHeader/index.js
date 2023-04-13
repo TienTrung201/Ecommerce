@@ -60,7 +60,13 @@ function CartHeader() {
             <ul className="header__cart-list-items">
                 {cartUser.cartItems.map((item, i) => {
                     return (
-                        <li key={item.cartItemId} className="header__cart-item">
+                        <li
+                            onClick={() => {
+                                navigate(`/product/${item.name.replace(/ /g, '-')}/${item.productId}`);
+                            }}
+                            key={item.cartItemId}
+                            className="header__cart-item"
+                        >
                             <img className="header__cart-item-img" src={item.image} alt="" />
                             <div className="header__cart-item-info">
                                 <div className="header__cart-item-head">
