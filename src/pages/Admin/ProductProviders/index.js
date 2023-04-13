@@ -23,12 +23,12 @@ function ProductProviders() {
 
     useEffect(() => {
         // const page = queryParams.get('page');
-        // const search = queryParams.get('search');
-        // const sort = queryParams.get('sort');
+        const search = queryParams.get('search');
+        const sort = queryParams.get('sort');
 
         setLoading(true);
 
-        getData(api.providers)
+        getData(api.providers + `?search=${search || ''}&sort=${sort || ''}`)
             .then((response) => {
                 console.log(response);
                 setProviders(response);
@@ -40,7 +40,7 @@ function ProductProviders() {
             .catch((error) => {
                 console.warn(error);
             });
-    }, []);
+    }, [queryParams]);
 
     // Get all query params
     useEffect(() => {
