@@ -15,6 +15,9 @@ function SignIn({ setOptionsLogin }) {
     const [passwordError, setPasswordError] = useState('');
 
     const handleChangeForm = (setInput, e) => {
+        if (password !== '' || username !== '') {
+            setPasswordError('');
+        }
         setInput(e.target.value);
     };
     const handleSubmitLogin = (e) => {
