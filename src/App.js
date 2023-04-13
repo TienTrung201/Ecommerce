@@ -12,6 +12,7 @@ import { api } from './api';
 import { useDispatch } from 'react-redux';
 import categoriesSlice from './pages/Category/CategotySlice';
 import optionsSlice from './pages/OptionItem/optionItemSlice';
+import ScrollToTopOnMount from './components/ScrollToTopOnMount';
 
 function App() {
     const Dispatch = useDispatch();
@@ -46,6 +47,7 @@ function App() {
     //get category
     return (
         <Router>
+            <ScrollToTopOnMount />
             <div className="App">
                 <Routes>
                     {publicRoutes.map((route, index) => {

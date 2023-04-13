@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import cartSlice from '../Cart/CartSlice';
+import Loading from '@/components/Loading/Loading';
 
 function Home() {
     const [products, setProducts] = useState([]);
@@ -21,6 +22,7 @@ function Home() {
     const user = useSelector(userSelector);
     const cartUser = useSelector(cartSelector);
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
     // const [categories, setCategories] = useState([]);
     // const [promotions, setPromotions] = useState([]);
     // const [discounts,setDiscounts] = useState([]);
@@ -59,6 +61,7 @@ function Home() {
                     return acc;
                 }, []);
                 setProducts(allProduct);
+                setIsLoading(false);
             })
             .catch((error) => {
                 console.warn(error);
@@ -169,94 +172,104 @@ function Home() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-md-7 col-sm-6 col-xs-12">
-                                <div className="row engoc-row-equal">
-                                    {products.map((product, index) => {
-                                        if (index >= 6) {
-                                            return false;
-                                        }
-                                        const isWishlist = cartUser.wishlist.find(
-                                            (wishlist) => wishlist.productId === product.productId,
-                                        );
-                                        return (
-                                            <div
-                                                key={product.productId}
-                                                className="col-xs-6 col-sm-6 col-md-4 col-lg-4 product-item"
-                                            >
-                                                <div className="product-img">
-                                                    <Link
-                                                        to={`/product/${product.name.replace(/ /g, '-')}/${
-                                                            product.productId
-                                                        }`}
-                                                    >
-                                                        <img src={product.image} alt="" className="img-responsive" />
-                                                    </Link>
-                                                    {product.discountRate === 0 ? (
-                                                        false
-                                                    ) : (
-                                                        <div className="ribbon zoa-sale">
-                                                            <span>-{product.discountRate}%</span>
-                                                        </div>
-                                                    )}
-
-                                                    <div className="product-button-group">
-                                                        <Link
-                                                            style={{ background: isWishlist ? '#dd2a2a' : '' }}
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-
-                                                                if (user.uid === '') {
-                                                                    navigate('/user/signin');
-                                                                } else if (isWishlist) {
-                                                                    handleDeleteWishlist(isWishlist.wishlistId);
-                                                                } else {
-                                                                    handleAddWishList(product.productId);
-                                                                }
-                                                            }}
-                                                            className="zoa-btn zoa-wishlist"
-                                                        >
-                                                            <span className="zoa-icon-heart">
-                                                                <FontAwesomeIcon icon={faHeart} />
-                                                            </span>
-                                                        </Link>
+                            {isLoading ? (
+                                <Loading />
+                            ) : (
+                                <div className="col-md-7 col-sm-6 col-xs-12">
+                                    <div className="row engoc-row-equal">
+                                        {products.map((product, index) => {
+                                            if (index >= 6) {
+                                                return false;
+                                            }
+                                            const isWishlist = cartUser.wishlist.find(
+                                                (wishlist) => wishlist.productId === product.productId,
+                                            );
+                                            return (
+                                                <div
+                                                    key={product.productId}
+                                                    className="col-xs-6 col-sm-6 col-md-4 col-lg-4 product-item"
+                                                >
+                                                    <div className="product-img">
                                                         <Link
                                                             to={`/product/${product.name.replace(/ /g, '-')}/${
                                                                 product.productId
                                                             }`}
-                                                            className="zoa-btn zoa-addcart"
                                                         >
-                                                            <span className="zoa-icon-cart">
-                                                                <FontAwesomeIcon icon={faCartPlus} />
-                                                            </span>
+                                                            <img
+                                                                src={product.image}
+                                                                alt=""
+                                                                className="img-responsive"
+                                                            />
                                                         </Link>
-                                                    </div>
-                                                </div>
-                                                <div className="product-info text-center">
-                                                    <h3 className="product-title">{product.name}</h3>
-                                                    <div className="product-price">
-                                                        <span className="old">
-                                                            {convertVnd(product.items[0].price)}
-                                                        </span>
                                                         {product.discountRate === 0 ? (
-                                                            <span>{convertVnd(product.items[0].price)}</span>
+                                                            false
                                                         ) : (
-                                                            <span>
-                                                                {convertVnd(
-                                                                    (product.items[0].price * product.discountRate) /
-                                                                        100,
-                                                                )}
-                                                            </span>
+                                                            <div className="ribbon zoa-sale">
+                                                                <span>-{product.discountRate}%</span>
+                                                            </div>
                                                         )}
+
+                                                        <div className="product-button-group">
+                                                            <Link
+                                                                style={{ background: isWishlist ? '#dd2a2a' : '' }}
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+
+                                                                    if (user.uid === '') {
+                                                                        navigate('/user/signin');
+                                                                    } else if (isWishlist) {
+                                                                        handleDeleteWishlist(isWishlist.wishlistId);
+                                                                    } else {
+                                                                        handleAddWishList(product.productId);
+                                                                    }
+                                                                }}
+                                                                className="zoa-btn zoa-wishlist"
+                                                            >
+                                                                <span className="zoa-icon-heart">
+                                                                    <FontAwesomeIcon icon={faHeart} />
+                                                                </span>
+                                                            </Link>
+                                                            <Link
+                                                                to={`/product/${product.name.replace(/ /g, '-')}/${
+                                                                    product.productId
+                                                                }`}
+                                                                className="zoa-btn zoa-addcart"
+                                                            >
+                                                                <span className="zoa-icon-cart">
+                                                                    <FontAwesomeIcon icon={faCartPlus} />
+                                                                </span>
+                                                            </Link>
+                                                        </div>
+                                                    </div>
+                                                    <div className="product-info text-center">
+                                                        <h3 className="product-title">{product.name}</h3>
+                                                        <div className="product-price">
+                                                            <span className="old">
+                                                                {convertVnd(product.items[0].price)}
+                                                            </span>
+                                                            {product.discountRate === 0 ? (
+                                                                <span>{convertVnd(product.items[0].price)}</span>
+                                                            ) : (
+                                                                <span>
+                                                                    {convertVnd(
+                                                                        (product.items[0].price *
+                                                                            product.discountRate) /
+                                                                            100,
+                                                                    )}
+                                                                </span>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        );
-                                    })}
+                                            );
+                                        })}
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>
+
                 <div className="single-banner">
                     <div className="container container-content">
                         <div className="banner-img hover-images">
