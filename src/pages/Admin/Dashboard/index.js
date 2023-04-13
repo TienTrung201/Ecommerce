@@ -2,10 +2,34 @@ import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scs
 import classNames from 'classnames/bind';
 import * as Unicons from '@iconscout/react-unicons';
 import images from '@/assets/admin/images';
+import { useEffect, useState } from 'react';
+import { getData } from '@/api/service';
+import { api } from '@/api';
 
 const cx = classNames.bind(styles);
 
 function Dashboard() {
+    const [totalOrders, setTotalOrders] = useState(0);
+    const [totalSales, setTotalSales] = useState(0);
+    const [totalCustomers, setTotalCustomers] = useState(0);
+
+    useEffect(() => {
+        Promise.all([
+            getData(api.reports + '/total-orders'),
+            getData(api.reports + '/total-sales'),
+            getData(api.reports + '/total-customers'),
+        ])
+            .then((response) => {
+                console.log(response);
+                setTotalOrders(response[0].data);
+                setTotalSales(response[1].data);
+                setTotalCustomers(response[2].data);
+            })
+            .catch((error) => {
+                console.warn(error);
+            });
+    }, []);
+
     return (
         <>
             <div className={cx('page-header', 'align-items-center', 'mt-2')}>
@@ -57,7 +81,7 @@ function Dashboard() {
                                 </i>
                                 Đơn đã bán
                             </h4>
-                            <h2 className={cx('mb-5', 'fw-bold')}>99</h2>
+                            <h2 className={cx('mb-5', 'fw-bold')}>{totalOrders}</h2>
                             <h6 className={cx('card-text', 'fs-14', 'text-success')}>
                                 <i className={cx('me-1')}>
                                     <Unicons.UilArrowGrowth size="18" />
@@ -98,7 +122,7 @@ function Dashboard() {
                                 </i>
                                 Doanh thu
                             </h4>
-                            <h2 className={cx('mb-5', 'fw-bold')}>91,00M</h2>
+                            <h2 className={cx('mb-5', 'fw-bold')}>{totalSales / 1000000}M</h2>
                             <h6 className={cx('card-text', 'fs-14', 'text-danger')}>
                                 <i className={cx('me-1')}>
                                     <Unicons.UilChartDown size="18" />
@@ -139,7 +163,7 @@ function Dashboard() {
                                 </i>
                                 Khách hàng
                             </h4>
-                            <h2 className={cx('mb-5', 'fw-bold')}>190</h2>
+                            <h2 className={cx('mb-5', 'fw-bold')}>{totalCustomers}</h2>
                             <h6 className={cx('card-text', 'fs-14', 'text-success')}>
                                 <i className={cx('me-1')}>
                                     <Unicons.UilArrowGrowth size="18" />

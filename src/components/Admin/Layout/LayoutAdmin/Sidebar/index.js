@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
 import * as Unicons from '@iconscout/react-unicons';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { adminUserSelector } from '@/redux/selector';
 import CustomCollapse from '@/components/Admin/CustomCollapse';
@@ -13,6 +13,8 @@ const cx = classNames.bind(styles);
 
 function Sidebar({ active, iconOnly }) {
     const [activeCollapse, setActiveCollapse] = useState(0);
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const handleSetActiveCollapse = (id) => {
         setActiveCollapse((prev) => (prev === id ? 0 : id));
@@ -24,13 +26,20 @@ function Sidebar({ active, iconOnly }) {
         }
     }, [iconOnly]);
 
-    const location = useLocation();
-
     const handleStopBubble = (e) => {
         e.stopPropagation();
     };
 
     const adminUser = useSelector(adminUserSelector);
+
+    // Handle sign out
+    const handleSignOut = (e) => {
+        e.preventDefault();
+
+        localStorage.setItem('token', '');
+        navigate('/');
+        window.location.reload();
+    };
 
     return (
         <>
@@ -208,6 +217,7 @@ function Sidebar({ active, iconOnly }) {
                     <li className={cx('nav-item', 'sidebar-actions')}>
                         <Divider style={{ margin: '12px 0' }} />
                         <button
+                            onClick={handleSignOut}
                             className={cx(
                                 'd-flex',
                                 'align-items-center',

@@ -6,10 +6,13 @@ import { useState } from 'react';
 import { postData } from '@/api/service';
 import { api } from '@/api';
 import Validator from '@/Validator/Validator';
+import { Spin } from 'antd';
 
 const cx = classNames.bind(styles);
 
 function AdminLogin() {
+    const [loading, setLoading] = useState(false);
+
     const [userNameInput, setUsernameInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
 
@@ -63,15 +66,22 @@ function AdminLogin() {
                 password: passwordInput,
             };
 
+            setLoading(true);
+
             postData(api.loginAdmin, data)
                 .then((response) => {
                     console.log(response);
                     localStorage.setItem('token', response.data);
-                    navigate('/admin');
+
+                    setTimeout(() => {
+                        setLoading(false);
+                        navigate('/admin');
+                    }, 1500);
                 })
                 .catch((error) => {
                     const payload = JSON.parse(error.message);
                     console.warn(payload);
+                    setLoading(false);
                     setPasswordError('Sai tên đăng nhập hoặc mật khẩu');
                 });
         }
@@ -80,47 +90,51 @@ function AdminLogin() {
 
     return (
         <LayoutAccount title="Đăng nhập vào Bellissa" subTitle="Chào mừng quay trở lại">
-            <div className={cx('form-group')}>
-                <label htmlFor="inputUserName">Tên đăng nhập / email</label>
-                <input
-                    onChange={handleUsernameInputChange}
-                    onBlur={handleValidateUserNameInput}
-                    value={userNameInput}
-                    type="text"
-                    className={cx('form-control', 'form-control-sm', 'border-secondary')}
-                    id="inputUserName"
-                    placeholder=" Nhập tên đăng nhập hoặc email"
-                />
-                <span className={cx('text-danger', 'fs-14')}>{userNameError}</span>
-            </div>
-            <div className={cx('form-group')}>
-                <label htmlFor="inputPassword">Mật khẩu</label>
-                <input
-                    onChange={handlePasswordInputChange}
-                    onBlur={handleValidatePasswordInput}
-                    value={passwordInput}
-                    type="password"
-                    className={cx('form-control', 'form-control-sm', 'border-secondary')}
-                    id="inputPassword"
-                    placeholder=" Nhập mật khẩu"
-                />
-                <span className={cx('text-danger', 'fs-14')}>{passwordError}</span>
-            </div>
-            <div className={cx('form-group')}>
-                <button
-                    onClick={handleSubmitLogin}
-                    className={cx('btn', 'btn-gradient-primary', 'w-100', { disabled: userNameError || passwordError })}
-                >
-                    Đăng nhập
-                </button>
-                <Link to={'/admin/register'} className={cx('btn', 'btn-light', 'w-100', 'mt-4')}>
-                    Đăng ký
-                </Link>
-            </div>
+            <Spin spinning={loading}>
+                <div className={cx('form-group')}>
+                    <label htmlFor="inputUserName">Tên đăng nhập / email</label>
+                    <input
+                        onChange={handleUsernameInputChange}
+                        onBlur={handleValidateUserNameInput}
+                        value={userNameInput}
+                        type="text"
+                        className={cx('form-control', 'form-control-sm', 'border-secondary')}
+                        id="inputUserName"
+                        placeholder="Nhập tên đăng nhập hoặc email"
+                    />
+                    <span className={cx('text-danger', 'fs-14')}>{userNameError}</span>
+                </div>
+                <div className={cx('form-group')}>
+                    <label htmlFor="inputPassword">Mật khẩu</label>
+                    <input
+                        onChange={handlePasswordInputChange}
+                        onBlur={handleValidatePasswordInput}
+                        value={passwordInput}
+                        type="password"
+                        className={cx('form-control', 'form-control-sm', 'border-secondary')}
+                        id="inputPassword"
+                        placeholder=" Nhập mật khẩu"
+                    />
+                    <span className={cx('text-danger', 'fs-14')}>{passwordError}</span>
+                </div>
+                <div className={cx('form-group')}>
+                    <button
+                        onClick={handleSubmitLogin}
+                        className={cx('btn', 'btn-gradient-primary', 'w-100', {
+                            disabled: userNameError || passwordError,
+                        })}
+                    >
+                        Đăng nhập
+                    </button>
+                    <Link to={'/admin/register'} className={cx('btn', 'btn-light', 'w-100', 'mt-4')}>
+                        Đăng ký
+                    </Link>
+                </div>
 
-            <div className={cx('form-group', 'text-center')}>
-                <button className={cx('btn', 'btn-link')}>Quên mật khẩu?</button>
-            </div>
+                <div className={cx('form-group', 'text-center')}>
+                    <button className={cx('btn', 'btn-link')}>Quên mật khẩu?</button>
+                </div>
+            </Spin>
         </LayoutAccount>
     );
 }

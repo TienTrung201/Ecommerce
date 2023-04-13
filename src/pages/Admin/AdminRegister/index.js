@@ -6,10 +6,13 @@ import { useState } from 'react';
 import { postData } from '@/api/service';
 import { api } from '@/api';
 import Validator from '@/Validator/Validator';
+import { Spin } from 'antd';
 
 const cx = classNames.bind(styles);
 
 function AdminRegister() {
+    const [loading, setLoading] = useState(false);
+
     const [fullNameInput, setFullNameInput] = useState('');
     const [userNameInput, setUsernameInput] = useState('');
     const [emailInput, setEmailInput] = useState('');
@@ -26,7 +29,6 @@ function AdminRegister() {
     const handleFullNameInputChange = (e) => {
         setFullNameInput(e.target.value);
         setFullNameError('');
-
     };
 
     const handleUsernameInputChange = (e) => {
@@ -104,11 +106,17 @@ function AdminRegister() {
                 password: passwordInput,
             };
 
+            setLoading(true);
+
             postData(api.registerAdmin, data)
                 .then((response) => {
                     console.log(response);
                     localStorage.setItem('token', response.data);
-                    navigate('/admin');
+
+                    setTimeout(() => {
+                        setLoading(false);
+                        navigate('/admin');
+                    }, 1500);
                 })
                 .catch((error) => {
                     console.warn(JSON.parse(error.message));
@@ -119,6 +127,8 @@ function AdminRegister() {
                     } else if (message.includes('username already exist')) {
                         setUsernameError('Tên đăng nhập đã tồn tại');
                     }
+
+                    setLoading(false);
                 });
         }
     };
@@ -126,74 +136,76 @@ function AdminRegister() {
 
     return (
         <LayoutAccount title="Đăng ký tài khoản Bellissa" subTitle="Đăng ký tài khoản mới">
-            <div className={cx('row', 'gx-4')}>
-                <div className={cx('col-md-6')}>
-                    <div className={cx('form-group')}>
-                        <label htmlFor="inputFullName">Họ tên</label>
-                        <input
-                            onChange={handleFullNameInputChange}
-                            onBlur={handleValidateNameInput}
-                            value={fullNameInput}
-                            type="text"
-                            className={cx('form-control', 'form-control-sm', 'border-secondary')}
-                            id="inputFullName"
-                            placeholder=" Nhập họ tên"
-                        />
-                        <span className={cx('text-danger', 'fs-14')}>{fullNameError}</span>
+            <Spin spinning={loading}>
+                <div className={cx('row', 'gx-4')}>
+                    <div className={cx('col-md-6')}>
+                        <div className={cx('form-group')}>
+                            <label htmlFor="inputFullName">Họ tên</label>
+                            <input
+                                onChange={handleFullNameInputChange}
+                                onBlur={handleValidateNameInput}
+                                value={fullNameInput}
+                                type="text"
+                                className={cx('form-control', 'form-control-sm', 'border-secondary')}
+                                id="inputFullName"
+                                placeholder=" Nhập họ tên"
+                            />
+                            <span className={cx('text-danger', 'fs-14')}>{fullNameError}</span>
+                        </div>
+                    </div>
+                    <div className={cx('col-md-6')}>
+                        <div className={cx('form-group')}>
+                            <label htmlFor="inputUserName">Tên đăng nhập</label>
+                            <input
+                                onChange={handleUsernameInputChange}
+                                onBlur={handleValidateUsernameInput}
+                                value={userNameInput}
+                                type="text"
+                                className={cx('form-control', 'form-control-sm', 'border-secondary')}
+                                id="inputUserName"
+                                placeholder=" Nhập tên đăng nhập"
+                            />
+                            <span className={cx('text-danger', 'fs-14')}>{userNameError}</span>
+                        </div>
                     </div>
                 </div>
-                <div className={cx('col-md-6')}>
-                    <div className={cx('form-group')}>
-                        <label htmlFor="inputUserName">Tên đăng nhập</label>
-                        <input
-                            onChange={handleUsernameInputChange}
-                            onBlur={handleValidateUsernameInput}
-                            value={userNameInput}
-                            type="text"
-                            className={cx('form-control', 'form-control-sm', 'border-secondary')}
-                            id="inputUserName"
-                            placeholder=" Nhập tên đăng nhập"
-                        />
-                        <span className={cx('text-danger', 'fs-14')}>{userNameError}</span>
-                    </div>
+
+                <div className={cx('form-group')}>
+                    <label htmlFor="inputEmail">Email</label>
+                    <input
+                        onChange={handleEmailInputChange}
+                        onBlur={handleValidateEmailInput}
+                        value={emailInput}
+                        type="text"
+                        className={cx('form-control', 'form-control-sm', 'border-secondary')}
+                        id="inputEmail"
+                        placeholder=" Nhập email"
+                    />
+                    <span className={cx('text-danger', 'fs-14')}>{emailError}</span>
                 </div>
-            </div>
 
-            <div className={cx('form-group')}>
-                <label htmlFor="inputEmail">Email</label>
-                <input
-                    onChange={handleEmailInputChange}
-                    onBlur={handleValidateEmailInput}
-                    value={emailInput}
-                    type="text"
-                    className={cx('form-control', 'form-control-sm', 'border-secondary')}
-                    id="inputEmail"
-                    placeholder=" Nhập email"
-                />
-                <span className={cx('text-danger', 'fs-14')}>{emailError}</span>
-            </div>
-
-            <div className={cx('form-group')}>
-                <label htmlFor="inputPassword">Mật khẩu</label>
-                <input
-                    onChange={handlePasswordInputChange}
-                    onBlur={handleValidatePasswordInput}
-                    value={passwordInput}
-                    type="password"
-                    className={cx('form-control', 'form-control-sm', 'border-secondary')}
-                    id="inputPassword"
-                    placeholder=" Nhập mật khẩu"
-                />
-                <span className={cx('text-danger', 'fs-14')}>{passwordError}</span>
-            </div>
-            <div className={cx('form-group')}>
-                <button onClick={handleSubmitRegister} className={cx('btn', 'btn-gradient-primary', 'w-100')}>
-                    Đăng ký
-                </button>
-                <Link to={'/admin/login'} className={cx('btn', 'btn-light', 'w-100', 'mt-4')}>
-                    Đăng nhập
-                </Link>
-            </div>
+                <div className={cx('form-group')}>
+                    <label htmlFor="inputPassword">Mật khẩu</label>
+                    <input
+                        onChange={handlePasswordInputChange}
+                        onBlur={handleValidatePasswordInput}
+                        value={passwordInput}
+                        type="password"
+                        className={cx('form-control', 'form-control-sm', 'border-secondary')}
+                        id="inputPassword"
+                        placeholder=" Nhập mật khẩu"
+                    />
+                    <span className={cx('text-danger', 'fs-14')}>{passwordError}</span>
+                </div>
+                <div className={cx('form-group')}>
+                    <button onClick={handleSubmitRegister} className={cx('btn', 'btn-gradient-primary', 'w-100')}>
+                        Đăng ký
+                    </button>
+                    <Link to={'/admin/login'} className={cx('btn', 'btn-light', 'w-100', 'mt-4')}>
+                        Đăng nhập
+                    </Link>
+                </div>
+            </Spin>
         </LayoutAccount>
     );
 }
