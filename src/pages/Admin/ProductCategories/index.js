@@ -25,13 +25,16 @@ function ProductCategories() {
 
     useEffect(() => {
         // const page = queryParams.get('page');
-        // const search = queryParams.get('search');
-        // const sort = queryParams.get('sort');
-        // const status = queryParams.get('status');
+        const search = queryParams.get('search');
+        const sort = queryParams.get('sort');
+        const status = queryParams.get('status');
 
         setLoading(true);
 
-        Promise.all([getData(api.categories), getData(api.promotions)])
+        Promise.all([
+            getData(api.categories + `?search=${search || ''}&sort=${sort || ''}&status=${status || ''}`),
+            getData(api.promotions),
+        ])
             .then((values) => {
                 console.log(values);
                 setCategories(values[0]);
@@ -44,7 +47,7 @@ function ProductCategories() {
             .catch((error) => {
                 console.warn(error);
             });
-    }, []);
+    }, [queryParams]);
 
     // Get all query params
     useEffect(() => {

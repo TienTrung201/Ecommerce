@@ -23,12 +23,12 @@ function ProductOptions() {
 
     useEffect(() => {
         // const page = queryParams.get('page');
-        // const search = queryParams.get('search');
-        // const sort = queryParams.get('sort');
+        const search = queryParams.get('search');
+        const sort = queryParams.get('sort');
 
         setLoading(true);
 
-        getData(api.productOptions)
+        getData(api.productOptions + `?search=${search || ''}&sort=${sort || ''}`)
             .then((response) => {
                 console.log(response);
                 setProductOptions(response);
@@ -40,7 +40,7 @@ function ProductOptions() {
             .catch((error) => {
                 console.warn(error);
             });
-    }, []);
+    }, [queryParams]);
 
     // Get all query params
     useEffect(() => {
@@ -123,8 +123,6 @@ function ProductOptions() {
                                             <Panel header="Sắp xếp" key="1">
                                                 <Radio.Group onChange={handleSortParamChange}>
                                                     <Space size="small" direction="vertical">
-                                                        <Radio value={'creationTimeDesc'}>Mới hơn</Radio>
-                                                        <Radio value={'creationTimeAsc'}>Cũ hơn</Radio>
                                                         <Radio value={'nameAsc'}>Tên A - Z</Radio>
                                                         <Radio value={'nameDesc'}>Tên Z - A</Radio>
                                                     </Space>

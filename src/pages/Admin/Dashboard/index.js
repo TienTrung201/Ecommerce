@@ -155,21 +155,28 @@ function Dashboard() {
             {/* Block 4 */}
             <div className={cx('row')}>
                 <div className={cx('col-md-12', 'stretch-card', 'grid-margin')}>
-                    <div style={{ backgroundColor: '#dfd6c9' }} className={cx('card', 'rounded-12', 'card-img-holder')}>
-                        <div className={cx('card-body')}>
-                            <h2 className={cx('mb-2', 'mt-0', 'fs-4')} style={{ maxWidth: '400px', color: '#634944' }}>
+                    <div
+                        style={{ backgroundColor: '#dfd6c9', minHeight: '200px' }}
+                        className={cx('card', 'rounded-12', 'card-img-holder')}
+                    >
+                        <div className={cx('card-body', 'd-flex', 'flex-column')}>
+                            <h2 className={cx('mb-2', 'mt-4', 'fs-4')} style={{ color: '#634944' }}>
                                 Tải app Bellissa cho smartphone
                             </h2>
-                            <p className={cx('mb-4')} style={{ maxWidth: '380px', color: '#634944' }}>
+                            <p className={cx('mb-4')} style={{ color: '#634944' }}>
                                 Giúp bạn bán hàng, theo dõi đơn hàng, xem báo cáo thuận tiện.
                             </p>
-                            <div>
+                            <div className={cx('mt-auto', 'mb-4')}>
                                 <button className={cx('btn', 'btn-sm', 'btn-primary')}>
                                     <Unicons.UilImport size="18" className={cx('me-2')} />
                                     Tải app ngay
                                 </button>
                             </div>
-                            <img src={images.mockup} className={cx('card-img-absolute')} alt="" />
+                            <img
+                                src={images.mockup}
+                                className={cx('card-img-absolute', 'd-none', 'd-md-inline-block')}
+                                alt=""
+                            />
                         </div>
                     </div>
                 </div>
