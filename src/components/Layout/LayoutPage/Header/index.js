@@ -214,9 +214,10 @@ function Header() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-md-4 col flex justify-content-center">
-                                <Link to="/">
-                                    <img src={require('@/assets/image/logo.png')} alt="" className="img-reponsive" />
+                            <div className="col-md-4 col flex justify-content-center header2">
+                                <Link className=" autoCenter" to="/">
+                                    {/* <img src={require('@/assets/image/logo2.png')} alt="" className="img-reponsive" /> */}
+                                    <img src={images.logo} alt="" className="img-reponsive" />
                                 </Link>
                             </div>
                             <div className="col-md-4 col flex justify-content-end">

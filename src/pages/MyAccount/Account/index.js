@@ -16,6 +16,7 @@ function Account({ user }) {
     //onfocus input date
 
     //Form
+    const [isFormChange, setIsFormChange] = useState(false);
     const [formData, setFormData] = useState({
         fullName: '',
         phoneNumber: '',
@@ -28,6 +29,7 @@ function Account({ user }) {
     });
     const handleChange = (event) => {
         const { name, value } = event.target;
+        setIsFormChange(true);
         setFormData((prevState) => ({ ...prevState, [name]: value }));
     };
     //handle change Img
@@ -41,14 +43,12 @@ function Account({ user }) {
     const file = useRef();
     useEffect(() => {
         const { fullName, phoneNumber, gender, birthDate, password, avatar, email, userName } = user;
-
         setFormData({ fullName, phoneNumber, gender, birthDate, password, avatar, email, userName });
         setImgUrl(avatar);
     }, [user]);
     //Form
     //update data
     const updateDataUser = (data) => {
-        dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
         updateData(api.userAccount, data)
             .then((response) => {
                 setTimeout(() => {
@@ -60,8 +60,15 @@ function Account({ user }) {
                 console.log(response);
             })
             .catch((err) => {
-                dispatch(notificationsSlice.actions.showError('Thất bại'));
-
+                const message = JSON.parse(err.message)?.title;
+                if (formData.birthDate === '') {
+                    dispatch(notificationsSlice.actions.showError('Ngày sinh không hợp lệ'));
+                } else {
+                    if (message.includes('email already exist')) {
+                        dispatch(notificationsSlice.actions.showError('Email đã tồn tại'));
+                    }
+                    dispatch(notificationsSlice.actions.showError('Thất bại'));
+                }
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 1000);
@@ -69,15 +76,17 @@ function Account({ user }) {
             });
     };
     const handleSendForm = async () => {
-        dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
+        if (isFormChange) {
+            dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
 
-        if (imgFile) {
-            const uploadedItemImg = await uploadFile(imgFile, 'images/avatar-users');
-            const data = { ...formData, password: '123456', avatar: uploadedItemImg.url };
-            updateDataUser(data);
-        } else {
-            const data = { ...formData, gender: Number(formData.gender), password: '123456' };
-            updateDataUser(data);
+            if (imgFile) {
+                const uploadedItemImg = await uploadFile(imgFile, 'images/avatar-users');
+                const data = { ...formData, password: '123456', avatar: uploadedItemImg.url };
+                updateDataUser(data);
+            } else {
+                const data = { ...formData, gender: Number(formData.gender), password: '123456' };
+                updateDataUser(data);
+            }
         }
     };
     //update data
@@ -169,7 +178,7 @@ function Account({ user }) {
                                     required=""
                                     className="select-gender"
                                 >
-                                    <option value="">Nam/Nữ</option>
+                                    {/* <option value="">Nam/Nữ</option> */}
                                     <option value="0">Nam</option>
                                     <option value="1">Nữ</option>
                                 </select>

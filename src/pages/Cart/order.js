@@ -2,13 +2,13 @@ import { cartSelector, optionsSelector, shippingMethodsSelector, userSelector } 
 import { useDispatch, useSelector } from 'react-redux';
 import userSlice from '../MyAccount/UserSlice';
 import { convertVnd } from '@/components/GlobalStyles/fuction';
+import { Link } from 'react-router-dom';
 
 function Order({ total, priceShipping, addressDefault, paymentMethodId }) {
     const dispatch = useDispatch();
     const cartUser = useSelector(cartSelector);
     const user = useSelector(userSelector);
     const shippingMethods = useSelector(shippingMethodsSelector);
-    const { addresses } = user;
     const optionProduct = useSelector(optionsSelector);
     // const addressDefault = useMemo(() => {
     //     const addressOrder = addresses.find((address) => address.isDefault === true);
@@ -35,7 +35,7 @@ function Order({ total, priceShipping, addressDefault, paymentMethodId }) {
             <div className="order_wrapper">
                 <div className="address-form__group">
                     <label className="address-form__label">Địa chỉ nhận hàng:</label>
-                    {addresses.length > 0 ? (
+                    {addressDefault ? (
                         <>
                             <p className="address-name">{`${addressDefault.fullName}  `}</p>
                             <p className="address-phone">{addressDefault.phoneNumber}</p>
@@ -45,7 +45,9 @@ function Order({ total, priceShipping, addressDefault, paymentMethodId }) {
                             </p>
                         </>
                     ) : (
-                        false
+                        <Link className="add-address" to="/myAccount/address">
+                            Thêm địa chỉ nhận hàng
+                        </Link>
                     )}
                 </div>
                 <label className="address-form__label">Sản phẩm:</label>

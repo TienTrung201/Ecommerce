@@ -1,5 +1,5 @@
 import Modal from '@/components/Layout/Modal';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PaymentForm from './FormPaymentMethod';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,7 +20,19 @@ function PaymentMethods({ user }) {
         cardholderName: '',
         securityCode: '',
     });
-
+    const checkedSubmit = useMemo(() => {
+        const { provider, accountNumber, expiryDate, cardholderName, securityCode } = formData;
+        if (
+            provider === '' ||
+            accountNumber === '' ||
+            expiryDate === '' ||
+            cardholderName === '' ||
+            securityCode === ''
+        ) {
+            return false;
+        }
+        return true;
+    }, [formData]);
     const handleChangeForm = (event) => {
         const { name, value } = event.target;
         setFormData((prevState) => ({ ...prevState, [name]: value }));
@@ -81,17 +93,18 @@ function PaymentMethods({ user }) {
     // handle delete paymentmethod
 
     return (
-        <div className="payment-methods">
+        <div className="address-list">
             <Modal
                 title={'Thêm phương thức thanh toán'}
                 haldleSendModal={handleAddNewAddress}
                 save={'Thêm'}
                 visible={visible}
                 setVisible={setVisible}
+                checkedSubmit={checkedSubmit}
             >
                 <PaymentForm formData={formData} setFormData={setFormData} onChangeForm={handleChangeForm} />
             </Modal>
-            <h2 className="payment-methods__title">Phương thức thanh toán</h2>
+            <h3 className="address-list-title">Phương thức thanh toán</h3>
             <ul className="payment-methods__list">
                 {user.paymentMethods.map((paymentMethod, i) => {
                     return (
