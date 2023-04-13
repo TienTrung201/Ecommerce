@@ -24,12 +24,12 @@ function ShippingMethods() {
 
     useEffect(() => {
         // const page = queryParams.get('page');
-        // const search = queryParams.get('search');
-        // const sort = queryParams.get('sort');
+        const search = queryParams.get('search');
+        const sort = queryParams.get('sort');
 
         setLoading(true);
 
-        getData(api.shippingMethods)
+        getData(api.shippingMethods + `?search=${search || ''}&sort=${sort || ''}`)
             .then((response) => {
                 console.log(response);
                 setShippingMethods(response);
@@ -41,7 +41,7 @@ function ShippingMethods() {
             .catch((error) => {
                 console.warn(error);
             });
-    }, []);
+    }, [queryParams]);
 
     // Get all query params
     useEffect(() => {
