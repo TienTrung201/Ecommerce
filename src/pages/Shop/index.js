@@ -50,6 +50,7 @@ function Shop() {
     const [categories, setCategories] = useState([]);
     const [proviers, setProviders] = useState([]);
     useEffect(() => {
+        setIsLoading(true);
         const dataQuery = `?${'page=' + pageNumber}${filterCategory !== '' ? '&category=' + filterCategory : ''}${
             filterProvider !== '' ? '&provider=' + filterProvider : ''
         }${minPrice !== '' ? '&min=' + minPrice : ''}${maxPrice !== '' ? '&max=' + maxPrice : ''}${
@@ -369,7 +370,9 @@ function Shop() {
                 </div>
                 <div ref={listProduct} className="product-collection-grid product-grid bd-bottom ">
                     {isLoading ? (
-                        <Loading />
+                        <div style={{ padding: '200px' }}>
+                            <Loading />
+                        </div>
                     ) : (
                         <div className="row engoc-row-equal">
                             {products.map((product) => {
