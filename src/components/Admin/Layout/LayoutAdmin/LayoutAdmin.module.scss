@@ -17072,6 +17072,7 @@ code {
 }
 .card.card-img-holder {
     position: relative;
+    overflow: hidden;
 }
 .card.card-img-holder .card-img-absolute {
     position: absolute;

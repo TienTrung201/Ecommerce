@@ -6,7 +6,7 @@ import { getData } from '@/api/service';
 import { api } from '@/api';
 import dayjs from 'dayjs';
 import * as Unicons from '@iconscout/react-unicons';
-import { Button, Collapse, Pagination, Popover, Radio, Space, Input } from 'antd';
+import { Button, Collapse, Pagination, Popover, Radio, Space, Input, Spin, Empty } from 'antd';
 import { debounce } from 'lodash';
 
 const cx = classNames.bind(styles);
@@ -14,6 +14,8 @@ const cx = classNames.bind(styles);
 const { Panel } = Collapse;
 
 function Promotions() {
+    const [loading, setLoading] = useState(false);
+
     const [promotions, setPromotions] = useState([]);
 
     const [queryParams, setQueryParams] = useSearchParams();
@@ -23,6 +25,7 @@ function Promotions() {
 
     // Get promotions
     useEffect(() => {
+        setLoading(true);
         const search = queryParams.get('search');
         const sort = queryParams.get('sort');
         const status = queryParams.get('status');
@@ -31,6 +34,10 @@ function Promotions() {
             .then((data) => {
                 console.log(data);
                 setPromotions(data);
+
+                setTimeout(() => {
+                    setLoading(false);
+                }, 400);
             })
             .catch((error) => {
                 console.warn(error.message);
@@ -189,18 +196,24 @@ function Promotions() {
                     {/* End Search and filter */}
 
                     <div className={cx('overflow-x-auto', 'w-100')}>
-                        <table className={cx('table', 'table-hover', 'overflow-x-auto')}>
-                            <thead>
-                                <tr>
-                                    <th> Khuyến mãi </th>
-                                    <th> Giảm giá </th>
-                                    <th> Trạng thái </th>
-                                    <th> Ngày bắt đầu </th>
-                                    <th> Ngày kết thúc </th>
-                                </tr>
-                            </thead>
-                            <tbody>{renderPromotions}</tbody>
-                        </table>
+                        <Spin spinning={loading}>
+                            <table className={cx('table', 'table-hover', 'overflow-x-auto')}>
+                                <thead>
+                                    <tr>
+                                        <th> Khuyến mãi </th>
+                                        <th> Giảm giá </th>
+                                        <th> Trạng thái </th>
+                                        <th> Ngày bắt đầu </th>
+                                        <th> Ngày kết thúc </th>
+                                    </tr>
+                                </thead>
+                                <tbody>{renderPromotions}</tbody>
+                            </table>
+
+                            {renderPromotions.length === 0 && !loading && (
+                                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                            )}
+                        </Spin>
                     </div>
 
                     {/* Paging */}

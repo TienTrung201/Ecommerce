@@ -17,11 +17,15 @@ import placeholder from './placeholder.png';
 // background
 import loginBg from './login-bg.webp';
 
+// mockup
+import mockup from './mockup.png';
+
 const images = {
     logo: logo,
-    logoMini: logoMini,
+    logoMini,
     placeholder,
     loginBg,
+    mockup,
     faces: {
         face1: face1,
         face2: face2,

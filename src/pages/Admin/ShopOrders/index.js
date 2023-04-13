@@ -1,7 +1,7 @@
 import { api } from '@/api';
 import { getData } from '@/api/service';
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
-import { Button, Collapse, Input, Pagination, Popover, Radio, Space } from 'antd';
+import { Button, Collapse, Empty, Input, Pagination, Popover, Radio, Space, Spin } from 'antd';
 import classNames from 'classnames/bind';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -19,6 +19,8 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 function ShopOrders() {
+    const [loading, setLoading] = useState(false);
+
     const [shopOrders, setShopOrders] = useState([]);
     const [orderStatuses, setOrderStatuses] = useState([]);
 
@@ -32,6 +34,8 @@ function ShopOrders() {
         const sort = queryParams.get('sort');
         const status = queryParams.get('status');
 
+        setLoading(true);
+
         Promise.all([
             getData(api.shopOrders + `?search=${search || ''}&sort=${sort || ''}&status=${status || ''}`),
             getData(api.orderStatuses),
@@ -40,6 +44,10 @@ function ShopOrders() {
                 console.log(response);
                 setShopOrders(response[0].data);
                 setOrderStatuses(response[1].data);
+
+                setTimeout(() => {
+                    setLoading(false);
+                }, 400);
             })
             .catch((error) => {
                 console.warn(error);
@@ -182,49 +190,54 @@ function ShopOrders() {
                     </div>
                     {/* End Search and filter */}
 
-                    <div className={cx('w-100', 'overflow-x-auto')}>
-                        <table className={cx('table', 'table-hover')}>
-                            <thead>
-                                <tr>
-                                    <th>Đơn hàng</th>
-                                    <th>Ngày đặt</th>
-                                    <th>Khách hàng</th>
-                                    <th>Thanh toán</th>
-                                    <th>Trạng thái</th>
-                                    <th>Tổng tiền</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {shopOrders.map((shopOrder) => (
-                                    <tr
-                                        key={shopOrder.orderId}
-                                        className={cx('pointer')}
-                                        onClick={() => {
-                                            navigate(`/admin/orders/detail/${shopOrder.orderId}`);
-                                        }}
-                                    >
-                                        <td className={cx('py-1')}>#{shopOrder.orderId}</td>
-                                        <td>
-                                            {dayjs(shopOrder.orderDate)
-                                                .utcOffset(7)
-                                                .tz('Asia/Bangkok')
-                                                .format('DD/MM/YYYY HH:mm')}
-                                        </td>
-                                        <td>{shopOrder?.address?.fullName || 'N/A'}</td>
-                                        <td>
-                                            <span className={cx('badge', 'badge-light')}>Đã thanh toán</span>
-                                        </td>
-                                        <td>
-                                            <span className={cx('badge', `${getCurrentStatus(shopOrder).className}`)}>
-                                                {getCurrentStatus(shopOrder).name}
-                                            </span>
-                                        </td>
-                                        <td>{shopOrder.orderTotal}đ</td>
+                    <Spin spinning={loading}>
+                        <div className={cx('w-100', 'overflow-x-auto')}>
+                            <table className={cx('table', 'table-hover')}>
+                                <thead>
+                                    <tr>
+                                        <th>Đơn hàng</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Khách hàng</th>
+                                        <th>Thanh toán</th>
+                                        <th>Trạng thái</th>
+                                        <th>Tổng tiền</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {shopOrders.map((shopOrder) => (
+                                        <tr
+                                            key={shopOrder.orderId}
+                                            className={cx('pointer')}
+                                            onClick={() => {
+                                                navigate(`/admin/orders/detail/${shopOrder.orderId}`);
+                                            }}
+                                        >
+                                            <td className={cx('py-1')}>#{shopOrder.orderId}</td>
+                                            <td>
+                                                {dayjs(shopOrder.orderDate)
+                                                    .utcOffset(7)
+                                                    .tz('Asia/Bangkok')
+                                                    .format('DD/MM/YYYY HH:mm')}
+                                            </td>
+                                            <td>{shopOrder?.address?.fullName || 'N/A'}</td>
+                                            <td>
+                                                <span className={cx('badge', 'badge-light')}>Đã thanh toán</span>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    className={cx('badge', `${getCurrentStatus(shopOrder).className}`)}
+                                                >
+                                                    {getCurrentStatus(shopOrder).name}
+                                                </span>
+                                            </td>
+                                            <td>{shopOrder.orderTotal}đ</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            {shopOrders.length === 0 && !loading && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                        </div>
+                    </Spin>
 
                     {/* Paging */}
                     <div className={cx('mt-5', 'd-flex', 'justify-content-end')}>
