@@ -76,13 +76,17 @@ function WishList() {
                                         </div>
                                     </td>
                                     <td className="wl total-price">
-                                        <p className="price">
-                                            {convertVnd(
-                                                (wishlist.product.items[0].price *
-                                                    wishlist.product.items[0].discountRate) /
-                                                    100,
-                                            )}
-                                        </p>
+                                        {wishlist.product.items[0].discountRate === 0 ? (
+                                            <p className="price">{convertVnd(wishlist.product.items[0].price)}</p>
+                                        ) : (
+                                            <p className="price">
+                                                {convertVnd(
+                                                    (wishlist.product.items[0].price *
+                                                        wishlist.product.items[0].discountRate) /
+                                                        100,
+                                                )}
+                                            </p>
+                                        )}
                                     </td>
 
                                     <td>

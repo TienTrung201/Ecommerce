@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import cartSlice from '../Cart/CartSlice';
 import TextEditorParagraph from '@/components/Admin/TextEditorParagraph';
+import Loading from '@/components/Loading/Loading';
 
 function Shop() {
     //Products  FilterProduct and Paging
@@ -18,6 +19,7 @@ function Shop() {
     const cartUser = useSelector(cartSelector);
     const location = useLocation();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
     const [filterCategory, setFilterCategory] = useState(
         new URLSearchParams(location.search).get('category')
             ? new URLSearchParams(location.search).get('category')
@@ -48,6 +50,7 @@ function Shop() {
     const [categories, setCategories] = useState([]);
     const [proviers, setProviders] = useState([]);
     useEffect(() => {
+        setIsLoading(true);
         const dataQuery = `?${'page=' + pageNumber}${filterCategory !== '' ? '&category=' + filterCategory : ''}${
             filterProvider !== '' ? '&provider=' + filterProvider : ''
         }${minPrice !== '' ? '&min=' + minPrice : ''}${maxPrice !== '' ? '&max=' + maxPrice : ''}${
@@ -96,6 +99,7 @@ function Shop() {
                 setProviders(values[3]);
                 setCategories(values[1]);
                 setProducts(allProduct);
+                setIsLoading(false);
                 const pageSize = [];
                 for (let i = 1; i <= values[0].totalPages; i++) {
                     pageSize.push(i);
@@ -365,116 +369,133 @@ function Shop() {
                     </div>
                 </div>
                 <div ref={listProduct} className="product-collection-grid product-grid bd-bottom ">
-                    <div className="row engoc-row-equal">
-                        {products.map((product) => {
-                            const isWishlist = cartUser.wishlist.find(
-                                (wishlist) => wishlist.productId === product.productId,
-                            );
-                            return (
-                                <div
-                                    key={product.productId}
-                                    className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item"
-                                >
-                                    <div className="product-img">
-                                        <Link to={`/product/${product.name.replace(/ /g, '-')}/${product.productId}`}>
-                                            <img src={product.image} alt="" className="img-responsive" />
-                                        </Link>
-                                        {product.discountRate === 0 ? (
-                                            false
-                                        ) : (
-                                            <div className="ribbon zoa-sale">
-                                                <span>-{product.discountRate}%</span>
-                                            </div>
-                                        )}
-
-                                        <div className="product-button-group">
-                                            <Link
-                                                style={{ background: isWishlist ? '#dd2a2a' : '' }}
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-
-                                                    if (user.uid === '') {
-                                                        navigate('/user/signin');
-                                                    } else if (isWishlist) {
-                                                        handleDeleteWishlist(isWishlist.wishlistId);
-                                                    } else {
-                                                        handleAddWishList(product.productId);
-                                                    }
-                                                }}
-                                                className="zoa-btn zoa-wishlist"
-                                            >
-                                                <span className="zoa-icon-heart">
-                                                    <FontAwesomeIcon icon={faHeart} />
-                                                </span>
-                                            </Link>
-                                            <Link
-                                                to={`/product/${product.name.replace(/ /g, '-')}/${product.productId}`}
-                                                className="zoa-btn zoa-addcart"
-                                            >
-                                                <span className="zoa-icon-cart">
-                                                    <FontAwesomeIcon icon={faCartPlus} />
-                                                </span>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                    <div className="product-info text-center">
-                                        {/* đây là layout 2 */}
-                                        <h3 className="product-title">
+                    {isLoading ? (
+                        <div style={{ padding: '200px' }}>
+                            <Loading />
+                        </div>
+                    ) : (
+                        <div className="row engoc-row-equal">
+                            {products.map((product) => {
+                                const isWishlist = cartUser.wishlist.find(
+                                    (wishlist) => wishlist.productId === product.productId,
+                                );
+                                return (
+                                    <div
+                                        key={product.productId}
+                                        className="col-xs-6 col-sm-4 col-md-3 col-lg-3 product-item"
+                                    >
+                                        <div className="product-img">
                                             <Link
                                                 to={`/product/${product.name.replace(/ /g, '-')}/${product.productId}`}
                                             >
-                                                {product.name}
+                                                <img src={product.image} alt="" className="img-responsive" />
                                             </Link>
-                                        </h3>
-                                        <div className="short-desc">
-                                            <div className="product-desc">
-                                                <TextEditorParagraph value={product.description} />
-                                            </div>
-                                        </div>
-                                        <div className="product-price">
                                             {product.discountRate === 0 ? (
-                                                <span>{convertVnd(product.items[0].price)}</span>
+                                                false
                                             ) : (
-                                                <span>
-                                                    {convertVnd((product.items[0].price * product.discountRate) / 100)}
-                                                </span>
+                                                <div className="ribbon zoa-sale">
+                                                    <span>-{product.discountRate}%</span>
+                                                </div>
                                             )}
-                                        </div>
-                                        <div className="product-bottom-group">
-                                            <Link
-                                                style={{ background: isWishlist ? '#dd2a2a' : '' }}
-                                                onClick={(e) => {
-                                                    e.preventDefault();
 
-                                                    if (user.uid === '') {
-                                                        navigate('/user/signin');
-                                                    } else if (isWishlist) {
-                                                        handleDeleteWishlist(isWishlist.wishlistId);
-                                                    } else {
-                                                        handleAddWishList(product.productId);
-                                                    }
-                                                }}
-                                                className="zoa-btn zoa-wishlist"
-                                            >
-                                                <span className="zoa-icon-heart">
-                                                    <FontAwesomeIcon icon={faHeart} />
-                                                </span>
-                                            </Link>
-                                            <Link
-                                                to={`/product/${product.name.replace(/ /g, '-')}/${product.productId}`}
-                                                className="zoa-btn zoa-addcart"
-                                            >
-                                                <span className="zoa-icon-cart">
-                                                    <FontAwesomeIcon icon={faCartPlus} />
-                                                </span>
-                                            </Link>
+                                            <div className="product-button-group">
+                                                <Link
+                                                    style={{ background: isWishlist ? '#dd2a2a' : '' }}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+
+                                                        if (user.uid === '') {
+                                                            navigate('/user/signin');
+                                                        } else if (isWishlist) {
+                                                            handleDeleteWishlist(isWishlist.wishlistId);
+                                                        } else {
+                                                            handleAddWishList(product.productId);
+                                                        }
+                                                    }}
+                                                    className="zoa-btn zoa-wishlist"
+                                                >
+                                                    <span className="zoa-icon-heart">
+                                                        <FontAwesomeIcon icon={faHeart} />
+                                                    </span>
+                                                </Link>
+                                                <Link
+                                                    to={`/product/${product.name.replace(/ /g, '-')}/${
+                                                        product.productId
+                                                    }`}
+                                                    className="zoa-btn zoa-addcart"
+                                                >
+                                                    <span className="zoa-icon-cart">
+                                                        <FontAwesomeIcon icon={faCartPlus} />
+                                                    </span>
+                                                </Link>
+                                            </div>
                                         </div>
-                                        {/* đây là layout 2 */}
+                                        <div className="product-info text-center">
+                                            {/* đây là layout 2 */}
+                                            <h3 className="product-title">
+                                                <Link
+                                                    to={`/product/${product.name.replace(/ /g, '-')}/${
+                                                        product.productId
+                                                    }`}
+                                                >
+                                                    {product.name}
+                                                </Link>
+                                            </h3>
+                                            <div className="short-desc">
+                                                <div className="product-desc">
+                                                    <TextEditorParagraph value={product.description} />
+                                                </div>
+                                            </div>
+                                            <div className="product-price">
+                                                {product.discountRate === 0 ? (
+                                                    <span>{convertVnd(product.items[0].price)}</span>
+                                                ) : (
+                                                    <span>
+                                                        {convertVnd(
+                                                            (product.items[0].price * product.discountRate) / 100,
+                                                        )}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="product-bottom-group">
+                                                <Link
+                                                    style={{ background: isWishlist ? '#dd2a2a' : '' }}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+
+                                                        if (user.uid === '') {
+                                                            navigate('/user/signin');
+                                                        } else if (isWishlist) {
+                                                            handleDeleteWishlist(isWishlist.wishlistId);
+                                                        } else {
+                                                            handleAddWishList(product.productId);
+                                                        }
+                                                    }}
+                                                    className="zoa-btn zoa-wishlist"
+                                                >
+                                                    <span className="zoa-icon-heart">
+                                                        <FontAwesomeIcon icon={faHeart} />
+                                                    </span>
+                                                </Link>
+                                                <Link
+                                                    to={`/product/${product.name.replace(/ /g, '-')}/${
+                                                        product.productId
+                                                    }`}
+                                                    className="zoa-btn zoa-addcart"
+                                                >
+                                                    <span className="zoa-icon-cart">
+                                                        <FontAwesomeIcon icon={faCartPlus} />
+                                                    </span>
+                                                </Link>
+                                            </div>
+                                            {/* đây là layout 2 */}
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        })}
-                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+
                     {totalPages.length > 1 ? (
                         <div className="text-center">
                             <div className="pagination">
