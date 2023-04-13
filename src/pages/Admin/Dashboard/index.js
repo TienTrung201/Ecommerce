@@ -1,10 +1,7 @@
 import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scss';
 import classNames from 'classnames/bind';
-import images from '@/assets/admin/images';
 import * as Unicons from '@iconscout/react-unicons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine } from '@fortawesome/free-solid-svg-icons';
-import { faBookmark, faStar } from '@fortawesome/free-regular-svg-icons';
+import images from '@/assets/admin/images';
 
 const cx = classNames.bind(styles);
 
@@ -15,7 +12,6 @@ function Dashboard() {
                 <h3 className={cx('page-title', 'd-flex', 'align-items-center', 'm-0')}>
                     <span className={cx('page-title-icon', 'bg-gradient-primary', 'text-white', 'me-3')}>
                         <i className={cx('mdi')}>
-                            {/* <FontAwesomeIcon icon={faHouse} /> */}
                             <Unicons.UilEstate size="24" />
                         </i>
                     </span>
@@ -30,127 +26,155 @@ function Dashboard() {
                     </ul>
                 </nav>
             </div>
+
             <div className={cx('row', 'gx-4')}>
+                {/* Block 1 */}
                 <div className={cx('col-md-4', 'stretch-card', 'grid-margin')}>
-                    <div className={cx('card', 'bg-gradient-danger', 'card-img-holder', 'text-white')}>
+                    <div className={cx('card', 'rounded-12', 'shadow-sm')}>
                         <div className={cx('card-body')}>
-                            <img src={images.dashboard.circleSvg} className={cx('card-img-absolute')} alt="" />
-                            <h4 className={cx('font-weight-normal', 'mb-3')}>
-                                Weekly Sales{' '}
-                                <i className={cx('mdi', 'mdi-24px', 'float-right')}>
-                                    <FontAwesomeIcon icon={faChartLine} />
+                            {/* <img src={images.dashboard.circleSvg} className={cx('card-img-absolute')} alt="" /> */}
+                            <h4
+                                className={cx(
+                                    'd-flex',
+                                    'align-items-center',
+                                    'font-weight-normal',
+                                    'mb-3',
+                                    'mt-0',
+                                    'fs-6',
+                                )}
+                            >
+                                <i
+                                    style={{ background: '#d8f2dc', width: '32px', height: '32px' }}
+                                    className={cx(
+                                        'd-inline-flex',
+                                        'me-2',
+                                        'rounded',
+                                        'justify-content-center',
+                                        'align-items-center',
+                                    )}
+                                >
+                                    <Unicons.UilBill size="20" />
                                 </i>
+                                Đơn đã bán
                             </h4>
-                            <h2 className={cx('mb-5')}>$ 15,0000</h2>
-                            <h6 className={cx('card-text')}>Increased by 60%</h6>
+                            <h2 className={cx('mb-5', 'fw-bold')}>99</h2>
+                            <h6 className={cx('card-text', 'fs-14', 'text-success')}>
+                                <i className={cx('me-1')}>
+                                    <Unicons.UilArrowGrowth size="18" />
+                                </i>
+                                6.0%
+                            </h6>
                         </div>
                     </div>
                 </div>
+                {/* End Block 1 */}
+
+                {/* Block 2 */}
                 <div className={cx('col-md-4', 'stretch-card', 'grid-margin')}>
-                    <div className={cx('card', 'bg-gradient-info', 'card-img-holder', 'text-white')}>
+                    <div className={cx('card', 'rounded-12', 'shadow-sm')}>
                         <div className={cx('card-body')}>
-                            <img src={images.dashboard.circleSvg} className={cx('card-img-absolute')} alt="" />
-                            <h4 className={cx('font-weight-normal', 'mb-3')}>
-                                Weekly Orders{' '}
-                                <i className={cx('mdi', 'mdi-24px', 'float-right')}>
-                                    <FontAwesomeIcon icon={faBookmark} />
+                            {/* <img src={images.dashboard.circleSvg} className={cx('card-img-absolute')} alt="" /> */}
+                            <h4
+                                className={cx(
+                                    'd-flex',
+                                    'align-items-center',
+                                    'font-weight-normal',
+                                    'mb-3',
+                                    'mt-0',
+                                    'fs-6',
+                                )}
+                            >
+                                <i
+                                    style={{ background: '#eae4ff', width: '32px', height: '32px' }}
+                                    className={cx(
+                                        'd-inline-flex',
+                                        'me-2',
+                                        'rounded',
+                                        'justify-content-center',
+                                        'align-items-center',
+                                    )}
+                                >
+                                    <Unicons.UilMoneybag size="20" />
                                 </i>
+                                Doanh thu
                             </h4>
-                            <h2 className={cx('mb-5')}>45,6334</h2>
-                            <h6 className={cx('card-text')}>Decreased by 10%</h6>
+                            <h2 className={cx('mb-5', 'fw-bold')}>91,00M</h2>
+                            <h6 className={cx('card-text', 'fs-14', 'text-danger')}>
+                                <i className={cx('me-1')}>
+                                    <Unicons.UilChartDown size="18" />
+                                </i>
+                                0.1%
+                            </h6>
                         </div>
                     </div>
                 </div>
+                {/* End Block 2 */}
+
+                {/* Block 3 */}
                 <div className={cx('col-md-4', 'stretch-card', 'grid-margin')}>
-                    <div className={cx('card', 'bg-gradient-success', 'card-img-holder', 'text-white')}>
+                    <div className={cx('card', 'rounded-12', 'shadow-sm')}>
                         <div className={cx('card-body')}>
-                            <img src={images.dashboard.circleSvg} className={cx('card-img-absolute')} alt="" />
-                            <h4 className={cx('font-weight-normal', 'mb-3')}>
-                                Visitors Online{' '}
-                                <i className={cx('mdi', 'mdi-24px', 'float-right')}>
-                                    <FontAwesomeIcon icon={faStar} />
+                            {/* <img src={images.dashboard.circleSvg} className={cx('card-img-absolute')} alt="" /> */}
+                            <h4
+                                className={cx(
+                                    'd-flex',
+                                    'align-items-center',
+                                    'font-weight-normal',
+                                    'mb-3',
+                                    'mt-0',
+                                    'fs-6',
+                                )}
+                            >
+                                <i
+                                    style={{ background: '#f4e9dd', width: '32px', height: '32px' }}
+                                    className={cx(
+                                        'd-inline-flex',
+                                        'me-2',
+                                        'rounded',
+                                        'justify-content-center',
+                                        'align-items-center',
+                                    )}
+                                >
+                                    <Unicons.UilUserPlus size="20" />
                                 </i>
+                                Khách hàng
                             </h4>
-                            <h2 className={cx('mb-5')}>95,5741</h2>
-                            <h6 className={cx('card-text')}>Increased by 5%</h6>
+                            <h2 className={cx('mb-5', 'fw-bold')}>190</h2>
+                            <h6 className={cx('card-text', 'fs-14', 'text-success')}>
+                                <i className={cx('me-1')}>
+                                    <Unicons.UilArrowGrowth size="18" />
+                                </i>
+                                9.0%
+                            </h6>
                         </div>
                     </div>
                 </div>
+                {/* End Block   3 */}
             </div>
 
+            {/* Block 4 */}
             <div className={cx('row')}>
-                <div className={cx('col-12', 'grid-margin')}>
-                    <div className={cx('card')}>
+                <div className={cx('col-md-12', 'stretch-card', 'grid-margin')}>
+                    <div style={{ backgroundColor: '#dfd6c9' }} className={cx('card', 'rounded-12', 'card-img-holder')}>
                         <div className={cx('card-body')}>
-                            <h4 className={cx('card-title')}>Recent Tickets</h4>
-                            <div className={cx('table-responsive')}>
-                                <table className={cx('table')}>
-                                    <thead>
-                                        <tr>
-                                            <th> Assignee </th>
-                                            <th> Subject </th>
-                                            <th> Status </th>
-                                            <th> Last Update </th>
-                                            <th> Tracking ID </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <img src={images.faces.face1} className={cx('me-2')} alt="" /> David
-                                                Grey
-                                            </td>
-                                            <td> Fund is not recieved </td>
-                                            <td>
-                                                <label className={cx('badge', 'badge-gradient-success')}>DONE</label>
-                                            </td>
-                                            <td> Dec 5, 2017 </td>
-                                            <td> WD-12345 </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src={images.faces.face2} className={cx('me-2')} alt="" /> Stella
-                                                Johnson
-                                            </td>
-                                            <td> High loading time </td>
-                                            <td>
-                                                <label className={cx('badge', 'badge-gradient-warning')}>
-                                                    PROGRESS
-                                                </label>
-                                            </td>
-                                            <td> Dec 12, 2017 </td>
-                                            <td> WD-12346 </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src={images.faces.face3} className={cx('me-2')} alt="" /> Marina
-                                                Michel
-                                            </td>
-                                            <td> Website down for one week </td>
-                                            <td>
-                                                <label className={cx('badge', 'badge-gradient-info')}>ON HOLD</label>
-                                            </td>
-                                            <td> Dec 16, 2017 </td>
-                                            <td> WD-12347 </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src={images.faces.face4} className={cx('me-2')} alt="" /> John Doe
-                                            </td>
-                                            <td> Loosing control on server </td>
-                                            <td>
-                                                <label className={cx('badge', 'badge-gradient-danger')}>REJECTED</label>
-                                            </td>
-                                            <td> Dec 3, 2017 </td>
-                                            <td> WD-12348 </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <h2 className={cx('mb-2', 'mt-0', 'fs-4')} style={{ maxWidth: '400px', color: '#634944' }}>
+                                Tải app Bellissa cho smartphone
+                            </h2>
+                            <p className={cx('mb-4')} style={{ maxWidth: '380px', color: '#634944' }}>
+                                Giúp bạn bán hàng, theo dõi đơn hàng, xem báo cáo thuận tiện.
+                            </p>
+                            <div>
+                                <button className={cx('btn', 'btn-sm', 'btn-primary')}>
+                                    <Unicons.UilImport size="18" className={cx('me-2')} />
+                                    Tải app ngay
+                                </button>
                             </div>
+                            <img src={images.mockup} className={cx('card-img-absolute')} alt="" />
                         </div>
                     </div>
                 </div>
             </div>
+            {/* End Block 4 */}
         </>
     );
 }

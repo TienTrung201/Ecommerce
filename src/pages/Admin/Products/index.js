@@ -6,17 +6,17 @@ import { useEffect, useMemo, useState } from 'react';
 import { getData } from '@/api/service';
 import images from '@/assets/admin/images';
 import * as Unicons from '@iconscout/react-unicons';
-import { Button, Collapse, Input, Pagination, Popover, Radio, Space } from 'antd';
+import { Button, Collapse, Empty, Input, Pagination, Popover, Radio, Space, Spin } from 'antd';
 import { debounce } from 'lodash';
 
 const cx = classNames.bind(styles);
-
 const { Panel } = Collapse;
 
 function Products() {
+    const [loading, setLoading] = useState(false);
+
     const [products, setProducts] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
-    const [currentPage, setCurrentPage] = useState(1);
     const [categories, setCategories] = useState([]);
     const [providers, setProviders] = useState([]);
 
@@ -24,15 +24,19 @@ function Products() {
     const [allQueryParams, setAllQueryParams] = useState({});
 
     const navigate = useNavigate();
-    // const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
+        const page = queryParams.get('page');
         const search = queryParams.get('search');
         const sort = queryParams.get('sort');
         const status = queryParams.get('status');
 
+        setLoading(true);
+
         Promise.all([
-            getData(api.products + `?page=${currentPage}&search=${search || ''}&sort=${sort || ''}&status=${status}`),
+            getData(
+                api.products + `?page=${page || 1}&search=${search || ''}&sort=${sort || ''}&status=${status || ''}`,
+            ),
             getData(api.categories),
             getData(api.providers),
         ])
@@ -42,11 +46,15 @@ function Products() {
                 setTotalPages(values[0].totalPages * 10);
                 setCategories(values[1]);
                 setProviders(values[2]);
+
+                setTimeout(() => {
+                    setLoading(false);
+                }, 400);
             })
             .catch((error) => {
                 console.warn(error);
             });
-    }, [currentPage, queryParams]);
+    }, [queryParams]);
 
     // Get all query params
     useEffect(() => {
@@ -78,6 +86,10 @@ function Products() {
     const handleStatusParamChange = (e) => {
         let value = e.target.value;
         setQueryParams({ ...allQueryParams, status: value });
+    };
+
+    const handlePageParamChange = (page) => {
+        setQueryParams({ ...allQueryParams, page: page });
     };
     // --------- End Input change ---------
 
@@ -158,66 +170,71 @@ function Products() {
                     </div>
                     {/* End Search and filter */}
 
-                    <div className={cx('overflow-x-auto', 'w-100')}>
-                        <table className={cx('table', 'table-hover')}>
-                            <thead>
-                                <tr>
-                                    <th> Ảnh </th>
-                                    <th> Tên sản phẩm </th>
-                                    <th> Kho </th>
-                                    <th> Danh mục </th>
-                                    <th> Nhà cung cấp </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {products.map((product) => (
-                                    <tr
-                                        onClick={() => {
-                                            navigate(`/admin/products/update/${product.productId}`);
-                                        }}
-                                        className={cx('pointer')}
-                                        key={product.productId}
-                                    >
-                                        <td className={cx('py-1')}>
-                                            <img
-                                                className={cx('rounded-6', 'border')}
-                                                src={product.image || images.placeholder}
-                                                alt=""
-                                            />
-                                        </td>
-                                        <td className={cx('text-wrap', 'lh-base')} style={{ minWidth: '280px' }}>
-                                            {product.name}
-                                        </td>
-                                        <td>
-                                            {product.items.reduce((total, current) => total + current.qtyInStock, 0)}{' '}
-                                            của {product.items.length} loại
-                                        </td>
-                                        <td>
-                                            {(categories.length &&
-                                                categories
-                                                    .map((c) =>
-                                                        product.categoriesId.includes(c.categoryId) ? c.name : '',
-                                                    )
-                                                    .filter((c) => c !== '')
-                                                    .join(', ')) ||
-                                                'N/A'}
-                                        </td>
-                                        <td>
-                                            {providers.find((p) => p.providerId === product.providerId)?.name || 'N/A'}
-                                        </td>
+                    <Spin spinning={loading}>
+                        <div className={cx('overflow-x-auto', 'w-100')}>
+                            <table className={cx('table', 'table-hover')}>
+                                <thead>
+                                    <tr>
+                                        <th> Ảnh </th>
+                                        <th> Tên sản phẩm </th>
+                                        <th> Kho </th>
+                                        <th> Danh mục </th>
+                                        <th> Nhà cung cấp </th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {products.map((product) => (
+                                        <tr
+                                            onClick={() => {
+                                                navigate(`/admin/products/update/${product.productId}`);
+                                            }}
+                                            className={cx('pointer')}
+                                            key={product.productId}
+                                        >
+                                            <td className={cx('py-1')}>
+                                                <img
+                                                    className={cx('rounded-6', 'border')}
+                                                    src={product.image || images.placeholder}
+                                                    alt=""
+                                                />
+                                            </td>
+                                            <td className={cx('text-wrap', 'lh-base')} style={{ minWidth: '280px' }}>
+                                                {product.name}
+                                            </td>
+                                            <td>
+                                                {product.items.reduce(
+                                                    (total, current) => total + current.qtyInStock,
+                                                    0,
+                                                )}{' '}
+                                                của {product.items.length} loại
+                                            </td>
+                                            <td>
+                                                {(categories.length &&
+                                                    categories
+                                                        .map((c) =>
+                                                            product.categoriesId.includes(c.categoryId) ? c.name : '',
+                                                        )
+                                                        .filter((c) => c !== '')
+                                                        .join(', ')) ||
+                                                    'N/A'}
+                                            </td>
+                                            <td>
+                                                {providers.find((p) => p.providerId === product.providerId)?.name ||
+                                                    'N/A'}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            {products.length === 0 && !loading && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                        </div>
+                    </Spin>
 
                     {/* Paging */}
                     <div className={cx('mt-5', 'd-flex', 'justify-content-end')}>
                         <Pagination
-                            current={currentPage}
-                            onChange={(page) => {
-                                setCurrentPage(page);
-                            }}
+                            current={queryParams.get('page') || 1}
+                            onChange={handlePageParamChange}
                             total={totalPages}
                             size="small"
                             simple

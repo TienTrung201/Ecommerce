@@ -3,7 +3,7 @@ import styles from '@/components/Admin/Layout/LayoutAdmin/LayoutAdmin.module.scs
 
 import * as Unicons from '@iconscout/react-unicons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -88,13 +88,13 @@ function Navbar({ onClickActiveSidebar, onClickIconOnly }) {
                             <div className={cx('input-group', 'border', 'rounded')}>
                                 <div className={cx('input-group-prepend', 'bg-transparent')}>
                                     <i className={cx('input-group-text', 'border-0', 'mdi')}>
-                                        <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                        <Unicons.UilSearch size="16" />
                                     </i>
                                 </div>
                                 <input
                                     type="text"
                                     className={cx('form-control', 'bg-transparent', 'border-0')}
-                                    placeholder="Search projects"
+                                    placeholder="Tìm kiếm"
                                 />
                             </div>
                         </form>
