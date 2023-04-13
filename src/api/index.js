@@ -29,6 +29,8 @@ const api = {
     adminUsers: domain + '/api/adminusers',
     adminAccount: domain + '/api/adminusers/account',
     roles: domain + '/api/roles',
+
+    reports: domain + '/api/reports',
 };
 
 export { api };

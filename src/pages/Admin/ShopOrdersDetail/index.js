@@ -18,6 +18,7 @@ function ShopOrdersDetail() {
     const [orderAddress, setOrderAddress] = useState({});
     const [orderItems, setOrderItems] = useState([]);
     const [orderStatuses, setOrderStatuses] = useState([]);
+    const [productOptions, setProductOptions] = useState([]);
 
     const [toggleStatus, setToggleStatus] = useState('pending');
 
@@ -26,7 +27,12 @@ function ShopOrdersDetail() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        Promise.all([getData(api.shopOrders + '/' + id), getData(api.shippingMethods), getData(api.orderStatuses)])
+        Promise.all([
+            getData(api.shopOrders + '/' + id),
+            getData(api.shippingMethods),
+            getData(api.orderStatuses),
+            getData(api.productOptions),
+        ])
             .then((response) => {
                 // console.log(response);
                 setShopOrder(response[0].data);
@@ -35,6 +41,9 @@ function ShopOrdersDetail() {
 
                 // Order statuses
                 setOrderStatuses(response[2].data);
+
+                console.log(response[3]);
+                setProductOptions(response[3]);
             })
             .catch((error) => {
                 console.warn(error);
@@ -158,7 +167,19 @@ function ShopOrdersDetail() {
                                                     >
                                                         {item.product.name}
                                                     </p>
-                                                    <p className={cx('mb-0', 'small')}>25cm / Xanh</p>
+                                                    <p className={cx('mb-0', 'small')}>
+                                                        {productOptions
+                                                            .reduce((result, po) => {
+                                                                const options = po.options.filter((o) =>
+                                                                    item?.product?.items[0]?.optionsId?.includes(
+                                                                        o.productOptionId,
+                                                                    ),
+                                                                );
+                                                                result = [...result, options.map((i) => i.name)];
+                                                                return result;
+                                                            }, [])
+                                                            .join(' / ')}
+                                                    </p>
                                                     <p className={cx('mb-0', 'small')}>
                                                         SKU: {item?.product?.items[0]?.sku || 'N/A'}
                                                     </p>
@@ -172,7 +193,7 @@ function ShopOrdersDetail() {
                                                             'text-secondary',
                                                         )}
                                                     >
-                                                        {item.price}đ
+                                                        {item.discountRate > 0 ? item.price + 'đ' : ''}
                                                     </p>
                                                     <p className={cx('mb-0', 'fs-14')}>
                                                         {item.price - (item.price * item.discountRate) / 100}đ x{' '}
