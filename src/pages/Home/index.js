@@ -29,38 +29,7 @@ function Home() {
     useEffect(() => {
         Promise.all([getData(api.products), getData(api.categories), getData(api.promotions)])
             .then((values) => {
-                const categories = values[1]
-                    .map((categorie) => {
-                        const result = values[2].find((promotion) => promotion.promotionId === categorie.promotionId);
-
-                        return result !== undefined
-                            ? {
-                                  name: result.name,
-                                  promotionId: result.promotionId,
-                                  discountRate: result.discountRate,
-                                  categoriesId: categorie.categoryId,
-                              }
-                            : undefined;
-                    })
-                    .filter((category) => category !== undefined);
-
-                const allProduct = values[0].data.reduce((acc, item) => {
-                    const discount = categories
-                        .filter((c) =>
-                            item.categoriesId.find((item) => {
-                                return c.categoriesId === item;
-                            }),
-                        )
-                        .sort((a, b) => b.discountRate - a.discountRate)[0];
-                    acc.push({
-                        ...item,
-                        discountRate: discount === undefined ? 0 : discount.discountRate,
-                        categoriesId: discount === undefined ? 0 : discount.categoriesId,
-                    });
-
-                    return acc;
-                }, []);
-                setProducts(allProduct);
+                setProducts(values[0].data);
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -201,11 +170,11 @@ function Home() {
                                                                 className="img-responsive"
                                                             />
                                                         </Link>
-                                                        {product.discountRate === 0 ? (
+                                                        {product.items[0].discountRate === 0 ? (
                                                             false
                                                         ) : (
                                                             <div className="ribbon zoa-sale">
-                                                                <span>-{product.discountRate}%</span>
+                                                                <span>-{product.items[0].discountRate}%</span>
                                                             </div>
                                                         )}
 
@@ -247,14 +216,15 @@ function Home() {
                                                             <span className="old">
                                                                 {convertVnd(product.items[0].price)}
                                                             </span>
-                                                            {product.discountRate === 0 ? (
+                                                            {product.items[0].discountRate === 0 ? (
                                                                 <span>{convertVnd(product.items[0].price)}</span>
                                                             ) : (
                                                                 <span>
                                                                     {convertVnd(
-                                                                        (product.items[0].price *
-                                                                            product.discountRate) /
-                                                                            100,
+                                                                        product.items[0].price -
+                                                                            (product.items[0].price *
+                                                                                product.items[0].discountRate) /
+                                                                                100,
                                                                     )}
                                                                 </span>
                                                             )}

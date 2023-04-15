@@ -2,9 +2,8 @@ import { cartSelector, optionsSelector, shippingMethodsSelector, userSelector } 
 import { useDispatch, useSelector } from 'react-redux';
 import userSlice from '../MyAccount/UserSlice';
 import { convertVnd } from '@/components/GlobalStyles/fuction';
-import { Link } from 'react-router-dom';
 
-function Order({ total, priceShipping, addressDefault, paymentMethodId }) {
+function Order({ chooseAddressId, setChooseAddressId, total, priceShipping, addressDefault, addresses }) {
     const dispatch = useDispatch();
     const cartUser = useSelector(cartSelector);
     const user = useSelector(userSelector);
@@ -35,20 +34,36 @@ function Order({ total, priceShipping, addressDefault, paymentMethodId }) {
             <div className="order_wrapper">
                 <div className="address-form__group">
                     <label className="address-form__label">Địa chỉ nhận hàng:</label>
-                    {addressDefault ? (
-                        <>
-                            <p className="address-name">{`${addressDefault.fullName}  `}</p>
-                            <p className="address-phone">{addressDefault.phoneNumber}</p>
-                            <p className="address">
-                                {' '}
-                                {`${addressDefault.addressLine} ${addressDefault.ward} ${addressDefault.district} ${addressDefault.city}`}
-                            </p>
-                        </>
-                    ) : (
-                        <Link className="add-address" to="/myAccount/address">
-                            Thêm địa chỉ nhận hàng
-                        </Link>
-                    )}
+                    {addressDefault
+                        ? addresses.map((address) => {
+                              return (
+                                  <div
+                                      className={address.addressId !== chooseAddressId ? 'address-checked' : ''}
+                                      onClick={() => {
+                                          setChooseAddressId(address.addressId);
+                                      }}
+                                      key={address.addressId}
+                                  >
+                                      <div className="address_checkbox-radio">
+                                          <input
+                                              onChange={() => {
+                                                  setChooseAddressId(address.addressId);
+                                              }}
+                                              checked={address.addressId === chooseAddressId}
+                                              type="radio"
+                                          />
+                                          <p className="address-name">{`${address.fullName}  `}</p>
+                                      </div>
+                                      <p className="address-phone">{address.phoneNumber}</p>
+                                      <p className="address">
+                                          {' '}
+                                          {`${address.addressLine} ${address.ward} ${address.district} ${address.city}`}
+                                      </p>
+                                  </div>
+                              );
+                          })
+                        : false}
+                    {/* { } */}
                 </div>
                 <label className="address-form__label">Sản phẩm:</label>
                 <ul className="header__cart-list-items">

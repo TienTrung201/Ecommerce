@@ -64,41 +64,9 @@ function Shop() {
             getData(api.providers),
         ])
             .then((values) => {
-                const categories = values[1]
-                    .map((categorie) => {
-                        const result = values[2].find((promotion) => promotion.promotionId === categorie.promotionId);
-
-                        return result !== undefined
-                            ? {
-                                  name: result.name,
-                                  promotionId: result.promotionId,
-                                  discountRate: result.discountRate,
-                                  categoriesId: categorie.categoryId,
-                              }
-                            : undefined;
-                    })
-                    .filter((category) => category !== undefined);
-
-                const allProduct = values[0].data.reduce((acc, item) => {
-                    const discount = categories
-                        .filter((c) =>
-                            item.categoriesId.find((item) => {
-                                return c.categoriesId === item;
-                            }),
-                        )
-                        .sort((a, b) => b.discountRate - a.discountRate)[0];
-
-                    acc.push({
-                        ...item,
-                        discountRate: discount === undefined ? 0 : discount.discountRate,
-                        categoriesId: discount === undefined ? 0 : discount.categoriesId,
-                    });
-
-                    return acc;
-                }, []);
                 setProviders(values[3]);
                 setCategories(values[1]);
-                setProducts(allProduct);
+                setProducts(values[0].data);
                 setIsLoading(false);
                 const pageSize = [];
                 for (let i = 1; i <= values[0].totalPages; i++) {
@@ -310,44 +278,6 @@ function Shop() {
                                     </div>
                                 </div>
                             </li>
-                            {/* <li className="filter">
-                                <i className="zoa-icon-sort">
-                                    <FontAwesomeIcon icon={faArrowUpWideShort} />
-                                </i>
-                                <Link to="">
-                                    <i className="zoa-icon-sort" />
-                                    Sort by: <span>Best selling</span>
-                                </Link>
-                                <i className="zoa-icon-down">
-                                    <FontAwesomeIcon icon={faChevronDown} />
-                                </i>
-                                <ul className="dropdown-menu">
-                                    <li>
-                                        <Link to="manual">Featured</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="best-selling">Best Selling</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="title-ascending">Alphabetically, A-Z</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="title-descending">Alphabetically, A-Z</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="price-descending">Price, high to low</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="price-ascending">Price, low to high</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="created-ascending">Date, old to new</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="created-descending">Date, new to old</Link>
-                                    </li>
-                                </ul>
-                            </li> */}
                         </ul>
                     </div>
                     <div className="shop-element right">
@@ -390,11 +320,11 @@ function Shop() {
                                             >
                                                 <img src={product.image} alt="" className="img-responsive" />
                                             </Link>
-                                            {product.discountRate === 0 ? (
+                                            {product.items[0].discountRate === 0 ? (
                                                 false
                                             ) : (
                                                 <div className="ribbon zoa-sale">
-                                                    <span>-{product.discountRate}%</span>
+                                                    <span>-{product.items[0].discountRate}%</span>
                                                 </div>
                                             )}
 
@@ -452,7 +382,10 @@ function Shop() {
                                                 ) : (
                                                     <span>
                                                         {convertVnd(
-                                                            (product.items[0].price * product.discountRate) / 100,
+                                                            product.items[0].price -
+                                                                (product.items[0].price *
+                                                                    product.items[0].discountRate) /
+                                                                    100,
                                                         )}
                                                     </span>
                                                 )}

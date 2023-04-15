@@ -109,34 +109,6 @@ function Product() {
     useEffect(() => {
         Promise.all([getData(api.products + `/${id}`), getData(api.categories), getData(api.promotions)])
             .then((values) => {
-                // console.log(values[0]);
-                const categoriesProduct = values[2]
-                    .map((categorie) => {
-                        const result = values[1].find((promotion) => promotion.promotionId === categorie.promotionId);
-                        return result !== undefined
-                            ? {
-                                  name: result.name,
-                                  promotionId: result.promotionId,
-                                  discountRate: categorie.discountRate,
-                                  categoryId: result.categoryId,
-                              }
-                            : {
-                                  name: categorie.name,
-                                  promotionId: categorie.promotionId,
-                                  discountRate: 0,
-                                  categoryId: categorie.categoryId,
-                              };
-                    })
-                    .filter((category) => category !== undefined);
-                // console.log(categoriesProduct);
-                const discount = categoriesProduct
-                    .filter((c) =>
-                        values[0].categoriesId.find((p) => {
-                            return c.categoryId === p;
-                        }),
-                    )
-                    .sort((a, b) => b.discountRate - a.discountRate)[0];
-
                 values[0].items.forEach((element) => {
                     const a = [...element.optionsId];
 
@@ -149,10 +121,8 @@ function Product() {
                 setItemsProduct(values[0].items);
                 setCategoryProduct(values[0].categoriesId);
                 maxProductPrice.current = values[0].items.sort((a, b) => b.price - a.price)[0].price;
-                setPriceRangeProduct(values[0].items.sort((a, b) => b.price - a.price));
-                setProduct({ ...values[0], discountRate: discount === undefined ? 0 : discount.discountRate });
-
-                // setProductItem(values[0].items.sort((a, b) => b.price - a.price)[0]);
+                setPriceRangeProduct(values[0].items.sort((a, b) => a.price - b.price));
+                setProduct(values[0]);
             })
             .catch((error) => {
                 console.log(error);
@@ -316,6 +286,35 @@ function Product() {
         setNav1(slider1.current);
         setNav2(slider2.current);
     }, []);
+    const priceProduct = useMemo(() => {
+        if (productItem !== null) {
+            if (product.items[0].discountRate === 0) {
+                return convertVnd(productItem.price);
+            } else {
+                return convertVnd(productItem.price - (productItem.price * product.items[0].discountRate) / 100);
+            }
+        } else if (priceRangeProduct.length > 1) {
+            if (product.items[0].discountRate === 0) {
+                return `${convertVnd(priceRangeProduct.slice(-1)[0].price)} - ${convertVnd(
+                    priceRangeProduct.slice(0, 1)[0].price,
+                )}`;
+            } else {
+                return `${convertVnd(
+                    priceRangeProduct.slice(-1)[0].price -
+                        (priceRangeProduct.slice(-1)[0].price * product.items[0].discountRate) / 100,
+                )} - ${convertVnd(
+                    priceRangeProduct.slice(-1)[0].price -
+                        (priceRangeProduct.slice(0, 1)[0].price * product.items[0].discountRate) / 100,
+                )}`;
+            }
+        } else if (priceRangeProduct.length === 1) {
+            if (product.items[0].discountRate === 0) {
+                return convertVnd(priceRangeProduct.slice(-1)[0].price);
+            }
+            return convertVnd((priceRangeProduct.slice(-1)[0].price * product.items[0].discountRate) / 100);
+        }
+        return '';
+    }, [priceRangeProduct, product, productItem]);
     //setting slider product
     //settings related product slider
     // const settingRelated = {
@@ -377,7 +376,15 @@ function Product() {
                             <div className="flex product-img-slide">
                                 <div className="product-images">
                                     <div className="ribbon zoa-sale">
-                                        {product.discountRate === 0 ? false : <span>-{product.discountRate}%</span>}
+                                        {product.items ? (
+                                            product.items[0].discountRate === 0 ? (
+                                                false
+                                            ) : (
+                                                <span>-{product.items[0].discountRate}%</span>
+                                            )
+                                        ) : (
+                                            false
+                                        )}
                                     </div>
                                     <Slider
                                         asNavFor={nav2}
@@ -437,32 +444,7 @@ function Product() {
                                 <h3 className="product-title">{product.name}</h3>
                                 <div className="product-price">
                                     <span className="old thin">{convertVnd(maxProductPrice.current)}</span>
-                                    <span>
-                                        {productItem !== null
-                                            ? product.discountRate === 0
-                                                ? convertVnd(productItem.price)
-                                                : convertVnd((productItem.price * product.discountRate) / 100)
-                                            : priceRangeProduct.length > 1
-                                            ? product.discountRate === 0
-                                                ? `${convertVnd(priceRangeProduct.slice(-1)[0].price)} - ${convertVnd(
-                                                      priceRangeProduct.slice(0, 1)[0].price,
-                                                  )}`
-                                                : `${convertVnd(
-                                                      (priceRangeProduct.slice(-1)[0].price * product.discountRate) /
-                                                          100,
-                                                  )} - ${convertVnd(
-                                                      (priceRangeProduct.slice(0, 1)[0].price * product.discountRate) /
-                                                          100,
-                                                  )}`
-                                            : priceRangeProduct.length === 1
-                                            ? product.discountRate === 0
-                                                ? convertVnd(priceRangeProduct.slice(-1)[0].price)
-                                                : `${convertVnd(
-                                                      (priceRangeProduct.slice(-1)[0].price * product.discountRate) /
-                                                          100,
-                                                  )}`
-                                            : ''}
-                                    </span>
+                                    <span>{priceProduct}</span>
                                 </div>
                                 <div className="flex product-rating">
                                     <div className="group-star">
@@ -850,17 +832,16 @@ function Product() {
                                                     </Link>
                                                 </h3>
                                                 <div className="product-price">
-                                                    <span className="old">
-                                                        {convertVnd(product.items[0].costPrice)}
-                                                    </span>
+                                                    <span className="old">{convertVnd(product.items[0].price)}</span>
                                                     {product.items[0].discountRate === 0 ? (
-                                                        <span>{convertVnd(product.items[0].costPrice)}</span>
+                                                        <span>{convertVnd(product.items[0].price)}</span>
                                                     ) : (
                                                         <span>
                                                             {convertVnd(
-                                                                (product.items[0].costPrice *
-                                                                    product.items[0].discountRate) /
-                                                                    100,
+                                                                product.items[0].price -
+                                                                    (product.items[0].price *
+                                                                        product.items[0].discountRate) /
+                                                                        100,
                                                             )}
                                                         </span>
                                                     )}
