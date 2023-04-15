@@ -603,7 +603,23 @@ label.mail {
         margin-bottom: 0;
     }
     .address-form__group {
+        display: flex;
+        flex-direction: column;
+        max-height: 180px;
+        overflow-y: scroll;
         margin-bottom: 5px;
+        .address_checkbox-radio {
+            display: flex;
+            align-items: center;
+            input {
+                margin: 0;
+                margin-right: 10px;
+            }
+        }
+        .address-checked {
+            opacity: 0.6;
+            cursor: pointer;
+        }
         .address-phone,
         .address-name {
             font-weight: 600;

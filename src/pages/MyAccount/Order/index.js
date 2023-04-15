@@ -99,19 +99,13 @@ function Order() {
                                                     ) : (
                                                         <div className="cart-total">
                                                             {convertVnd(
-                                                                (item.product.items[0].price *
-                                                                    item.product.items[0].discountRate) /
-                                                                    100,
+                                                                item.product.items[0].price -
+                                                                    (item.product.items[0].price *
+                                                                        item.product.items[0].discountRate) /
+                                                                        100,
                                                             )}
                                                         </div>
                                                     )}
-                                                    <div className="cart-total">
-                                                        {convertVnd(
-                                                            (item.product.items[0].price *
-                                                                item.product.items[0].discountRate) /
-                                                                100,
-                                                        )}
-                                                    </div>
                                                 </div>
                                             );
                                         })}

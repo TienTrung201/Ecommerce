@@ -4,7 +4,7 @@ import notificationsSlice from '@/components/Admin/Notification/notificationsSli
 import { cartSelector, optionsSelector, shippingMethodsSelector, userSelector } from '@/redux/selector';
 import { faClose, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
@@ -24,7 +24,6 @@ function Cart() {
     const cartItem = useRef();
     const wishlistItem = useRef();
     const [visible, setVisible] = useState(false);
-
     // set quantiti item cart
     const handeSetQuantity = (id, position, action) => {
         dispatch(notificationsSlice.actions.showLoading(''));
@@ -145,7 +144,7 @@ function Cart() {
                 if (item.discountRate === 0) {
                     return (acc += item.price * item.qty);
                 }
-                return (acc += ((item.price * item.discountRate) / 100) * item.qty);
+                return (acc += (item.price - (item.price * item.discountRate) / 100) * item.qty);
             }
             return (acc += 0);
         }, 0);
@@ -175,12 +174,20 @@ function Cart() {
     //menu tab
 
     //order
+
     const { addresses, shippingMethodId, paymentMethodId } = user;
     const shippingMethods = useSelector(shippingMethodsSelector);
     const addressDefault = useMemo(() => {
         const addressOrder = addresses.find((address) => address.isDefault === true);
+
         return addressOrder;
     }, [addresses]);
+    const [chooseAddressId, setChooseAddressId] = useState(addressDefault ? addressDefault.addressId : 0);
+    useEffect(() => {
+        if (addressDefault) {
+            setChooseAddressId(addressDefault.addressId);
+        }
+    }, [addressDefault]);
     const priceShipping = useMemo(() => {
         if (shippingMethods.length === 0) {
             return 0;
@@ -206,12 +213,12 @@ function Cart() {
             const dataOrder =
                 paymentMethodId === 0
                     ? {
-                          addressId: addressDefault.addressId,
+                          addressId: chooseAddressId,
                           shippingMethodId: typeShipping.shippingMethodId,
                           items: dataItemsOrder,
                       }
                     : {
-                          addressId: addressDefault.addressId,
+                          addressId: chooseAddressId,
                           shippingMethodId: typeShipping.shippingMethodId,
                           paymentMethodId: paymentMethodId,
                           items: dataItemsOrder,
@@ -274,6 +281,7 @@ function Cart() {
             }, 1000);
         }
     };
+
     return (
         <div className="container">
             <Modal
@@ -285,22 +293,25 @@ function Cart() {
                 checkedSubmit={addressDefault ? true : false}
             >
                 <Order
+                    addresses={addresses}
                     paymentMethodId={paymentMethodId}
                     priceShipping={priceShipping}
                     addressDefault={addressDefault}
                     total={totalCart}
+                    setChooseAddressId={setChooseAddressId}
+                    chooseAddressId={chooseAddressId}
                 />
             </Modal>
             <div className="zoa-cart">
                 <ul className="account-tab">
                     <li ref={cartItem} onClick={handleChangeCart} className="active">
                         <Link data-toggle="tab" to="#" aria-expanded="false">
-                            Shopping Cart
+                            Giỏ hàng
                         </Link>
                     </li>
                     <li ref={wishlistItem} onClick={handleChangeWishlist} className="">
                         <Link data-toggle="tab" to="#" aria-expanded="true">
-                            Wishlist
+                            Danh sách yêu thích
                         </Link>
                     </li>
                 </ul>
@@ -312,13 +323,13 @@ function Cart() {
                                     <thead>
                                         <tr>
                                             <th></th>
-                                            <th className="product-thumbnail">Product</th>
-                                            <th className="product-name">Description</th>
-                                            <th className="product-name">Size</th>
-                                            <th className="product-price">Price</th>
-                                            <th className="product-quantity">Quantity</th>
-                                            <th className="product-subtotal">Total</th>
-                                            <th className="product-remove">Delete</th>
+                                            <th className="product-thumbnail">Sản phẩm</th>
+                                            <th className="product-name">Mô tả</th>
+                                            <th className="product-name">Loại</th>
+                                            <th className="product-price">Giá</th>
+                                            <th className="product-quantity">Số lượng</th>
+                                            <th className="product-subtotal">Tổng tiền</th>
+                                            <th className="product-remove">Xóa</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -372,7 +383,9 @@ function Cart() {
                                                             <p className="price">{convertVnd(item.price)}</p>
                                                         ) : (
                                                             <p className="price">
-                                                                {convertVnd((item.price * item.discountRate) / 100)}
+                                                                {convertVnd(
+                                                                    item.price - (item.price * item.discountRate) / 100,
+                                                                )}
                                                             </p>
                                                         )}
                                                     </td>
@@ -419,7 +432,9 @@ function Cart() {
                                                         ) : (
                                                             <p className="price">
                                                                 {convertVnd(
-                                                                    item.qty * ((item.price * item.discountRate) / 100),
+                                                                    item.qty *
+                                                                        (item.price -
+                                                                            (item.price * item.discountRate) / 100),
                                                                 )}
                                                             </p>
                                                         )}
@@ -473,7 +488,7 @@ function Cart() {
                                     <div className="col-md-5 col-sm-6 col-xs-12">
                                         <div className="cart-text">
                                             <div className="cart-element">
-                                                <p>Total products:</p>
+                                                <p>Tổng tiền sản phẩm:</p>
                                                 <p>{convertVnd(totalCart)}</p>
                                             </div>
                                             <div className="cart-element">
@@ -481,7 +496,7 @@ function Cart() {
                                                 <p>{convertVnd(0)}</p>
                                             </div>
                                             <div className="cart-element text-bold">
-                                                <p>Total:</p>
+                                                <p>Tổng thanh toán:</p>
                                                 <p>{convertVnd(totalCart)}</p>
                                             </div>
                                         </div>
@@ -496,7 +511,7 @@ function Cart() {
                                                     : 'zoa-btn zoa-checkout'
                                             }
                                         >
-                                            Checkout
+                                            Mua hàng
                                         </Link>
                                     </div>
                                 </div>
