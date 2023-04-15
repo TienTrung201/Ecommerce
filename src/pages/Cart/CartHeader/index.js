@@ -74,7 +74,7 @@ function CartHeader() {
                                     <div className="header__cart-item-price-wrap">
                                         {item.discountRate !== 0 ? (
                                             <span className="header__cart-item-price">
-                                                {(item.price * item.discountRate) / 100}đ
+                                                {item.price - (item.price * item.discountRate) / 100}đ
                                             </span>
                                         ) : (
                                             <span className="header__cart-item-price">{item.price}đ</span>
