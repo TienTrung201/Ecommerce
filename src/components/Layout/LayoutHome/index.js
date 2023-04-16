@@ -2,12 +2,14 @@ import Header from './Header';
 import Footer from './Footer';
 
 function LayoutHome({ children }) {
+    // Get current admin information
+
     return (
-        <section className="">
+        <>
             <Header />
             <div className="">{children}</div>
             <Footer />
-        </section>
+        </>
     );
 }
 

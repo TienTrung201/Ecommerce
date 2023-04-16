@@ -1,0 +1,110 @@
+@mixin mobile {
+    @media screen and (max-width: 739px) {
+        @content;
+    }
+}
+@mixin tablet {
+    @media screen and (min-width: 740px) and (max-width: 1023px) {
+        @content;
+    }
+}
+
+.wrapper {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 999;
+    .overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.2);
+        z-index: 0;
+    }
+    .container {
+        z-index: 1;
+        width: 540px;
+        max-width: calc(100vw - 32px);
+        // border-radius: 8px;
+        border: 2px solid #dce0e3;
+        overflow: hidden;
+        .wrapperModal {
+            transition: 0.2s ease-in-out;
+            background-color: var(--backGround--page);
+            .header {
+                height: 50px;
+                text-align: center;
+                font-size: 20px;
+                border-bottom: 1px solid #ccc;
+                line-height: 1rem;
+                position: relative;
+                h2 {
+                    font-size: 2.2rem;
+                }
+                button {
+                    position: absolute;
+                    right: 16px;
+                    background-color: #fff;
+                    height: 35px;
+                    width: 35px;
+                    border-radius: 50%;
+                    border: none;
+                    cursor: pointer;
+                    transition: 0.2s ease-in-out;
+                    // &:hover {
+                    //     background-color: rgba(204, 204, 204, 1);
+                    // }
+                    .iconClose {
+                        font-size: 2rem;
+                    }
+                }
+            }
+
+            .content {
+                max-height: 450px;
+                overflow-y: scroll;
+                padding: 5px;
+            }
+            .footer {
+                padding: 8px 0;
+                padding-bottom: 20px;
+                button {
+                    background-color: var(--backGround-App);
+                    height: 35px;
+                    width: 120px;
+                    // border-radius: 6px;
+                    transition: all 0.3s ease;
+                    color: #fff;
+                    transition: 0.2s ease;
+                    border: none !important;
+                    @include mobile {
+                        height: 35px;
+                        width: 120px;
+                        border-radius: 5px;
+                        font-size: 1.4rem;
+                        right: 50px !important;
+                    }
+                }
+                .opacity05 {
+                    opacity: 0.5;
+                }
+                .opacity1 {
+                    opacity: 1;
+                    &:hover {
+                        background-color: #000000;
+                    }
+                }
+                .poiter-none {
+                    cursor: auto;
+                }
+                .poiter {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
