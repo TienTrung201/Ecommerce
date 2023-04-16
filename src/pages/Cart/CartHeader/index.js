@@ -78,7 +78,7 @@ function CartHeader() {
                                                 {convertVnd(item.price - (item.price * item.discountRate) / 100)}
                                             </span>
                                         ) : (
-                                            <span className="header__cart-item-price">{convertVnd(item.pric)}</span>
+                                            <span className="header__cart-item-price">{convertVnd(item.price)}</span>
                                         )}
 
                                         <span className="header__cart-item-multiply">x</span>
