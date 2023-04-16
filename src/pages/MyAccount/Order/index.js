@@ -10,6 +10,8 @@ import { faTruckMoving } from '@fortawesome/free-solid-svg-icons';
 import { faMoneyBillAlt } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
 import Loading from '@/components/Loading/Loading';
+import Modal from '@/components/Layout/Modal';
+import ProductReviews from './productReviews';
 
 function Order() {
     const dispatch = useDispatch();
@@ -18,6 +20,13 @@ function Order() {
     const user = useSelector(userSelector);
     const [orderStatus, setOrderStatus] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [visible, setVisible] = useState(false);
+    const [orderItems, setOrderItems] = useState([]);
+    //review product Items
+    const handleReviewOrderItems = (orderItems) => {
+        setVisible(true);
+        setOrderItems(orderItems);
+    };
     useEffect(() => {
         console.log(user.uid !== '');
         if (user.uid !== '') {
@@ -44,6 +53,9 @@ function Order() {
     }, []);
     return (
         <div className="shopping-cart">
+            <Modal visible={visible} setVisible={setVisible} title={'Đánh giá sản phẩm'}>
+                <ProductReviews optionItems={optionItems} orderItems={orderItems} />
+            </Modal>
             <h3 className="address-list-title">Danh sách Đơn hàng</h3>
             {isLoading ? (
                 <div style={{ paddingTop: '100px' }}>
@@ -92,14 +104,12 @@ function Order() {
                                                         </p>
                                                         <span className="item-quantity">x{item.qty}</span>
                                                     </div>
-                                                    {item.product.items[0].discountRate === 0 ? (
+                                                    {item.discountRate === 0 ? (
                                                         <div className="cart-total">{convertVnd(item.price)}</div>
                                                     ) : (
                                                         <div className="cart-total">
                                                             {convertVnd(
-                                                                item.price -
-                                                                    (item.price * item.product.items[0].discountRate) /
-                                                                        100,
+                                                                item.price - (item.price * item.discountRate) / 100,
                                                             )}
                                                         </div>
                                                     )}
@@ -124,7 +134,12 @@ function Order() {
                                         </div>
                                     </div>
                                     <div className="order__items-footer">
-                                        <button className="order__items-btn feedback">
+                                        <button
+                                            onClick={() => {
+                                                handleReviewOrderItems(order.items);
+                                            }}
+                                            className="order__items-btn feedback"
+                                        >
                                             <Link to="">Đánh giá</Link>
                                         </button>
                                         <button className="order__items-btn contact">
