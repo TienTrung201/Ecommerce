@@ -2296,7 +2296,8 @@
 
 body {
     margin: 0;
-    font-family: var(--bs-body-font-family);
+    // font-family: var(--bs-body-font-family);
+    font-family: 'Roboto', sans-serif !important;
     font-size: var(--bs-body-font-size);
     font-weight: var(--bs-body-font-weight);
     line-height: var(--bs-body-line-height);
@@ -18940,11 +18941,17 @@ dl li {
 
 .content-wrapper {
     background: var(--content-background-color);
-    padding: 2.4rem 2.8rem;
+    padding: 2.4rem 1.6rem;
     width: 100%;
     -webkit-box-flex: 1;
     -ms-flex-positive: 1;
     flex-grow: 1;
+}
+
+@media (min-width: 768px) {
+    .content-wrapper {
+        padding: 2.4rem 2.8rem;
+    }
 }
 
 /*# sourceMappingURL=style.css.map */

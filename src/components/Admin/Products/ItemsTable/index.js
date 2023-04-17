@@ -43,7 +43,7 @@ function ItemsTable({ items, productOptions, handleRemoveItem, handleSelectItem 
                                         const options = po.options.filter((o) =>
                                             item.optionsId.includes(o.productOptionId),
                                         );
-                                        result = [...result, options.map((i) => i.name)];
+                                        result = [...result, ...options.map((i) => i.name)];
                                         return result;
                                     }, [])
                                     .join(', ')}
