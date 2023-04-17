@@ -1,10 +1,30 @@
 import { Rate } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-function ProductReviews({ orderItems, optionItems }) {
+function ProductReviews({ orderItems, optionItems, setOrderItems }) {
     // const handleReviewProduct = () => {};
-    const [chooseProductReview, setChooseAddressReview] = useState(orderItems[0].orderItemId);
+    const [chooseProductReviewId, setChooseProductReviewId] = useState(orderItems[0].orderItemId);
+    const desc = ['Tệ', 'Không hài lòng', 'Bình thường', 'Hài lòng', 'Tuyệt vời'];
+    // handle change review input and rating
+    const handleChangeReviewOrderItem = (id, value, name) => {
+        const orderItemsWhenReview = orderItems.map((item) => {
+            if (id === item.orderItemId) {
+                if (name === 'rate') {
+                    return { ...item, [name]: value, title: desc[value - 1] };
+                }
+                return { ...item, [name]: value };
+            }
+            return item;
+        });
+        setOrderItems(orderItemsWhenReview);
+    };
+    //handle send review product
+    // const handleSubmitReviewProduct =(positionArrayOrderItems)=>{
 
+    // }
+    useEffect(() => {
+        console.log(orderItems);
+    }, [orderItems]);
     return (
         <>
             <div className="product-review">
@@ -13,11 +33,11 @@ function ProductReviews({ orderItems, optionItems }) {
                           return (
                               <div
                                   onClick={() => {
-                                      setChooseAddressReview(orderItem.orderItemId);
+                                      setChooseProductReviewId(orderItem.orderItemId);
                                   }}
                                   key={orderItem.orderItemId}
                                   className={
-                                      chooseProductReview === orderItem.orderItemId
+                                      chooseProductReviewId === orderItem.orderItemId
                                           ? 'product_review-item choose-review'
                                           : 'product_review-item'
                                   }
@@ -42,14 +62,36 @@ function ProductReviews({ orderItems, optionItems }) {
                                       </div>
                                       <div className="rate-star">
                                           <p>Chất lượng sản phẩm</p>
-                                          <Rate allowHalf defaultValue={5} />
+                                          <Rate
+                                              onChange={(value) => {
+                                                  handleChangeReviewOrderItem(orderItem.orderItemId, value, 'rate');
+                                              }}
+                                              defaultValue={orderItem.rate}
+                                          />
+                                          {orderItem.rate ? (
+                                              <span className="ant-rate-text">{desc[orderItem.rate - 1]}</span>
+                                          ) : (
+                                              ''
+                                          )}
                                       </div>
                                   </div>
                                   <div className="form-review">
-                                      <textarea placeholder="Đánh giá của bạn" defaultValue={''} />
+                                      <textarea
+                                          onChange={(e) => {
+                                              handleChangeReviewOrderItem(
+                                                  orderItem.orderItemId,
+                                                  e.target.value,
+                                                  'comment',
+                                              );
+                                              //   setCommentReview(e.target.value);
+                                          }}
+                                          value={orderItem.comment}
+                                          placeholder="Đánh giá của bạn"
+                                          //   defaultValue={''}
+                                      />
                                       <button
                                           className={
-                                              chooseProductReview !== orderItem.orderItemId ? 'button-noChecked' : ''
+                                              chooseProductReviewId !== orderItem.orderItemId ? 'button-noChecked' : ''
                                           }
                                       >
                                           Đánh giá

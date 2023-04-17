@@ -954,12 +954,12 @@ label.mail {
     }
 
     .product_review-item {
-        background-color: rgba(0, 0, 0, 0.08);
+        // background-color: rgba(0, 0, 0, 0.08);
         padding: 5px 10px 10px 10px;
         margin-bottom: 8px;
     }
     .choose-review {
-        background-color: #cecece;
+        background-color: #e6e4e4;
     }
     .product-item-review {
         display: flex;
@@ -974,6 +974,9 @@ label.mail {
             justify-content: space-around;
             height: 77px;
             flex: 8;
+        }
+        .ant-rate-text {
+            margin: 0;
         }
         .cart-items-bytrung {
             display: flex;

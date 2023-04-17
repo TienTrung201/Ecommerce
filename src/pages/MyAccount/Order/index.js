@@ -25,7 +25,11 @@ function Order() {
     //review product Items
     const handleReviewOrderItems = (orderItems) => {
         setVisible(true);
-        setOrderItems(orderItems);
+        const orderItemReview = orderItems.reduce((acc, item) => {
+            acc.push({ ...item, comment: '', title: '', rate: 5 });
+            return acc;
+        }, []);
+        setOrderItems(orderItemReview);
     };
     useEffect(() => {
         console.log(user.uid !== '');
@@ -54,7 +58,7 @@ function Order() {
     return (
         <div className="shopping-cart">
             <Modal visible={visible} setVisible={setVisible} title={'Đánh giá sản phẩm'}>
-                <ProductReviews optionItems={optionItems} orderItems={orderItems} />
+                <ProductReviews setOrderItems={setOrderItems} optionItems={optionItems} orderItems={orderItems} />
             </Modal>
             <h3 className="address-list-title">Danh sách Đơn hàng</h3>
             {isLoading ? (
