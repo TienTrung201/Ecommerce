@@ -10,6 +10,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import * as Unicons from '@iconscout/react-unicons';
 import { debounce } from 'lodash';
+import currencyConvert from '@/service/currencyConvert';
 
 const cx = classNames.bind(styles);
 
@@ -219,9 +220,15 @@ function ShopOrders() {
                                                     .tz('Asia/Bangkok')
                                                     .format('DD/MM/YYYY HH:mm')}
                                             </td>
-                                            <td>{shopOrder?.address?.fullName || 'N/A'}</td>
+                                            <td>{shopOrder?.user?.fullName || 'N/A'}</td>
                                             <td>
-                                                <span className={cx('badge', 'badge-light')}>Đã thanh toán</span>
+                                                {shopOrder?.paymentMethodId ? (
+                                                    <span className={cx('badge', 'badge-light')}>Đã thanh toán</span>
+                                                ) : (
+                                                    <span className={cx('badge', 'badge-warning')}>
+                                                        TT khi nhận hàng
+                                                    </span>
+                                                )}
                                             </td>
                                             <td>
                                                 <span
@@ -230,7 +237,7 @@ function ShopOrders() {
                                                     {getCurrentStatus(shopOrder).name}
                                                 </span>
                                             </td>
-                                            <td>{shopOrder.orderTotal}đ</td>
+                                            <td>{currencyConvert(shopOrder.orderTotal)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
