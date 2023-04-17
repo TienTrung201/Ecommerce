@@ -93,15 +93,12 @@ function Order() {
                                                         <span className="item-quantity">x{item.qty}</span>
                                                     </div>
                                                     {item.product.items[0].discountRate === 0 ? (
-                                                        <div className="cart-total">
-                                                            {convertVnd(item.product.items[0].price)}
-                                                        </div>
+                                                        <div className="cart-total">{convertVnd(item.price)}</div>
                                                     ) : (
                                                         <div className="cart-total">
                                                             {convertVnd(
-                                                                item.product.items[0].price -
-                                                                    (item.product.items[0].price *
-                                                                        item.product.items[0].discountRate) /
+                                                                item.price -
+                                                                    (item.price * item.product.items[0].discountRate) /
                                                                         100,
                                                             )}
                                                         </div>
