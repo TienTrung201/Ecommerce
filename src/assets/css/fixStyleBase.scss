@@ -959,7 +959,7 @@ label.mail {
         margin-bottom: 8px;
     }
     .choose-review {
-        background-color: #e6e4e4;
+        background-color: #e4e4e4;
     }
     .product-item-review {
         display: flex;
@@ -1032,6 +1032,10 @@ label.mail {
             margin-bottom: 8px;
             width: 100%;
             padding: 2px 5px;
+            &::placeholder {
+                font-size: 1.3rem;
+            }
+            font-size: 1.3rem;
         }
         button {
             border: none;
@@ -1039,6 +1043,7 @@ label.mail {
             color: #fff;
             width: fit-content;
             padding: 3px 12px;
+            font-size: 1.4rem;
         }
         .button-noChecked {
             opacity: 0.4;

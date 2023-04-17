@@ -18,6 +18,7 @@ const api = {
     wishLists: domain + '/api/wishlists',
     shopOrders: domain + '/api/shoporders',
     providers: domain + '/api/providers',
+    userReview: domain + '/api/userreviews',
     //user
     users: domain + '/api/users',
     loginUser: domain + '/api/users/login',

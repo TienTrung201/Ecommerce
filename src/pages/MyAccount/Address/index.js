@@ -63,6 +63,9 @@ function Address({ user }) {
                     dispatch(
                         userSlice.actions.addAdress({ ...formData, addressId: response.addressId, isDefault: false }),
                     );
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.destroy());
+                    }, 1000);
                     handleSetNullFormData();
                 }, 1000);
                 console.log(response);
@@ -71,6 +74,9 @@ function Address({ user }) {
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.showError('Thất bại'));
                 }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
                 console.warn(err);
             });
     };

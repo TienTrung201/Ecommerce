@@ -1,9 +1,13 @@
+import { api } from '@/api';
+import { postData } from '@/api/service';
+import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { Rate } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-function ProductReviews({ orderItems, optionItems, setOrderItems }) {
+function ProductReviews({ orderItems, optionItems, setOrderItems, getDataMyOrder, dispatch, setVisible }) {
     // const handleReviewProduct = () => {};
-    const [chooseProductReviewId, setChooseProductReviewId] = useState(orderItems[0].orderItemId);
+    const [chooseProductReview, setChooseProductReview] = useState(0);
+
     const desc = ['Tệ', 'Không hài lòng', 'Bình thường', 'Hài lòng', 'Tuyệt vời'];
     // handle change review input and rating
     const handleChangeReviewOrderItem = (id, value, name) => {
@@ -18,26 +22,55 @@ function ProductReviews({ orderItems, optionItems, setOrderItems }) {
         });
         setOrderItems(orderItemsWhenReview);
     };
-    //handle send review product
-    // const handleSubmitReviewProduct =(positionArrayOrderItems)=>{
+    // handle send review product
+    const handleSubmitReviewProduct = (positionArrayOrderItems) => {
+        const title = desc[orderItems[positionArrayOrderItems].rate - 1];
+        const postItemReviewData = {
+            comment: orderItems[positionArrayOrderItems].comment,
+            ratingValue: orderItems[positionArrayOrderItems].rate,
+            title: title,
+            orderItemId: orderItems[positionArrayOrderItems].orderItemId,
+        };
+        console.log(postItemReviewData);
+        dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
+        postData(api.userReview, postItemReviewData)
+            .then((response) => {
+                const newData = orderItems.filter((orderItem) => orderItem.orderItemId !== response.data.orderItemId);
+                console.log(newData);
+                setOrderItems(newData);
+                if (newData.length === 0) {
+                    setVisible(false);
+                }
+                getDataMyOrder();
+                dispatch(notificationsSlice.actions.showSuccess('Đánh giá thành công'));
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 1000);
+                setChooseProductReview(0);
+                console.log(response);
+            })
+            .catch((error) => {
+                dispatch(notificationsSlice.actions.showSuccess('Đánh giá không thành công'));
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 1000);
+                console.log(error);
+            });
+    };
 
-    // }
-    useEffect(() => {
-        console.log(orderItems);
-    }, [orderItems]);
     return (
         <>
             <div className="product-review">
                 {orderItems.length !== 0
-                    ? orderItems.map((orderItem) => {
+                    ? orderItems.map((orderItem, i) => {
                           return (
                               <div
                                   onClick={() => {
-                                      setChooseProductReviewId(orderItem.orderItemId);
+                                      setChooseProductReview(i);
                                   }}
                                   key={orderItem.orderItemId}
                                   className={
-                                      chooseProductReviewId === orderItem.orderItemId
+                                      chooseProductReview === i
                                           ? 'product_review-item choose-review'
                                           : 'product_review-item'
                                   }
@@ -63,6 +96,7 @@ function ProductReviews({ orderItems, optionItems, setOrderItems }) {
                                       <div className="rate-star">
                                           <p>Chất lượng sản phẩm</p>
                                           <Rate
+                                              allowClear={false}
                                               onChange={(value) => {
                                                   handleChangeReviewOrderItem(orderItem.orderItemId, value, 'rate');
                                               }}
@@ -86,15 +120,16 @@ function ProductReviews({ orderItems, optionItems, setOrderItems }) {
                                               //   setCommentReview(e.target.value);
                                           }}
                                           value={orderItem.comment}
-                                          placeholder="Đánh giá của bạn"
+                                          placeholder="Hãy chia sẻ những điều bạn thích về sản phẩm này với những người bạn đã mua nhé"
                                           //   defaultValue={''}
                                       />
                                       <button
-                                          className={
-                                              chooseProductReviewId !== orderItem.orderItemId ? 'button-noChecked' : ''
-                                          }
+                                          onClick={() => {
+                                              handleSubmitReviewProduct(i);
+                                          }}
+                                          className={chooseProductReview !== i ? 'button-noChecked' : ''}
                                       >
-                                          Đánh giá
+                                          Hoàn thành
                                       </button>
                                   </div>
                               </div>
