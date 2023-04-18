@@ -66,7 +66,7 @@ function Order() {
         if (user.uid !== '') {
             getData(api.shopOrders + '/myorders')
                 .then((response) => {
-                    dispatch(userOrderSlice.actions.setDataOrder(response.data.reverse()));
+                    dispatch(userOrderSlice.actions.setDataOrder(response.data));
                     setIsLoading(false);
                     console.log('my Order', response);
                 })
@@ -80,7 +80,7 @@ function Order() {
         if (user.uid !== '') {
             getData(api.shopOrders + '/myorders')
                 .then((response) => {
-                    dispatch(userOrderSlice.actions.setDataOrder(response.data.reverse()));
+                    dispatch(userOrderSlice.actions.setDataOrder(response.data));
                     setIsLoading(false);
                     console.log('my Order', response);
                 })

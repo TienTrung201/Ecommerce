@@ -1,6 +1,7 @@
 import { api } from '@/api';
-import { postData } from '@/api/service';
+import { postData, updateData } from '@/api/service';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
+import Loading from '@/components/Loading/Loading';
 import { Rate } from 'antd';
 import { useState } from 'react';
 
@@ -44,21 +45,23 @@ function ProductReviews({
         postData(api.userReview, postItemReviewData)
             .then((response) => {
                 const newData = orderItems.filter((orderItem) => orderItem.orderItemId !== response.data.orderItemId);
-                console.log(newData);
-                setOrderItems(newData);
-                if (newData.length === 0) {
-                    setVisible(false);
-                }
+
                 getDataMyOrder();
-                dispatch(notificationsSlice.actions.showSuccess('Đánh giá thành công'));
+                setTimeout(() => {
+                    setOrderItems(newData);
+                    if (newData.length === 0) {
+                        setVisible(false);
+                    }
+                    dispatch(notificationsSlice.actions.showSuccess('Đánh giá thành công'));
+                    setChooseProductReview(0);
+                    console.log(response);
+                }, 1000);
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.destroy());
-                }, 1000);
-                setChooseProductReview(0);
-                console.log(response);
+                }, 2000);
             })
             .catch((error) => {
-                dispatch(notificationsSlice.actions.showSuccess('Đánh giá không thành công'));
+                dispatch(notificationsSlice.actions.showError('Lỗi'));
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 1000);
@@ -66,88 +69,133 @@ function ProductReviews({
             });
     };
 
+    const handleEditReviewProduct = (orderItemId, positionArrayOrderItems) => {
+        const title = desc[orderItems[positionArrayOrderItems].ratingValue - 1];
+        const postItemReviewData = {
+            comment: orderItems[positionArrayOrderItems].comment,
+            ratingValue: orderItems[positionArrayOrderItems].ratingValue,
+            title: title,
+            orderItemId: orderItems[positionArrayOrderItems].orderItemId,
+        };
+        dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
+        updateData(api.userReview + `/${orderItemId}`, postItemReviewData)
+            .then((response) => {
+                getDataMyOrder();
+                setTimeout(() => {
+                    const newData = orderItems.filter(
+                        (orderItem) => orderItem.orderItemId !== response.data.orderItemId,
+                    );
+                    setOrderItems(newData);
+                    if (newData.length === 0) {
+                        setVisible(false);
+                    }
+                    dispatch(notificationsSlice.actions.showSuccess('Thay đổi thành công'));
+                }, 1000);
+
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                console.log(response);
+            })
+            .catch((err) => {
+                dispatch(notificationsSlice.actions.showError('Không thể thay đổi'));
+
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 1000);
+                console.log(err);
+            });
+    };
     return (
         <>
             <div className="product-review">
-                {orderItems.length !== 0
-                    ? orderItems.map((orderItem, i) => {
-                          return (
-                              <div
-                                  onClick={() => {
-                                      setChooseProductReview(i);
-                                  }}
-                                  key={orderItem.orderItemId}
-                                  className={
-                                      chooseProductReview === i
-                                          ? 'product_review-item choose-review'
-                                          : 'product_review-item'
-                                  }
-                              >
-                                  <div className="product-item-review">
-                                      <div className="cart-items-bytrung">
-                                          <div className="cart-img">
-                                              <img src={orderItem.product.image} alt="" />
-                                          </div>
-                                          <div className="cart-info">
-                                              <h5 className="item-name">{orderItem.product.name}</h5>
-                                              <p className="item-type">
-                                                  Phân loại:{' '}
-                                                  {orderItem.product.items[0].optionsId.map((optionCurrentItem) => {
-                                                      const typeOption = optionItems.find(
-                                                          (o) => o.productOptionId === optionCurrentItem,
-                                                      );
-                                                      return typeOption.name + ' ';
-                                                  })}
-                                              </p>
-                                          </div>
-                                      </div>
-                                      <div className="rate-star">
-                                          <p>Chất lượng sản phẩm</p>
-                                          <Rate
-                                              allowClear={false}
-                                              onChange={(value) => {
-                                                  handleChangeReviewOrderItem(
-                                                      orderItem.orderItemId,
-                                                      value,
-                                                      'ratingValue',
-                                                  );
-                                              }}
-                                              defaultValue={orderItem.ratingValue}
-                                          />
-                                          {orderItem.ratingValue ? (
-                                              <span className="ant-rate-text">{desc[orderItem.ratingValue - 1]}</span>
-                                          ) : (
-                                              ''
-                                          )}
-                                      </div>
-                                  </div>
-                                  <div className="form-review">
-                                      <textarea
-                                          onChange={(e) => {
-                                              handleChangeReviewOrderItem(
-                                                  orderItem.orderItemId,
-                                                  e.target.value,
-                                                  'comment',
-                                              );
-                                              //   setCommentReview(e.target.value);
-                                          }}
-                                          value={orderItem.comment}
-                                          placeholder="Hãy chia sẻ những điều bạn thích về sản phẩm này với những người bạn đã mua nhé"
-                                          //   defaultValue={''}
-                                      />
-                                      <button
-                                          onClick={() => {
-                                              handleSubmitReviewProduct(i);
-                                          }}
-                                          className={chooseProductReview !== i ? 'button-noChecked' : ''}
-                                      >
-                                          {typeActionRating === 'edit' ? 'Đánh giá lại' : 'Hoàn thành'}
-                                      </button>
-                                  </div>
-                              </div>
-                          );
-                      })
-                    : false}
+                {orderItems.length !== 0 ? (
+                    orderItems.map((orderItem, i) => {
+                        return (
+                            <div
+                                onClick={() => {
+                                    setChooseProductReview(i);
+                                }}
+                                key={orderItem.orderItemId}
+                                className={
+                                    chooseProductReview === i
+                                        ? 'product_review-item choose-review'
+                                        : 'product_review-item'
+                                }
+                            >
+                                <div className="product-item-review">
+                                    <div className="cart-items-bytrung">
+                                        <div className="cart-img">
+                                            <img src={orderItem.product.image} alt="" />
+                                        </div>
+                                        <div className="cart-info">
+                                            <h5 className="item-name">{orderItem.product.name}</h5>
+                                            <p className="item-type">
+                                                Phân loại:{' '}
+                                                {orderItem.product.items[0].optionsId.map((optionCurrentItem) => {
+                                                    const typeOption = optionItems.find(
+                                                        (o) => o.productOptionId === optionCurrentItem,
+                                                    );
+                                                    return typeOption.name + ' ';
+                                                })}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="rate-star">
+                                        <p>Chất lượng sản phẩm</p>
+                                        <Rate
+                                            allowClear={false}
+                                            onChange={(value) => {
+                                                handleChangeReviewOrderItem(
+                                                    orderItem.orderItemId,
+                                                    value,
+                                                    'ratingValue',
+                                                );
+                                            }}
+                                            defaultValue={orderItem.ratingValue}
+                                        />
+                                        {orderItem.ratingValue ? (
+                                            <span className="ant-rate-text">{desc[orderItem.ratingValue - 1]}</span>
+                                        ) : (
+                                            ''
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="form-review">
+                                    <textarea
+                                        onChange={(e) => {
+                                            handleChangeReviewOrderItem(
+                                                orderItem.orderItemId,
+                                                e.target.value,
+                                                'comment',
+                                            );
+                                            //   setCommentReview(e.target.value);
+                                        }}
+                                        value={orderItem.comment}
+                                        placeholder="Hãy chia sẻ những điều bạn thích về sản phẩm này với những người bạn đã mua nhé"
+                                        //   defaultValue={''}
+                                    />
+                                    <button
+                                        onClick={() => {
+                                            if (typeActionRating === 'edit') {
+                                                handleEditReviewProduct(orderItem.orderItemId, i);
+                                            } else {
+                                                handleSubmitReviewProduct(i);
+                                            }
+                                        }}
+                                        className={chooseProductReview !== i ? 'button-noChecked' : ''}
+                                    >
+                                        {typeActionRating === 'edit' ? 'Đánh giá lại' : 'Hoàn thành'}
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })
+                ) : (
+                    <div style={{ padding: '100px' }}>
+                        <Loading />
+                    </div>
+                )}
             </div>
         </>
     );

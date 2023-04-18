@@ -54,7 +54,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                 // }
                 console.log(error.message);
             });
-    }, [navigate, dispatch]);
+    }, [dispatch]);
     //userAccount
     //get cart
     useEffect(() => {

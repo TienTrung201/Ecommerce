@@ -486,7 +486,7 @@ function Product() {
                                         <div className="group-star">
                                             <Rate allowHalf disabled={true} value={totalRate} />
                                         </div>
-                                        <div className="number-rating"> {totalRate}/5 </div>
+                                        <div className="number-rating"> {totalRate.toFixed(1)}/5 </div>
                                     </div>
                                 )}
 
