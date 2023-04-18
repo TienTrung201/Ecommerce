@@ -3,7 +3,7 @@ import { deleteData, getData, postData } from '@/api/service';
 import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 import { cartSelector, categoriesSelector, optionsSelector, userSelector } from '@/redux/selector';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
-import { faCartPlus, faChevronRight, faMinus, faPlus, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faCartPlus, faChevronRight, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import Slider from 'react-slick';
 import cartSlice from '../Cart/CartSlice';
 import { convertVnd } from '@/components/GlobalStyles/fuction';
 import TextEditorParagraph from '@/components/Admin/TextEditorParagraph';
+import { Rate } from 'antd';
 
 function Product() {
     const dispatch = useDispatch();
@@ -28,6 +29,9 @@ function Product() {
     const [message, setMessage] = useState(null);
     const [categoryProduct, setCategoryProduct] = useState([]);
     const navigate = useNavigate();
+    const desc = ['Tệ', 'Không hài lòng', 'Bình thường', 'Hài lòng', 'Tuyệt vời'];
+
+    //choose option
     useEffect(() => {
         if (ItemsProduct[0].optionsId.length === 2) {
             if (sizeOprion !== null && colorOption !== null) {
@@ -59,6 +63,7 @@ function Product() {
             }
         }
     }, [ItemsProduct, sizeOprion, colorOption]);
+    //choose option
 
     useEffect(() => {
         if (productItem === null) {
@@ -106,8 +111,14 @@ function Product() {
     const { id } = useParams();
     const [product, setProduct] = useState({});
     const [priceRangeProduct, setPriceRangeProduct] = useState([]);
+    const [productReviews, setProductReviews] = useState([]);
     useEffect(() => {
-        Promise.all([getData(api.products + `/${id}`), getData(api.categories), getData(api.promotions)])
+        Promise.all([
+            getData(api.products + `/${id}`),
+            getData(api.categories),
+            getData(api.promotions),
+            getData(api.productReview + `/${id}`),
+        ])
             .then((values) => {
                 values[0].items.forEach((element) => {
                     const a = [...element.optionsId];
@@ -123,12 +134,27 @@ function Product() {
                 maxProductPrice.current = values[0].items.sort((a, b) => b.price - a.price)[0].price;
                 setPriceRangeProduct(values[0].items.sort((a, b) => a.price - b.price));
                 setProduct(values[0]);
+                setProductReviews(values[3].data);
+                console.log(values[3].data);
             })
             .catch((error) => {
                 console.log(error);
             });
     }, [id]);
     //get Product
+    //total rate
+    const totalRate = useMemo(() => {
+        const total = productReviews.reduce((acc, item) => {
+            return (acc += item.ratingValue);
+        }, 0);
+
+        const ratingValue = total / productReviews.length;
+        if (productReviews.length === 0) {
+            return 0;
+        }
+        return ratingValue;
+    }, [productReviews]);
+    //
     //handle add product to cart
     const handleAddToCart = async () => {
         try {
@@ -348,6 +374,7 @@ function Product() {
         focusOnSelect: true,
         infinite: false,
     };
+
     return (
         <>
             <div className="container container-content">
@@ -375,17 +402,18 @@ function Product() {
                         <div className="col-xs-12 col-sm-6 col-md-6 slide-product">
                             <div className="flex product-img-slide">
                                 <div className="product-images">
-                                    <div className="ribbon zoa-sale">
-                                        {product.items ? (
-                                            product.items[0].discountRate === 0 ? (
-                                                false
-                                            ) : (
-                                                <span>-{product.items[0].discountRate}%</span>
-                                            )
-                                        ) : (
+                                    {product.items ? (
+                                        product.items[0].discountRate === 0 ? (
                                             false
-                                        )}
-                                    </div>
+                                        ) : (
+                                            <div className="ribbon zoa-sale">
+                                                <span>-{product.items[0].discountRate}%</span>{' '}
+                                            </div>
+                                        )
+                                    ) : (
+                                        false
+                                    )}
+
                                     <Slider
                                         asNavFor={nav2}
                                         ref={slider1}
@@ -446,26 +474,22 @@ function Product() {
                                     <span className="old thin">{convertVnd(maxProductPrice.current)}</span>
                                     <span>{priceProduct}</span>
                                 </div>
-                                <div className="flex product-rating">
-                                    <div className="group-star">
-                                        <span className="star star-5">
-                                            <FontAwesomeIcon icon={faStar} />
-                                        </span>
-                                        <span className="star star-4">
-                                            <FontAwesomeIcon icon={faStar} />
-                                        </span>
-                                        <span className="star star-3">
-                                            <FontAwesomeIcon icon={faStar} />
-                                        </span>
-                                        <span className="star star-2">
-                                            <FontAwesomeIcon icon={faStar} />
-                                        </span>
-                                        <span className="star star-1">
-                                            <FontAwesomeIcon icon={faStar} />
-                                        </span>
+                                {totalRate === 0 ? (
+                                    <div className="flex product-rating">
+                                        <div className="group-star">
+                                            <Rate allowHalf disabled={true} value={5} />
+                                        </div>
+                                        <div className="number-rating"> Sản phẩm chưa có đánh giá</div>
                                     </div>
-                                    <div className="number-rating">( 02 reviews )</div>
-                                </div>
+                                ) : (
+                                    <div className="flex product-rating">
+                                        <div className="group-star">
+                                            <Rate allowHalf disabled={true} value={totalRate} />
+                                        </div>
+                                        <div className="number-rating"> {totalRate.toFixed(1)}/5 </div>
+                                    </div>
+                                )}
+
                                 <div className="short-desc">
                                     <div className="product-desc">
                                         <TextEditorParagraph value={product.description} />
@@ -619,7 +643,7 @@ function Product() {
                             </li>
                             <li className={tabs === 'Reviews' ? 'active' : ''}>
                                 <Link onClick={handleChangeTab} data-toggle="pill" href="#review">
-                                    Reviews <span className="review-number">2</span>
+                                    Reviews <span className="review-number">{productReviews.length}</span>
                                 </Link>
                             </li>
                         </ul>
@@ -629,18 +653,7 @@ function Product() {
                                 className={tabs === 'Description' ? 'tab-pane fade in  active' : 'tab-pane fade in'}
                             >
                                 <div className="content-desc text-center">
-                                    <p>
-                                        Add a British twist to your wardrobe with the Erika skirt in seersucker.
-                                        Pinstripe pattern. 2 patched front pockets. Waist tie belt with loops. Button
-                                        detailing on the front. Integrated cotton lining.
-                                    </p>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                                        fugiat nulla pariatur.
-                                    </p>
+                                    <TextEditorParagraph value={product.description} />
                                 </div>
                             </div>
 
@@ -649,125 +662,23 @@ function Product() {
                                 className={tabs === 'Reviews' ? 'tab-pane fade in  active' : 'tab-pane fade in'}
                             >
                                 <ul className="review-content">
-                                    <li className="element-review">
-                                        <p className="r-name">Felix Nguyen</p>
-                                        <p className="r-date">25, March 2018</p>
-                                        <div className="group-star">
-                                            <span className="star star-5">
-                                                <FontAwesomeIcon icon={faStar} />
-                                            </span>
-                                            <span className="star star-4">
-                                                <FontAwesomeIcon icon={faStar} />
-                                            </span>
-                                            <span className="star star-3">
-                                                <FontAwesomeIcon icon={faStar} />
-                                            </span>
-                                            <span className="star star-2">
-                                                <FontAwesomeIcon icon={faStar} />
-                                            </span>
-                                            <span className="star star-1">
-                                                <FontAwesomeIcon icon={faStar} />
-                                            </span>
-                                        </div>
-                                        <p className="r-desc">
-                                            Free shipping on orders over 150€ within Europe and North America. Place
-                                            your order today and receive it within 48 hours. And now, free and easy
-                                            returns within Europe.
-                                        </p>
-                                    </li>
-                                    <li className="element-review">
-                                        <p className="r-name">Felix Nguyen</p>
-                                        <p className="r-date">25, March 2018</p>
-                                        <div className="group-star">
-                                            <span className="star star-5">
-                                                <FontAwesomeIcon icon={faStar} />
-                                            </span>
-                                            <span className="star star-4">
-                                                <FontAwesomeIcon icon={faStar} />
-                                            </span>
-                                            <span className="star star-3">
-                                                <FontAwesomeIcon icon={faStar} />
-                                            </span>
-                                            <span className="star star-2">
-                                                <FontAwesomeIcon icon={faStar} />
-                                            </span>
-                                            <span className="star star-1">
-                                                <FontAwesomeIcon icon={faStar} />
-                                            </span>
-                                        </div>
-                                        <p className="r-desc">
-                                            Free shipping on orders over 150€ within Europe and North America. Place
-                                            your order today and receive it within 48 hours. And now, free and easy
-                                            returns within Europe.
-                                        </p>
-                                    </li>
+                                    {productReviews.map((productReview) => {
+                                        const date = new Date(productReview.commentDate);
+                                        return (
+                                            <li key={productReview.orderItemId} className="element-review">
+                                                <p className="r-name">{productReview.name}</p>
+                                                <p className="r-date">{date.toLocaleDateString()}</p>
+                                                <div className="group-star">
+                                                    <Rate disabled={true} defaultValue={productReview.ratingValue} />
+                                                    <span className="ant-rate-text">
+                                                        {desc[productReview.ratingValue - 1]}
+                                                    </span>
+                                                </div>
+                                                <p className="r-desc">{productReview.comment}</p>
+                                            </li>
+                                        );
+                                    })}
                                 </ul>
-                                <div className="review-form">
-                                    <h3 className="review-heading">Your Rating</h3>
-                                    <div className="rating-star">
-                                        <span className="fa fa-star-o" aria-hidden="true">
-                                            <FontAwesomeIcon icon={faStar} />
-                                        </span>
-                                        <span className="fa fa-star-o" aria-hidden="true">
-                                            <FontAwesomeIcon icon={faStar} />
-                                        </span>
-                                        <span className="fa fa-star-o" aria-hidden="true">
-                                            <FontAwesomeIcon icon={faStar} />
-                                        </span>
-                                        <span className="fa fa-star-o" aria-hidden="true">
-                                            <FontAwesomeIcon icon={faStar} />
-                                        </span>
-                                        <span className="fa fa-star-o" aria-hidden="true">
-                                            <FontAwesomeIcon icon={faStar} />
-                                        </span>
-                                    </div>
-
-                                    <div className="cmt-form">
-                                        <div className="form-group">
-                                            <div className="row">
-                                                <div className="col-md-6 col-sm-6 col-xs-12">
-                                                    <input
-                                                        type="text"
-                                                        id="name"
-                                                        className="form-control"
-                                                        name="comment[name]"
-                                                        defaultValue=""
-                                                        placeholder="Name *"
-                                                    />
-                                                </div>
-                                                <div className="col-md-6 col-sm-6 col-xs-12">
-                                                    <input
-                                                        type="email"
-                                                        id="email"
-                                                        className="form-control"
-                                                        name="comment[email]"
-                                                        defaultValue=""
-                                                        placeholder="Phone Number"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="form-group">
-                                            <div className="row">
-                                                <div className="col-md-12">
-                                                    <textarea
-                                                        id="message"
-                                                        className="form-control"
-                                                        name="comment[body]"
-                                                        rows={9}
-                                                        placeholder="Your reviews"
-                                                        defaultValue={''}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="form-group text-center">
-                                            <button type="submit" className="zoa-btn">
-                                                Submit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

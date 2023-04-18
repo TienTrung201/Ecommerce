@@ -213,9 +213,14 @@ function Home() {
                                                     <div className="product-info text-center">
                                                         <h3 className="product-title">{product.name}</h3>
                                                         <div className="product-price">
-                                                            <span className="old">
-                                                                {convertVnd(product.items[0].price)}
-                                                            </span>
+                                                            {product.items[0].discountRate !== 0 ? (
+                                                                <span className="old">
+                                                                    {convertVnd(product.items[0].price)}
+                                                                </span>
+                                                            ) : (
+                                                                false
+                                                            )}
+
                                                             {product.items[0].discountRate === 0 ? (
                                                                 <span>{convertVnd(product.items[0].price)}</span>
                                                             ) : (
