@@ -534,7 +534,6 @@ function ProductsCreate() {
                                 <Divider />
 
                                 {/* Product Options*/}
-
                                 <div className={cx('form-group')}>
                                     <h4 className={cx('card-title', 'd-flex', 'justify-between', 'align-items-center')}>
                                         Phiên bản
@@ -719,7 +718,6 @@ function ProductsCreate() {
                                                                 itemImageInputRef.current &&
                                                                     itemImageInputRef.current.click();
                                                             }}
-
                                                             className={cx(
                                                                 'btn',
                                                                 'btn-sm',

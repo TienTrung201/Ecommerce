@@ -122,7 +122,7 @@ function Dashboard() {
                                 </i>
                                 Doanh thu
                             </h4>
-                            <h2 className={cx('mb-5', 'fw-bold')}>{totalSales / 1000000}M</h2>
+                            <h2 className={cx('mb-5', 'fw-bold')}>{(totalSales / 1000000).toFixed(3)}M</h2>
                             <h6 className={cx('card-text', 'fs-14', 'text-danger')}>
                                 <i className={cx('me-1')}>
                                     <Unicons.UilChartDown size="18" />
