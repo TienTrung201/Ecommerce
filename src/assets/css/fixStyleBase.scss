@@ -943,6 +943,15 @@ label.mail {
         }
     }
 }
+.element-review {
+    padding: 10px !important;
+    .r-date {
+        margin: 0 !important;
+    }
+    .ant-rate-text {
+        font-size: 1.2rem !important;
+    }
+}
 .product-review {
     padding: 0 5px;
     ul li:nth-child(1) {

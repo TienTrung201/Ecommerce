@@ -4,7 +4,15 @@ import notificationsSlice from '@/components/Admin/Notification/notificationsSli
 import { Rate } from 'antd';
 import { useState } from 'react';
 
-function ProductReviews({ orderItems, optionItems, setOrderItems, getDataMyOrder, dispatch, setVisible }) {
+function ProductReviews({
+    orderItems,
+    optionItems,
+    setOrderItems,
+    getDataMyOrder,
+    dispatch,
+    setVisible,
+    typeActionRating,
+}) {
     // const handleReviewProduct = () => {};
     const [chooseProductReview, setChooseProductReview] = useState(0);
 
@@ -13,7 +21,7 @@ function ProductReviews({ orderItems, optionItems, setOrderItems, getDataMyOrder
     const handleChangeReviewOrderItem = (id, value, name) => {
         const orderItemsWhenReview = orderItems.map((item) => {
             if (id === item.orderItemId) {
-                if (name === 'rate') {
+                if (name === 'ratingValue') {
                     return { ...item, [name]: value, title: desc[value - 1] };
                 }
                 return { ...item, [name]: value };
@@ -24,10 +32,10 @@ function ProductReviews({ orderItems, optionItems, setOrderItems, getDataMyOrder
     };
     // handle send review product
     const handleSubmitReviewProduct = (positionArrayOrderItems) => {
-        const title = desc[orderItems[positionArrayOrderItems].rate - 1];
+        const title = desc[orderItems[positionArrayOrderItems].ratingValue - 1];
         const postItemReviewData = {
             comment: orderItems[positionArrayOrderItems].comment,
-            ratingValue: orderItems[positionArrayOrderItems].rate,
+            ratingValue: orderItems[positionArrayOrderItems].ratingValue,
             title: title,
             orderItemId: orderItems[positionArrayOrderItems].orderItemId,
         };
@@ -98,12 +106,16 @@ function ProductReviews({ orderItems, optionItems, setOrderItems, getDataMyOrder
                                           <Rate
                                               allowClear={false}
                                               onChange={(value) => {
-                                                  handleChangeReviewOrderItem(orderItem.orderItemId, value, 'rate');
+                                                  handleChangeReviewOrderItem(
+                                                      orderItem.orderItemId,
+                                                      value,
+                                                      'ratingValue',
+                                                  );
                                               }}
-                                              defaultValue={orderItem.rate}
+                                              defaultValue={orderItem.ratingValue}
                                           />
-                                          {orderItem.rate ? (
-                                              <span className="ant-rate-text">{desc[orderItem.rate - 1]}</span>
+                                          {orderItem.ratingValue ? (
+                                              <span className="ant-rate-text">{desc[orderItem.ratingValue - 1]}</span>
                                           ) : (
                                               ''
                                           )}
@@ -129,7 +141,7 @@ function ProductReviews({ orderItems, optionItems, setOrderItems, getDataMyOrder
                                           }}
                                           className={chooseProductReview !== i ? 'button-noChecked' : ''}
                                       >
-                                          Hoàn thành
+                                          {typeActionRating === 'edit' ? 'Đánh giá lại' : 'Hoàn thành'}
                                       </button>
                                   </div>
                               </div>

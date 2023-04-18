@@ -22,17 +22,45 @@ function Order() {
     const [isLoading, setIsLoading] = useState(true);
     const [visible, setVisible] = useState(false);
     const [orderItems, setOrderItems] = useState([]);
+    const [typeActionRating, setTypeActionRating] = useState('');
     //review product Items
-    const handleReviewOrderItems = (orderItems) => {
+    const handleChooseReviewOrderItems = (orderItems) => {
         setVisible(true);
         const orderItemReview = orderItems.reduce((acc, item) => {
             if (item.isReview) {
                 return acc;
             }
-            acc.push({ ...item, comment: '', title: '', rate: 5 });
+            acc.push({ ...item, comment: '', title: '', ratingValue: 5 });
             return acc;
         }, []);
         setOrderItems(orderItemReview);
+    };
+    const handleChooseEditReviewOrderItems = (orderItems, orderId) => {
+        setVisible(true);
+        getData(api.myorderReview + `/${orderId}`)
+            .then((response) => {
+                console.log('orderId ', response.data);
+                const newOrderItems = orderItems.reduce((acc, item) => {
+                    if (!item.isReview) {
+                        return acc;
+                    }
+                    const orderItem = response.data.find((orderItem) => item.orderItemId === orderItem.orderItemId);
+                    if (orderItem) {
+                        acc.push({
+                            ...item,
+                            title: orderItem.title,
+                            comment: orderItem.comment,
+                            ratingValue: orderItem.ratingValue,
+                            reviewId: orderItem.reviewId,
+                        });
+                    }
+                    return acc;
+                }, []);
+                setOrderItems(newOrderItems);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
     const getDataMyOrder = () => {
         if (user.uid !== '') {
@@ -73,15 +101,37 @@ function Order() {
     }, []);
     return (
         <div className="shopping-cart">
-            <Modal visible={visible} setVisible={setVisible} title={'Đánh giá sản phẩm'}>
-                <ProductReviews
-                    setVisible={setVisible}
-                    dispatch={dispatch}
-                    getDataMyOrder={getDataMyOrder}
-                    setOrderItems={setOrderItems}
-                    optionItems={optionItems}
-                    orderItems={orderItems}
-                />
+            <Modal
+                visible={visible}
+                setVisible={setVisible}
+                title={typeActionRating === 'edit' ? 'Xem đánh giá' : 'Đánh giá sản phẩm'}
+            >
+                {typeActionRating === 'edit' ? (
+                    <ProductReviews
+                        setVisible={setVisible}
+                        dispatch={dispatch}
+                        getDataMyOrder={getDataMyOrder}
+                        setOrderItems={setOrderItems}
+                        optionItems={optionItems}
+                        orderItems={orderItems}
+                        typeActionRating={typeActionRating}
+                    />
+                ) : (
+                    false
+                )}
+                {typeActionRating === 'rating' ? (
+                    <ProductReviews
+                        setVisible={setVisible}
+                        dispatch={dispatch}
+                        getDataMyOrder={getDataMyOrder}
+                        setOrderItems={setOrderItems}
+                        optionItems={optionItems}
+                        orderItems={orderItems}
+                        typeActionRating={typeActionRating}
+                    />
+                ) : (
+                    false
+                )}
             </Modal>
             <h3 className="address-list-title">Danh sách Đơn hàng</h3>
             {isLoading ? (
@@ -94,7 +144,7 @@ function Order() {
                         dataOrder.map((order) => {
                             const status = orderStatus.find((status) => status.orderStatusId === order.orderStatusId);
                             const isReview = order.items.find((orderItem) => orderItem.isReview === false);
-
+                            const seeReview = order.items.find((orderItem) => orderItem.isReview === true);
                             return (
                                 <div key={order.orderId} className="table cart-table">
                                     <div className="product-thumbnail">
@@ -127,7 +177,10 @@ function Order() {
                                                                     const typeOption = optionItems.find(
                                                                         (o) => o.productOptionId === optionCurrentItem,
                                                                     );
-                                                                    return typeOption.name + ' ';
+                                                                    if (typeOption) {
+                                                                        return typeOption.name + ' ';
+                                                                    }
+                                                                    return false;
                                                                 },
                                                             )}
                                                         </p>
@@ -163,12 +216,26 @@ function Order() {
                                         </div>
                                     </div>
                                     <div className="order__items-footer">
+                                        {seeReview !== undefined ? (
+                                            <button
+                                                onClick={() => {
+                                                    setTypeActionRating('edit');
+                                                    handleChooseEditReviewOrderItems(order.items, order.orderId);
+                                                }}
+                                                className="order__items-btn feedback"
+                                            >
+                                                <Link to="">Xem đánh giá</Link>
+                                            </button>
+                                        ) : (
+                                            false
+                                        )}
                                         {isReview === undefined ? (
                                             false
                                         ) : (
                                             <button
                                                 onClick={() => {
-                                                    handleReviewOrderItems(order.items);
+                                                    setTypeActionRating('rating');
+                                                    handleChooseReviewOrderItems(order.items);
                                                 }}
                                                 className="order__items-btn feedback"
                                             >
