@@ -1,5 +1,5 @@
 import { api } from '@/api';
-import { getData } from '@/api/service';
+import { getData, updateData } from '@/api/service';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import userOrderSlice from './UserOrderSlice';
@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import Loading from '@/components/Loading/Loading';
 import Modal from '@/components/Layout/Modal';
 import ProductReviews from './productReviews';
+import notificationsSlice from '@/components/Admin/Notification/notificationsSlice';
 
 function Order() {
     const dispatch = useDispatch();
@@ -74,6 +75,29 @@ function Order() {
                     console.log(error);
                 });
         }
+    };
+    const handleSuccessDelivery = (id) => {
+        dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
+        updateData(api.shopOrders + '/success/' + id)
+            .then((response) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showSuccess(''));
+                    getDataMyOrder();
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                console.log(response);
+            })
+            .catch((error) => {
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.showError('Không thể cập nhật'));
+                }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
+                console.log(error);
+            });
     };
     useEffect(() => {
         console.log(user.uid !== '');
@@ -216,31 +240,53 @@ function Order() {
                                         </div>
                                     </div>
                                     <div className="order__items-footer">
-                                        {seeReview !== undefined ? (
-                                            <button
-                                                onClick={() => {
-                                                    setTypeActionRating('edit');
-                                                    handleChooseEditReviewOrderItems(order.items, order.orderId);
-                                                }}
-                                                className="order__items-btn feedback"
-                                            >
-                                                <Link to="">Xem đánh giá</Link>
-                                            </button>
+                                        {status.status === 'success' ? (
+                                            <>
+                                                {seeReview !== undefined ? (
+                                                    <button
+                                                        onClick={() => {
+                                                            setTypeActionRating('edit');
+                                                            handleChooseEditReviewOrderItems(
+                                                                order.items,
+                                                                order.orderId,
+                                                            );
+                                                        }}
+                                                        className="order__items-btn feedback"
+                                                    >
+                                                        <Link to="">Xem đánh giá</Link>
+                                                    </button>
+                                                ) : (
+                                                    false
+                                                )}
+                                                {isReview === undefined ? (
+                                                    false
+                                                ) : (
+                                                    <button
+                                                        onClick={() => {
+                                                            setTypeActionRating('rating');
+                                                            handleChooseReviewOrderItems(order.items);
+                                                        }}
+                                                        className="order__items-btn feedback"
+                                                    >
+                                                        <Link to="">Đánh giá</Link>
+                                                    </button>
+                                                )}
+                                            </>
                                         ) : (
-                                            false
-                                        )}
-                                        {isReview === undefined ? (
-                                            false
-                                        ) : (
-                                            <button
-                                                onClick={() => {
-                                                    setTypeActionRating('rating');
-                                                    handleChooseReviewOrderItems(order.items);
-                                                }}
-                                                className="order__items-btn feedback"
-                                            >
-                                                <Link to="">Đánh giá</Link>
-                                            </button>
+                                            <>
+                                                {status.status === 'delivery' ? (
+                                                    <button
+                                                        onClick={() => {
+                                                            handleSuccessDelivery(order.orderId);
+                                                        }}
+                                                        className="order__items-btn feedback"
+                                                    >
+                                                        <Link to="">Đã nhận được hàng</Link>
+                                                    </button>
+                                                ) : (
+                                                    false
+                                                )}
+                                            </>
                                         )}
 
                                         <button className="order__items-btn contact">
