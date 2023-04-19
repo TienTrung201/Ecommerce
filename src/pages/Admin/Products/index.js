@@ -44,8 +44,8 @@ function Products() {
                 console.log(values);
                 setProducts(values[0].data);
                 setTotalPages(values[0].totalPages * 10);
-                setCategories(values[1]);
-                setProviders(values[2]);
+                setCategories(values[1].data);
+                setProviders(values[2].data);
 
                 setTimeout(() => {
                     setLoading(false);

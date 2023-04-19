@@ -64,28 +64,16 @@ function ProductsCreate() {
 
     // ------ Get dependencies data -------
     useEffect(() => {
-        // Get providers
-        getData(api.providers)
-            .then((data) => {
-                setProviders(data);
-            })
-            .catch((error) => {
-                console.warn(error);
-            });
+        Promise.all([getData(api.providers), getData(api.categories), getData(api.productOptions)])
+            .then((response) => {
+                // Get providers
+                setProviders(response[0].data);
 
-        // Get categories
-        getData(api.categories)
-            .then((data) => {
-                setCategories(data);
-            })
-            .catch((error) => {
-                console.warn(error);
-            });
+                // Get categories
+                setCategories(response[1].data);
 
-        // Get productOptions
-        getData(api.productOptions)
-            .then((data) => {
-                setProductOptions(data);
+                // Get productOptions
+                setProductOptions(response[2].data);
             })
             .catch((error) => {
                 console.warn(error);
@@ -96,8 +84,11 @@ function ProductsCreate() {
         if (action === 'update' && id) {
             // Get productOptions
             getData(api.products + '/' + id)
-                .then((data) => {
-                    console.log(data);
+                .then((response) => {
+                    console.log(response);
+
+                    const data = response.data;
+
                     // Product
                     setProductNameInput(data.name);
                     setProductDescInput(data.description);

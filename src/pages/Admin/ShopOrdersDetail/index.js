@@ -36,12 +36,7 @@ function ShopOrdersDetail() {
     useEffect(() => {
         setLoading(true);
 
-        Promise.all([
-            getData(api.shopOrders + '/' + id),
-            getData(api.shippingMethods),
-            getData(api.orderStatuses),
-            getData(api.productOptions),
-        ])
+        Promise.all([getData(api.shopOrders + '/' + id), getData(api.orderStatuses), getData(api.productOptions)])
             .then((response) => {
                 console.log(response);
 
@@ -52,10 +47,10 @@ function ShopOrdersDetail() {
                 setOrderPayment(response[0].data.paymentMethod);
 
                 // Order statuses
-                setOrderStatuses(response[2].data);
+                setOrderStatuses(response[1].data);
 
                 // Product options
-                setProductOptions(response[3]);
+                setProductOptions(response[2].data);
 
                 // Disable loading
                 setTimeout(() => {
@@ -93,6 +88,14 @@ function ShopOrdersDetail() {
             case 'canceled':
                 className = 'badge-light';
                 timeline = [...timeline, { children: 'Đã huỷ đơn hàng', color: 'gray' }];
+                break;
+            case 'success':
+                className = 'badge-success';
+                timeline = [
+                    ...timeline,
+                    { children: 'Đang giao hàng' },
+                    { children: 'Giao hàng thành công', color: 'green' },
+                ];
                 break;
             default:
                 className = 'badge-info';
@@ -254,8 +257,8 @@ function ShopOrdersDetail() {
                                         <div className={cx('col-md-6')}></div>
                                         <div className={cx('col-md-6')}>
                                             <div className={cx('row')}>
-                                                <p className={cx('col-6', 'fs-13', 'text-start', 'mb-1')}>Tổng tiền</p>
-                                                <p className={cx('col-6', 'fs-13', 'text-end', 'mb-1')}>
+                                                <p className={cx('col-6', 'fs-14', 'text-start', 'mb-1')}>Tổng tiền</p>
+                                                <p className={cx('col-6', 'fs-14', 'text-end', 'mb-1')}>
                                                     {currencyConvert(
                                                         orderItems.reduce((total, item) => {
                                                             return (
@@ -268,14 +271,14 @@ function ShopOrdersDetail() {
                                                 </p>
                                             </div>
                                             <div className={cx('row')}>
-                                                <p className={cx('col-6', 'fs-13', 'text-start', 'mb-1')}>Khuyến mãi</p>
-                                                <p className={cx('col-6', 'fs-13', 'text-end', 'mb-1')}>
+                                                <p className={cx('col-6', 'fs-14', 'text-start', 'mb-1')}>Khuyến mãi</p>
+                                                <p className={cx('col-6', 'fs-14', 'text-end', 'mb-1')}>
                                                     {currencyConvert(0)}
                                                 </p>
                                             </div>
                                             <div className={cx('row')}>
-                                                <p className={cx('col-6', 'fs-13', 'text-start', 'mb-1')}>Vận chuyển</p>
-                                                <p className={cx('col-6', 'fs-13', 'text-end', 'mb-1')}>
+                                                <p className={cx('col-6', 'fs-14', 'text-start', 'mb-1')}>Vận chuyển</p>
+                                                <p className={cx('col-6', 'fs-14', 'text-end', 'mb-1')}>
                                                     {currencyConvert(shopOrder.shippingCost)}
                                                 </p>
                                             </div>
@@ -283,7 +286,7 @@ function ShopOrdersDetail() {
                                                 <p
                                                     className={cx(
                                                         'col-6',
-                                                        'fs-13',
+                                                        'fs-14',
                                                         'font-weight-bold',
                                                         'text-start',
                                                         'mb-0',
@@ -294,7 +297,7 @@ function ShopOrdersDetail() {
                                                 <p
                                                     className={cx(
                                                         'col-6',
-                                                        'fs-13',
+                                                        'fs-14',
                                                         'font-weight-bold',
                                                         'text-end',
                                                         'mb-0',

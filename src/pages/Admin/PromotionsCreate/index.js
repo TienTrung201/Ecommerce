@@ -28,8 +28,11 @@ function PromotionsCreate() {
     useEffect(() => {
         if (action === 'update') {
             getData(api.promotions + '/' + id)
-                .then((data) => {
-                    console.log(data);
+                .then((response) => {
+                    console.log(response);
+
+                    const data = response.data;
+
                     setNameInput(data.name);
                     setDescriptionInput(data.description);
                     setDiscountInput(data.discountRate);

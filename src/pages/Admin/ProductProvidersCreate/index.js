@@ -25,7 +25,7 @@ function ProductProviderCreate() {
             getData(api.providers + '/' + id)
                 .then((response) => {
                     console.log(response);
-                    setProviderNameInput(response.name);
+                    setProviderNameInput(response.data.name);
                 })
                 .catch((error) => {
                     console.warn(error);
