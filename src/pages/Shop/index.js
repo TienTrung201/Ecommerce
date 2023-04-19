@@ -64,8 +64,8 @@ function Shop() {
             getData(api.providers),
         ])
             .then((values) => {
-                setProviders(values[3]);
-                setCategories(values[1]);
+                setProviders(values[3].data);
+                setCategories(values[1].data);
                 setProducts(values[0].data);
                 setIsLoading(false);
                 const pageSize = [];
@@ -121,9 +121,9 @@ function Shop() {
     const getDataWishlist = () => {
         getData(api.wishLists, user.uid)
             .then((response) => {
-                dispatch(cartSlice.actions.setWishlist(response));
+                dispatch(cartSlice.actions.setWishlist(response.data));
 
-                console.log('wishlist', response);
+                console.log('wishlist', response.data);
             })
             .catch((error) => {
                 console.log(error);
@@ -139,7 +139,7 @@ function Shop() {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
                 getDataWishlist();
-                console.log(response);
+                console.log(response.data);
             })
             .catch((err) => {
                 setTimeout(() => {
@@ -163,7 +163,7 @@ function Shop() {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
                 getDataWishlist();
-                console.log('delete wishlist', response);
+                console.log('delete wishlist', response.data);
             })
             .catch((err) => {
                 console.log('delete wishlist', err);

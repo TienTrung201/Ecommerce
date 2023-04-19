@@ -120,7 +120,7 @@ function Product() {
             getData(api.productReview + `/${id}`),
         ])
             .then((values) => {
-                values[0].items.forEach((element) => {
+                values[0].data.items.forEach((element) => {
                     const a = [...element.optionsId];
 
                     setOptionItem((prev) =>
@@ -129,11 +129,11 @@ function Product() {
                         }),
                     );
                 });
-                setItemsProduct(values[0].items);
-                setCategoryProduct(values[0].categoriesId);
-                maxProductPrice.current = values[0].items.sort((a, b) => b.price - a.price)[0].price;
-                setPriceRangeProduct(values[0].items.sort((a, b) => a.price - b.price));
-                setProduct(values[0]);
+                setItemsProduct(values[0].data.items);
+                setCategoryProduct(values[0].data.categoriesId);
+                maxProductPrice.current = values[0].data.items.sort((a, b) => b.price - a.price)[0].price;
+                setPriceRangeProduct(values[0].data.items.sort((a, b) => a.price - b.price));
+                setProduct(values[0].data);
                 setProductReviews(values[3].data);
                 console.log(values[3].data);
             })
@@ -217,7 +217,7 @@ function Product() {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
                 getDataWishlist();
-                console.log(response);
+                console.log('add wishlist', response.data);
             })
             .catch((err) => {
                 setTimeout(() => {
@@ -233,9 +233,9 @@ function Product() {
     const getDataWishlist = () => {
         getData(api.wishLists, user.uid)
             .then((response) => {
-                dispatch(cartSlice.actions.setWishlist(response));
+                dispatch(cartSlice.actions.setWishlist(response.data));
 
-                console.log('wishlist', response);
+                console.log('wishlist', response.data);
             })
             .catch((error) => {
                 console.log(error);
@@ -254,7 +254,7 @@ function Product() {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
                 getDataWishlist();
-                console.log('delete wishlist', response);
+                console.log('delete wishlist', response.data);
             })
             .catch((err) => {
                 console.log('delete wishlist', err);

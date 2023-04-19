@@ -105,8 +105,8 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
         if (user.uid !== '') {
             getData(api.wishLists + '/' + user.uid)
                 .then((response) => {
-                    dispatch(cartSlice.actions.setWishlist(response));
-                    console.log('wishlist', response);
+                    dispatch(cartSlice.actions.setWishlist(response.data));
+                    console.log('wishlist', response.data);
                 })
                 .catch((error) => {
                     console.log(error);

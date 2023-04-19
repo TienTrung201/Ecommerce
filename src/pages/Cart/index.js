@@ -66,7 +66,7 @@ function Cart() {
                 items: convertDataUpdate,
             })
                 .then((response) => {
-                    console.log(response);
+                    console.log('update cart', response.data);
                     setTimeout(() => {
                         dispatch(notificationsSlice.actions.showSuccess('Cập nhật thành công'));
                         dispatch(cartSlice.actions.setCart(itemCartChanged));
@@ -113,7 +113,7 @@ function Cart() {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
 
-                console.log(response);
+                console.log('update cart', response);
             })
             .catch((error) => {
                 dispatch(notificationsSlice.actions.showError('Thất bại'));

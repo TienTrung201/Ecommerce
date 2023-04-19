@@ -52,12 +52,15 @@ function PaymentMethods({ user }) {
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.showSuccess('Thành công'));
                     dispatch(
-                        userSlice.actions.addPaymentMethod({ ...formData, paymentMethodId: response.paymentMethodId }),
+                        userSlice.actions.addPaymentMethod({
+                            ...formData,
+                            paymentMethodId: response.data.paymentMethodId,
+                        }),
                     );
                     setTimeout(() => {
                         dispatch(notificationsSlice.actions.destroy());
                     }, 2000);
-                    console.log(response);
+                    console.log('update paymentmethod', response.data);
                     handleSetNullFormData();
                 }, 1000);
                 console.log(response);
@@ -86,7 +89,7 @@ function PaymentMethods({ user }) {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
 
-                console.log(response);
+                console.log('delete', response.data);
             })
             .catch((err) => {
                 dispatch(notificationsSlice.actions.showError('Thất bại'));

@@ -41,7 +41,7 @@ function CartHeader() {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
 
-                console.log(response);
+                console.log('update cart', response.data);
             })
             .catch((error) => {
                 dispatch(notificationsSlice.actions.showError('Thất bại'));
