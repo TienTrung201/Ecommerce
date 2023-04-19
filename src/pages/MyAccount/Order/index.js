@@ -242,59 +242,66 @@ function Order() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="order__items-footer">
-                                        {status.status === 'success' ? (
-                                            <>
-                                                {seeReview !== undefined ? (
-                                                    <button
-                                                        onClick={() => {
-                                                            setTypeActionRating('edit');
-                                                            handleChooseEditReviewOrderItems(
-                                                                order.items,
-                                                                order.orderId,
-                                                            );
-                                                        }}
-                                                        className="order__items-btn feedback"
-                                                    >
-                                                        <Link to="">Xem đánh giá</Link>
-                                                    </button>
-                                                ) : (
-                                                    false
-                                                )}
-                                                {isReview === undefined ? (
-                                                    false
-                                                ) : (
-                                                    <button
-                                                        onClick={() => {
-                                                            setTypeActionRating('rating');
-                                                            handleChooseReviewOrderItems(order.items);
-                                                        }}
-                                                        className="order__items-btn feedback"
-                                                    >
-                                                        <Link to="">Đánh giá</Link>
-                                                    </button>
-                                                )}
-                                            </>
-                                        ) : (
-                                            <>
-                                                {status.status === 'delivery' ? (
-                                                    <button
-                                                        onClick={() => {
-                                                            handleSuccessDelivery(order.orderId);
-                                                        }}
-                                                        className="order__items-btn feedback"
-                                                    >
-                                                        <Link to="">Đã nhận được hàng</Link>
-                                                    </button>
-                                                ) : (
-                                                    false
-                                                )}
-                                            </>
-                                        )}
+                                    <div style={{ fontSize: '1.4rem' }} className="order__items-footer">
+                                        <div>
+                                            {order.paymentMethodId === null
+                                                ? 'Thanh toán khi nhận hàng'
+                                                : 'Đơn hàng đã được thanh toán'}
+                                        </div>
+                                        <div>
+                                            {status.status === 'success' ? (
+                                                <>
+                                                    {seeReview !== undefined ? (
+                                                        <button
+                                                            onClick={() => {
+                                                                setTypeActionRating('edit');
+                                                                handleChooseEditReviewOrderItems(
+                                                                    order.items,
+                                                                    order.orderId,
+                                                                );
+                                                            }}
+                                                            className="order__items-btn feedback"
+                                                        >
+                                                            <Link to="">Xem đánh giá</Link>
+                                                        </button>
+                                                    ) : (
+                                                        false
+                                                    )}
+                                                    {isReview === undefined ? (
+                                                        false
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => {
+                                                                setTypeActionRating('rating');
+                                                                handleChooseReviewOrderItems(order.items);
+                                                            }}
+                                                            className="order__items-btn feedback"
+                                                        >
+                                                            <Link to="">Đánh giá</Link>
+                                                        </button>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    {status.status === 'delivery' ? (
+                                                        <button
+                                                            onClick={() => {
+                                                                handleSuccessDelivery(order.orderId);
+                                                            }}
+                                                            className="order__items-btn feedback"
+                                                        >
+                                                            <Link to="">Đã nhận được hàng</Link>
+                                                        </button>
+                                                    ) : (
+                                                        false
+                                                    )}
+                                                </>
+                                            )}
 
-                                        <button className="order__items-btn contact">
-                                            <Link to="/contact">Liên hệ người bán</Link>
-                                        </button>
+                                            <button className="order__items-btn contact">
+                                                <Link to="/contact">Liên hệ người bán</Link>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             );

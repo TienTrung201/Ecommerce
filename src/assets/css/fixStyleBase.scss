@@ -140,6 +140,7 @@
     }
     form {
         position: relative;
+        display: none;
         input {
             border: solid 2px rgba(0, 0, 0, 0.2) !important;
             &::placeholder {
@@ -220,6 +221,9 @@
         width: 30px;
         img {
             width: 30px;
+            height: 30px;
+            object-fit: cover;
+
             border-radius: 50%;
         }
     }
@@ -290,7 +294,7 @@ label.mail {
         position: absolute;
         top: 0;
         right: 0;
-
+        height: 100%;
         object-fit: cover;
     }
     .openChoseFile {
@@ -624,11 +628,14 @@ label.mail {
     label {
         margin-bottom: 0;
     }
+    .address-scroll {
+        max-height: 160px;
+        overflow-y: scroll;
+    }
     .address-form__group {
         display: flex;
         flex-direction: column;
-        max-height: 180px;
-        overflow-y: scroll;
+
         margin-bottom: 5px;
         .address_checkbox-radio {
             display: flex;
@@ -907,7 +914,7 @@ label.mail {
     }
     .order__items-footer {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         padding-bottom: 30px;
         padding-top: 20px;
         .order__items-btn {
@@ -1015,7 +1022,7 @@ label.mail {
             flex: 7;
             align-items: center;
             position: relative;
-            padding-right: 60px;
+            padding-right: 10px;
             // border-bottom: 1px solid rgb(207, 207, 207);
             &:last-child {
                 border: none;
@@ -1024,8 +1031,8 @@ label.mail {
                 width: 80px;
                 height: 80px;
                 img {
-                    width: 100%;
-                    height: 100%;
+                    width: 80px;
+                    height: 80px;
                     object-fit: cover;
                 }
             }
@@ -1323,9 +1330,27 @@ label.mail {
         }
     }
 }
+.button_mini.zoa-btn {
+    border: none;
+}
 //slider
 .slide {
     .img-responsive {
         object-fit: cover;
+    }
+}
+.pushmenu {
+    .close-left {
+        i {
+            color: #000 !important;
+        }
+    }
+    ul {
+        li {
+            a {
+                color: #000 !important;
+                border: none !important;
+            }
+        }
     }
 }
