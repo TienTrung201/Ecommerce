@@ -19040,6 +19040,10 @@ td {
     background-color: var(--active-bg);
 }
 
+.relative {
+    position: relative;
+}
+
 @keyframes scaleVertical {
     from {
         transform: scaleY(0);

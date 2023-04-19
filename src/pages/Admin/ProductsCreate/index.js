@@ -770,7 +770,11 @@ function ProductsCreate() {
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                     }}
-                                                    className={cx('btn', 'btn-inverse-danger', 'me-2')}
+                                                    className={cx('btn', 'btn-inverse-danger', 'me-2', {
+                                                        disabled: productItems?.some(
+                                                            (item) => item?.isHasOrder === true,
+                                                        ),
+                                                    })}
                                                 >
                                                     Xóa
                                                 </button>
