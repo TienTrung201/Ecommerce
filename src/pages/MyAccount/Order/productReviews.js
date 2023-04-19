@@ -129,7 +129,10 @@ function ProductReviews({
                                             <img src={orderItem.product.image} alt="" />
                                         </div>
                                         <div className="cart-info">
-                                            <h5 className="item-name">{orderItem.product.name}</h5>
+                                            <h5 className="item-name">
+                                                {orderItem.product.name.substring(0, 52)}
+                                                {orderItem.product.name.length > 52 ? '...' : ''}
+                                            </h5>
                                             <p className="item-type">
                                                 Phân loại:{' '}
                                                 {orderItem.product.items[0].optionsId.map((optionCurrentItem) => {

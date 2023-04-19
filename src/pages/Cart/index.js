@@ -249,7 +249,7 @@ function Cart() {
             const cartUserRespones = newDataCartReponse.data.items.reduce((acc, item) => {
                 const { cartItemId, qty } = item;
                 const { productId, image, name, items } = item.product;
-                const { costPrice, qtyInStock, productItemId, sku, optionsId } = items[0];
+                const { costPrice, qtyInStock, productItemId, sku, optionsId, price, discountRate } = items[0];
                 acc.push({
                     cartItemId,
                     productId,
@@ -261,14 +261,16 @@ function Cart() {
                     sku,
                     qty,
                     optionsId,
+                    price,
+                    discountRate,
                     isChecked: false,
                 });
                 return acc;
             }, []);
             setTimeout(() => {
                 dispatch(notificationsSlice.actions.showSuccess('Đặt hàng thành công'));
+                dispatch(cartSlice.actions.setCart(cartUserRespones.reverse()));
             }, 1000);
-            dispatch(cartSlice.actions.setCart(cartUserRespones.reverse()));
         } catch (error) {
             setTimeout(() => {
                 dispatch(notificationsSlice.actions.showError('Thất bại'));
@@ -469,6 +471,7 @@ function Cart() {
                                         <div className="coupon-group">
                                             <form className="form_coupon" action="#" method="post">
                                                 <input
+                                                    style={{ height: '60px' }}
                                                     type="email"
                                                     defaultValue=""
                                                     placeholder="COUPON CODE"

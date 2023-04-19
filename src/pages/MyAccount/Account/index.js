@@ -76,7 +76,7 @@ function Account({ user }) {
             });
     };
     const handleSendForm = async () => {
-        if (isFormChange) {
+        if (isFormChange || imgFile) {
             dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
 
             if (imgFile) {
@@ -248,7 +248,7 @@ function Account({ user }) {
                             }}
                             className="change"
                         >
-                            Save change
+                            Cập nhật thông tin
                         </button>
                     </div>
                 </div>

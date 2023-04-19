@@ -718,13 +718,15 @@ function Product() {
                                                 >
                                                     <img src={product.image} alt="" className="img-responsive" />
                                                 </Link>
-                                                <div className="ribbon zoa-sale">
-                                                    {product.items[0].discountRate === 0 ? (
-                                                        false
-                                                    ) : (
+
+                                                {product.items[0].discountRate === 0 ? (
+                                                    false
+                                                ) : (
+                                                    <div className="ribbon zoa-sale">
                                                         <span>-{product.items[0].discountRate}%</span>
-                                                    )}
-                                                </div>
+                                                    </div>
+                                                )}
+
                                                 <div className="product-button-group">
                                                     <Link to="#" className="zoa-btn zoa-wishlist">
                                                         <span className="zoa-icon-heart">

@@ -32,7 +32,7 @@ function Order({ chooseAddressId, setChooseAddressId, total, priceShipping, addr
     return (
         <>
             <div className="order_wrapper">
-                <div className="address-form__group">
+                <div className="address-form__group address-scroll">
                     <label className="address-form__label">Địa chỉ nhận hàng:</label>
                     {addressDefault
                         ? addresses.map((address) => {
