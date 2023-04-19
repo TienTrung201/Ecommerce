@@ -134,8 +134,8 @@ function Product() {
                 maxProductPrice.current = values[0].data.items.sort((a, b) => b.price - a.price)[0].price;
                 setPriceRangeProduct(values[0].data.items.sort((a, b) => a.price - b.price));
                 setProduct(values[0].data);
-                setProductReviews(values[3].data);
-                console.log(values[3].data);
+                setProductReviews(values[3].data.reverse());
+                console.log(values[0].data);
             })
             .catch((error) => {
                 console.log(error);
@@ -425,7 +425,7 @@ function Product() {
                                         </Link>
                                         {product.items &&
                                             product.items.map((p, index) => {
-                                                if (index >= 4) {
+                                                if (index >= 4 || p.image === null) {
                                                     return false;
                                                 }
                                                 return (
@@ -453,7 +453,7 @@ function Product() {
                                     </div>
                                     {product.items &&
                                         product.items.map((p, index) => {
-                                            if (index >= 4) {
+                                            if (index >= 4 || p.image === null) {
                                                 return false;
                                             }
                                             return (
@@ -471,7 +471,18 @@ function Product() {
                             <div className="single-product-info product-info product-grid-v2">
                                 <h3 className="product-title">{product.name}</h3>
                                 <div className="product-price">
-                                    <span className="old thin">{convertVnd(maxProductPrice.current)}</span>
+                                    <>
+                                        {product.items ? (
+                                            product.items[0].discountRate === 0 ? (
+                                                false
+                                            ) : (
+                                                <span className="old thin">{convertVnd(maxProductPrice.current)}</span>
+                                            )
+                                        ) : (
+                                            false
+                                        )}
+                                    </>
+
                                     <span>{priceProduct}</span>
                                 </div>
                                 {totalRate === 0 ? (
@@ -662,7 +673,7 @@ function Product() {
                                 className={tabs === 'Reviews' ? 'tab-pane fade in  active' : 'tab-pane fade in'}
                             >
                                 <ul className="review-content">
-                                    {productReviews.map((productReview) => {
+                                    {productReviews.map((productReview, i) => {
                                         const date = new Date(productReview.commentDate);
                                         return (
                                             <li key={productReview.orderItemId} className="element-review">

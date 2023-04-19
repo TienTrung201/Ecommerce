@@ -78,7 +78,7 @@ function ProductReviews({
             reviewId: orderItems[positionArrayOrderItems].reviewId,
         };
         dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
-        updateData(api.userReview + `/${orderItemId}`, postItemReviewData)
+        updateData(api.userReview + `/${postItemReviewData.reviewId}`, postItemReviewData)
             .then((response) => {
                 getDataMyOrder();
                 setTimeout(() => {

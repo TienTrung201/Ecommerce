@@ -97,7 +97,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
     useEffect(() => {
         getData(api.shippingMethods).then((response) => {
             console.log(response);
-            dispatch(shippingSlice.actions.setShippingMethods(response));
+            dispatch(shippingSlice.actions.setShippingMethods(response.data));
         });
     }, [dispatch]);
     //get wishlist
