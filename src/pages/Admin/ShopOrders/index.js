@@ -103,6 +103,9 @@ function ShopOrders() {
                 case 'canceled':
                     className = 'badge-light';
                     break;
+                case 'success':
+                    className = 'badge-success';
+                    break;
                 default:
                     className = 'badge-info';
                     break;

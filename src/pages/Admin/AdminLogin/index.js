@@ -132,7 +132,14 @@ function AdminLogin() {
                 </div>
 
                 <div className={cx('form-group', 'text-center')}>
-                    <button className={cx('btn', 'btn-link')}>Quên mật khẩu?</button>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                        }}
+                        className={cx('btn', 'btn-link')}
+                    >
+                        Quên mật khẩu?
+                    </button>
                 </div>
             </Spin>
         </LayoutAccount>

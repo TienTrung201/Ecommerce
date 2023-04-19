@@ -31,7 +31,7 @@ function ProductOptions() {
         getData(api.productOptions + `?search=${search || ''}&sort=${sort || ''}`)
             .then((response) => {
                 console.log(response);
-                setProductOptions(response);
+                setProductOptions(response.data);
 
                 setTimeout(() => {
                     setLoading(false);

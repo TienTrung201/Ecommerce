@@ -24,15 +24,20 @@ function ShippingMethodsCreate() {
 
     // Get shipping method for update
     useEffect(() => {
-        getData(api.shippingMethods + '/' + id)
-            .then((response) => {
-                console.log(response);
-                setNameInput(response.name);
-                setPriceInput(response.price);
-            })
-            .catch((error) => {
-                console.warn(error);
-            });
+        if (action === 'update') {
+            getData(api.shippingMethods + '/' + id)
+                .then((response) => {
+                    console.log(response);
+
+                    const data = response.data;
+
+                    setNameInput(data.name);
+                    setPriceInput(data.price);
+                })
+                .catch((error) => {
+                    console.warn(error);
+                });
+        }
     }, [action, id]);
 
     // --------- Handle validate input ---------
@@ -117,6 +122,7 @@ function ShippingMethodsCreate() {
 
                     setTimeout(() => {
                         dispatch(notificationsSlice.actions.showSuccess('Cập nhật thành công'));
+                        navigate('/admin/shipping-methods');
                     }, 1000);
                 })
                 .catch((error) => {

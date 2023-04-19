@@ -32,7 +32,7 @@ function ShippingMethods() {
         getData(api.shippingMethods + `?search=${search || ''}&sort=${sort || ''}`)
             .then((response) => {
                 console.log(response);
-                setShippingMethods(response);
+                setShippingMethods(response.data);
 
                 setTimeout(() => {
                     setLoading(false);
