@@ -34,8 +34,10 @@ function ProductOptionsCreate() {
             getData(api.productOptions + '/' + id)
                 .then((response) => {
                     console.log(response);
-                    setTypeNameInput(response.name);
-                    setOptions(response.options);
+                    const data = response.data;
+
+                    setTypeNameInput(data.name);
+                    setOptions(data.options);
                 })
                 .catch((error) => {
                     console.warn(error);

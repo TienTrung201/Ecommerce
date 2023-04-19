@@ -25,7 +25,10 @@ function EditRoles() {
             getData(api.roles + '/' + id)
                 .then((response) => {
                     console.log(response);
-                    setRoleNameInput(response.data.name);
+
+                    const data = response.data;
+
+                    setRoleNameInput(data.name);
                 })
                 .catch((error) => {
                     console.warn(error);

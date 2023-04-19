@@ -16,7 +16,8 @@ function LayoutAccount({ title = 'Form title', subTitle, children }) {
                         <div className={cx('w-100')}>
                             <h1 className={cx('fs-2', 'fw-bold', 'text-center', 'mt-5')}>{title}</h1>
                             <p className={cx('text-center', 'mb-5', 'ff-roboto', 'text-secondary')}>{subTitle}</p>
-                            {children}
+
+                            <form>{children}</form>
 
                             <div className={cx('form-group')}>
                                 <p className={cx('fs-14', 'text-center')}>
