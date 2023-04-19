@@ -10,7 +10,7 @@ import Notification from '@/components/Admin/Notification';
 import CartHeader from '@/pages/Cart/CartHeader';
 import cartSlice from '@/pages/Cart/CartSlice';
 import shippingSlice from '@/pages/ShippingMethod/ShippingSlice';
-function UserAccount({ onOpenSearch, onOpenCart }) {
+function UserAccount() {
     //userAccount
     const user = useSelector(userSelector);
     const cartItems = useSelector(cartSelector);

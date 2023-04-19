@@ -1,5 +1,4 @@
 import images from '@/assets/image';
-import { faFacebookF, faLinkedinIn, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import '@/assets/css/fixStyleBase.scss';
@@ -7,19 +6,13 @@ import { faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useRef } from 'react';
 import UserAccount from '@/components/Layout/User';
 
-function Header({ isUser }) {
+function Header() {
     //event close open header
-    const cart = useRef();
     const menuBar = useRef();
     const overlay = useRef();
-    const searchProduct = useRef();
 
-    const handleOpenSearch = () => {
-        searchProduct.current.classList.add('search--open');
-    };
     const handleCloseOverlay = () => {
         overlay.current.classList.remove('overlay-open');
-        cart.current.classList.remove('pushmenu-open');
         menuBar.current.classList.remove('pushmenu-open');
     };
     const handleOpenOverlay = () => {
@@ -139,7 +132,7 @@ function Header({ isUser }) {
                                         </Link>
                                     </li>
                                 </ul>
-                                <UserAccount onOpenSearch={handleOpenSearch} />
+                                <UserAccount />
                             </div>
                         </div>
                     </div>
