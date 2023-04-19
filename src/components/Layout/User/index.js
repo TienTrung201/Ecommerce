@@ -136,7 +136,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                         <ul>
                             {searchResult.map((category) => {
                                 return (
-                                    <li key={category.categoriesId}>
+                                    <li key={category.categoryId}>
                                         <Link
                                             onClick={() => {
                                                 setSearch('');

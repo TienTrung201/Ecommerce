@@ -68,7 +68,6 @@ function ProductReviews({
                 console.log(error);
             });
     };
-
     const handleEditReviewProduct = (orderItemId, positionArrayOrderItems) => {
         const title = desc[orderItems[positionArrayOrderItems].ratingValue - 1];
         const postItemReviewData = {
@@ -76,6 +75,7 @@ function ProductReviews({
             ratingValue: orderItems[positionArrayOrderItems].ratingValue,
             title: title,
             orderItemId: orderItems[positionArrayOrderItems].orderItemId,
+            reviewId: orderItems[positionArrayOrderItems].reviewId,
         };
         dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
         updateData(api.userReview + `/${orderItemId}`, postItemReviewData)
