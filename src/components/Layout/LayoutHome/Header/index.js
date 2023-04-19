@@ -1,5 +1,4 @@
 import images from '@/assets/image';
-import { faFacebookF, faLinkedinIn, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import '@/assets/css/fixStyleBase.scss';
