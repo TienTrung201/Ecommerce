@@ -15,7 +15,7 @@ const { Panel } = Collapse;
 function ManageAdminUsers() {
     const [loading, setLoading] = useState(false);
 
-    const [adminUsers, setAdminUser] = useState([]);
+    const [adminUsers, setAdminUsers] = useState([]);
 
     const [queryParams, setQueryParams] = useSearchParams();
     const [allQueryParams, setAllQueryParams] = useState({});
@@ -32,7 +32,10 @@ function ManageAdminUsers() {
         getData(api.adminUsers)
             .then((response) => {
                 console.log(response);
-                setAdminUser(response.data);
+
+                const data = response.data;
+
+                setAdminUsers(data);
 
                 setTimeout(() => {
                     setLoading(false);

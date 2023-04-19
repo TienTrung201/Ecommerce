@@ -63,14 +63,20 @@ function Address({ user }) {
                     dispatch(
                         userSlice.actions.addAdress({ ...formData, addressId: response.addressId, isDefault: false }),
                     );
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.destroy());
+                    }, 1000);
                     handleSetNullFormData();
                 }, 1000);
-                console.log(response);
+                console.log('update address', response.data);
             })
             .catch((err) => {
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.showError('Thất bại'));
                 }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
                 console.warn(err);
             });
     };
@@ -97,7 +103,7 @@ function Address({ user }) {
                             position: oldAddressPossition,
                         }),
                     );
-                    console.log(response);
+                    console.log('update address', response.data);
                 })
                 .catch((err) => {
                     setTimeout(() => {
@@ -120,7 +126,7 @@ function Address({ user }) {
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
-                console.log(response);
+                console.log('update address', response.data);
             })
             .catch((err) => {
                 setTimeout(() => {
@@ -151,7 +157,7 @@ function Address({ user }) {
                     setTimeout(() => {
                         dispatch(notificationsSlice.actions.destroy());
                     }, 2000);
-                    console.log(response);
+                    console.log('update address', response.data);
                 })
                 .catch((err) => {
                     dispatch(notificationsSlice.actions.showError('Thất bại'));
@@ -177,7 +183,7 @@ function Address({ user }) {
                     dispatch(notificationsSlice.actions.showSuccess('Cập nhật thành công'));
                     dispatch(userSlice.actions.editAddress({ data: formData, position: user.positionAddress }));
                 }, 1000);
-                console.log(response);
+                console.log('update address', response.data);
             })
             .catch((err) => {
                 setTimeout(() => {

@@ -31,7 +31,8 @@ function ProductProviders() {
         getData(api.providers + `?search=${search || ''}&sort=${sort || ''}`)
             .then((response) => {
                 console.log(response);
-                setProviders(response);
+
+                setProviders(response.data);
 
                 setTimeout(() => {
                     setLoading(false);

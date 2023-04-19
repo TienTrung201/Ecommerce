@@ -31,9 +31,10 @@ function Promotions() {
         const status = queryParams.get('status');
 
         getData(api.promotions + `?search=${search || ''}&sort=${sort || ''}&status=${status || ''}`)
-            .then((data) => {
-                console.log(data);
-                setPromotions(data);
+            .then((response) => {
+                console.log(response);
+
+                setPromotions(response.data);
 
                 setTimeout(() => {
                     setLoading(false);

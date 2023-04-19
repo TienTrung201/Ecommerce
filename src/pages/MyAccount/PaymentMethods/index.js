@@ -45,16 +45,22 @@ function PaymentMethods({ user }) {
         });
     };
     // handle add paymentmethod
-    const handleAddNewAddress = () => {
+    const handleAddNewPaymentMethod = () => {
         dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
         postData(api.paymentMethods, formData)
             .then((response) => {
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.showSuccess('Thành công'));
                     dispatch(
-                        userSlice.actions.addPaymentMethod({ ...formData, paymentMethodId: response.paymentMethodId }),
+                        userSlice.actions.addPaymentMethod({
+                            ...formData,
+                            paymentMethodId: response.data.paymentMethodId,
+                        }),
                     );
-                    console.log(response);
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.destroy());
+                    }, 2000);
+                    console.log('update paymentmethod', response.data);
                     handleSetNullFormData();
                 }, 1000);
                 console.log(response);
@@ -63,6 +69,9 @@ function PaymentMethods({ user }) {
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.showError('Thất bại'));
                 }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
                 console.warn(err);
             });
     };
@@ -80,7 +89,7 @@ function PaymentMethods({ user }) {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
 
-                console.log(response);
+                console.log('delete', response.data);
             })
             .catch((err) => {
                 dispatch(notificationsSlice.actions.showError('Thất bại'));
@@ -96,7 +105,7 @@ function PaymentMethods({ user }) {
         <div className="address-list">
             <Modal
                 title={'Thêm phương thức thanh toán'}
-                haldleSendModal={handleAddNewAddress}
+                haldleSendModal={handleAddNewPaymentMethod}
                 save={'Thêm'}
                 visible={visible}
                 setVisible={setVisible}

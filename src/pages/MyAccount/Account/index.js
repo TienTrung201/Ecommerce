@@ -57,7 +57,7 @@ function Account({ user }) {
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
-                console.log(response);
+                console.log('update address', response.data);
             })
             .catch((err) => {
                 const message = JSON.parse(err.message)?.title;

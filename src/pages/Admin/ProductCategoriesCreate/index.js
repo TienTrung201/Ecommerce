@@ -34,7 +34,7 @@ function ProductCategoriesCreate() {
         getData(api.promotions)
             .then((response) => {
                 console.log('promotions: ', response);
-                setPromotions(response);
+                setPromotions(response.data);
             })
             .catch((error) => {
                 console.warn(error);
@@ -43,23 +43,24 @@ function ProductCategoriesCreate() {
 
     // Get category for update
     useEffect(() => {
-        getData(api.categories + '/' + id)
-            .then((response) => {
-                console.log('category: ', response);
-                try {
-                    setCategoryName(response.name);
-                    setPromotionInput(response.promotionId);
+        if (action === 'update') {
+            getData(api.categories + '/' + id)
+                .then((response) => {
+                    console.log('category: ', response);
+
+                    const data = response.data;
+
+                    setCategoryName(data.name);
+                    setPromotionInput(data.promotionId);
                     setImageUpload({
-                        image: response.image,
-                        imagePreview: response.image,
+                        image: data.image,
+                        imagePreview: data.image,
                     });
-                } catch (error) {
+                })
+                .catch((error) => {
                     console.warn(error);
-                }
-            })
-            .catch((error) => {
-                console.warn(error);
-            });
+                });
+        }
     }, [action, id]);
 
     // ---------- Handle validate input ----------
@@ -148,6 +149,7 @@ function ProductCategoriesCreate() {
 
                     setTimeout(() => {
                         dispatch(notificationsSlice.actions.showSuccess('Cập nhật thành công'));
+                        navigate('/admin/categories');
                     }, 1000);
                 })
                 .catch((error) => {

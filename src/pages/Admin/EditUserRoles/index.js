@@ -25,7 +25,7 @@ function EditUserRoles() {
             .then((response) => {
                 console.log(response);
                 setAdminUser(response[0]?.data);
-                setRolesInput(response[0].data?.roles?.map((item) => item.roleId));
+                setRolesInput(response[0]?.data?.roles?.map((item) => item.roleId));
                 setRoles(response[1]?.data);
             })
             .catch((error) => {

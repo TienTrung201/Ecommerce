@@ -7,7 +7,7 @@ function LayoutHome({ children }) {
     return (
         <>
             <Header />
-            <div className="">{children}</div>
+            <div className="margin_top-100">{children}</div>
             <Footer />
         </>
     );

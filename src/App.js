@@ -21,26 +21,26 @@ function App() {
     useEffect(() => {
         Promise.all([getData(api.categories), getData(api.promotions), getData(api.productOptions)])
             .then((values) => {
-                const categories = values[0]
-                    .map((categorie) => {
-                        const result = values[1].find((promotion) => promotion.promotionId === categorie.promotionId);
-                        return result !== undefined
-                            ? {
-                                  name: categorie.name,
-                                  promotionId: result.promotionId,
-                                  discountRate: result.discountRate,
-                                  categoriesId: categorie.categoryId,
-                              }
-                            : {
-                                  name: categorie.name,
-                                  promotionId: categorie.promotionId,
-                                  discountRate: null,
-                                  categoriesId: categorie.categoryId,
-                              };
-                    })
-                    .filter((category) => category !== undefined);
-                Dispatch(categoriesSlice.actions.setCategories(categories));
-                Dispatch(optionsSlice.actions.setOptions(values[2].flatMap((option) => option.options)));
+                // const categories = values[0]
+                //     .map((categorie) => {
+                //         const result = values[1].find((promotion) => promotion.promotionId === categorie.promotionId);
+                //         return result !== undefined
+                //             ? {
+                //                   name: categorie.name,
+                //                   promotionId: result.promotionId,
+                //                   discountRate: result.discountRate,
+                //                   categoriesId: categorie.categoryId,
+                //               }
+                //             : {
+                //                   name: categorie.name,
+                //                   promotionId: categorie.promotionId,
+                //                   discountRate: null,
+                //                   categoriesId: categorie.categoryId,
+                //               };
+                //     })
+                //     .filter((category) => category !== undefined);
+                Dispatch(categoriesSlice.actions.setCategories(values[0].data));
+                Dispatch(optionsSlice.actions.setOptions(values[2].data.flatMap((option) => option.options)));
             })
             .catch((err) => console.error(err));
     }, [Dispatch]);

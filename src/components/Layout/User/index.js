@@ -54,7 +54,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                 // }
                 console.log(error.message);
             });
-    }, [navigate, dispatch]);
+    }, [dispatch]);
     //userAccount
     //get cart
     useEffect(() => {
@@ -97,7 +97,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
     useEffect(() => {
         getData(api.shippingMethods).then((response) => {
             console.log(response);
-            dispatch(shippingSlice.actions.setShippingMethods(response));
+            dispatch(shippingSlice.actions.setShippingMethods(response.data));
         });
     }, [dispatch]);
     //get wishlist
@@ -105,8 +105,8 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
         if (user.uid !== '') {
             getData(api.wishLists + '/' + user.uid)
                 .then((response) => {
-                    dispatch(cartSlice.actions.setWishlist(response));
-                    console.log('wishlist', response);
+                    dispatch(cartSlice.actions.setWishlist(response.data));
+                    console.log('wishlist', response.data);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -136,7 +136,7 @@ function UserAccount({ onOpenSearch, onOpenCart }) {
                         <ul>
                             {searchResult.map((category) => {
                                 return (
-                                    <li key={category.categoriesId}>
+                                    <li key={category.categoryId}>
                                         <Link
                                             onClick={() => {
                                                 setSearch('');

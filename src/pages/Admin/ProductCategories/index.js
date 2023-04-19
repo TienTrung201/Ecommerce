@@ -35,10 +35,10 @@ function ProductCategories() {
             getData(api.categories + `?search=${search || ''}&sort=${sort || ''}&status=${status || ''}`),
             getData(api.promotions),
         ])
-            .then((values) => {
-                console.log(values);
-                setCategories(values[0]);
-                setPromotions(values[1]);
+            .then((response) => {
+                console.log(response);
+                setCategories(response[0].data);
+                setPromotions(response[1].data);
 
                 setTimeout(() => {
                     setLoading(false);
