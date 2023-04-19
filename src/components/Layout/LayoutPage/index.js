@@ -5,7 +5,7 @@ function LayoutPage({ children }) {
     return (
         <section className="">
             <Header />
-            <div className="shopProducts">{children}</div>
+            <div className="margin_top-80 shopProducts">{children}</div>
             <Footer />
         </section>
     );

@@ -169,6 +169,9 @@ function Order() {
                             const status = orderStatus.find((status) => status.orderStatusId === order.orderStatusId);
                             const isReview = order.items.find((orderItem) => orderItem.isReview === false);
                             const seeReview = order.items.find((orderItem) => orderItem.isReview === true);
+                            if (status === undefined) {
+                                return false;
+                            }
                             return (
                                 <div key={order.orderId} className="table cart-table">
                                     <div className="product-thumbnail">

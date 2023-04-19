@@ -6927,7 +6927,6 @@ li {
     font-size: 15px;
 }
 
-
 @media (min-width: 1025px) and (max-width: 1200px) {
     .container {
         width: 100%;
@@ -7538,11 +7537,11 @@ span.star:last-child {
 .form-customer .checkbox input {
     margin-left: 0;
     transform: scale(1.5);
-    
+
     -moz-transform: scale(1.5);
- 
+
     -webkit-transform: scale(1.5);
-   
+
     -o-transform: scale(1.5);
 }
 
@@ -10542,15 +10541,15 @@ span.star:last-child {
 }
 .header-cate ul li a {
     display: -webkit-box;
-  
+
     display: -moz-box;
-   
+
     display: -ms-flexbox;
-   
+
     display: -webkit-flex;
-  
+
     display: flex;
-  
+
     -webkit-flex-direction: column;
     -moz-flex-direction: column;
     -ms-flex-direction: column;
@@ -16077,13 +16076,13 @@ i.fa.fa-plus {
     display: -webkit-box;
 
     display: -moz-box;
-   
+
     display: -ms-flexbox;
-  
+
     display: -webkit-flex;
-  
+
     display: flex;
-  
+
     -webkit-align-items: center;
     -moz-align-items: center;
     -ms-align-items: center;
@@ -19848,13 +19847,12 @@ i.fa.fa-plus {
     display: -webkit-box;
 
     display: -moz-box;
-  
+
     display: -ms-flexbox;
 
     display: -webkit-flex;
 
     display: flex;
-
 }
 @media (min-width: 480px) {
     .product-tab-sw {
@@ -19905,11 +19903,11 @@ i.fa.fa-plus {
     display: -webkit-box;
 
     display: -moz-box;
-  
+
     display: -ms-flexbox;
-  
+
     display: -webkit-flex;
-  
+
     display: flex;
     -webkit-justify-content: center;
     -moz-justify-content: center;

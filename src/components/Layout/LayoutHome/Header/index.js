@@ -14,9 +14,6 @@ function Header({ isUser }) {
     const overlay = useRef();
     const searchProduct = useRef();
 
-    const handleCloseSearch = () => {
-        searchProduct.current.classList.remove('search--open');
-    };
     const handleOpenSearch = () => {
         searchProduct.current.classList.add('search--open');
     };
@@ -102,146 +99,9 @@ function Header({ isUser }) {
 
             {/* Push cart */}
 
-            {/* Search form */}
-            <div ref={searchProduct} className="search-form-wrapper header-search-form ">
-                <div className="container">
-                    <div className="search-results-wrapper">
-                        <div onClick={handleCloseSearch} className="btn-search-close">
-                            <i className="ion-ios-close-empty">
-                                <FontAwesomeIcon icon={faClose} />
-                            </i>
-                        </div>
-                    </div>
-                    <ul className="zoa-category text-center">
-                        <li>
-                            <Link href="">All Categories</Link>
-                        </li>
-                        <li>
-                            <Link href="">Woman</Link>
-                        </li>
-                        <li>
-                            <Link href="">Man</Link>
-                        </li>
-                        <li>
-                            <Link href="">Accessories</Link>
-                        </li>
-                        <li>
-                            <Link href="">Kid</Link>
-                        </li>
-                        <li>
-                            <Link href="">Others</Link>
-                        </li>
-                    </ul>
-                    <form method="get" action="/search" role="search" className="search-form has-categories-select">
-                        <input
-                            name="q"
-                            className="search-input"
-                            type="text"
-                            defaultValue=""
-                            placeholder="Enter your keywords..."
-                            autoComplete="off"
-                        />
-                        <input type="hidden" name="post_type" defaultValue="product" />
-                        <button type="submit" id="search-btn">
-                            <i className="ion-ios-search-strong">
-                                <FontAwesomeIcon icon={faSearch} />
-                            </i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-            {/* Search form */}
-
             {/* Header */}
-            <header id="header" className="header-v2">
-                <div className="topbar hidden-xs hidden-sm">
-                    <button type="button" className="js-promo close">
-                        <i className="ion-ios-close-empty black" aria-hidden="true"></i>
-                    </button>
-                    <div className="container container-content">
-                        <div className="row flex">
-                            <div className="col col-sm-4">
-                                <div className="topbar-left">
-                                    <span className="text-3xl">Hotline: +01 234 567 890</span>
-                                    <div className="topbar-social">
-                                        <Link to="">
-                                            <i className="fa fa-facebook">
-                                                <FontAwesomeIcon icon={faFacebookF} />
-                                            </i>
-                                        </Link>
-                                        <Link to="">
-                                            <i className="fa fa-twitter">
-                                                <FontAwesomeIcon icon={faTwitter} />
-                                            </i>
-                                        </Link>
-                                        <Link to="">
-                                            <i className="fa fa-linkedin">
-                                                <FontAwesomeIcon icon={faLinkedinIn} />
-                                            </i>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col col-sm-4 justify-content-center">
-                                <p>
-                                    Summer sale discount off 50%! <Link to="">Shop Now</Link>
-                                </p>
-                            </div>
-                            <div className="col col-sm-4 justify-content-end">
-                                <div className="topbar-right">
-                                    <div className="element element-currency">
-                                        <Link
-                                            id="label3"
-                                            className="dropdown-toggle"
-                                            data-toggle="dropdown"
-                                            role="button"
-                                            aria-haspopup="true"
-                                            aria-expanded="false"
-                                        >
-                                            <span>$ USD</span>
-                                        </Link>
-                                        <ul className="dropdown-menu" aria-labelledby="label3">
-                                            <li>
-                                                <Link to="#">USD</Link>
-                                            </li>
-                                            <li>
-                                                <Link to="#">AUD</Link>
-                                            </li>
-                                            <li>
-                                                <Link to="#">EUR</Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="element element-leaguage">
-                                        <Link
-                                            id="label2"
-                                            className="dropdown-toggle"
-                                            data-toggle="dropdown"
-                                            role="button"
-                                            aria-haspopup="true"
-                                            aria-expanded="false"
-                                        >
-                                            <img src="img/icon-l.png" alt="" />
-                                            <span>English</span>
-                                        </Link>
-                                        <ul className="dropdown-menu" aria-labelledby="label2">
-                                            <li>
-                                                <Link to="#">EN</Link>
-                                            </li>
-                                            <li>
-                                                <Link to="#">DE</Link>
-                                            </li>
-                                            <li>
-                                                <Link to="#">FR</Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="header-center">
+            <header id="header" className="header-v2 ">
+                <nav className="header-center position-sticky">
                     <div className="container container-content">
                         <div className="row flex align-items-center justify-content-between">
                             <div className="col-md-4 col-xs-4 col-sm-4 col2 hidden-lg hidden-md">
@@ -283,7 +143,7 @@ function Header({ isUser }) {
                             </div>
                         </div>
                     </div>
-                </div>
+                </nav>
             </header>
             {/* Header */}
         </>

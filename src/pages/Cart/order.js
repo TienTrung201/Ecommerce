@@ -17,7 +17,7 @@ function Order({ chooseAddressId, setChooseAddressId, total, priceShipping, addr
         dispatch(userSlice.actions.setShippingMethodId(Number(e.target.value)));
     };
     const handleChangePaymentMethod = (e) => {
-        dispatch(userSlice.actions.removePaymentMethod(Number(e.target.value)));
+        dispatch(userSlice.actions.setpaymentMethod(Number(e.target.value)));
     };
     // const priceShipping = useMemo(() => {
     //     if (user.paymentMethodId === '0') {
