@@ -200,6 +200,8 @@ function Cart() {
 
     const handleOrderCart = async () => {
         try {
+            dispatch(notificationsSlice.actions.showLoading('Đặt hàng'));
+
             const typeShipping = shippingMethods.find(
                 (shippingMethod) => shippingMethod.shippingMethodId === user.shippingMethodId,
             );
