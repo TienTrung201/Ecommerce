@@ -54,7 +54,7 @@ function ProductReviews({
                     }
                     dispatch(notificationsSlice.actions.showSuccess('Đánh giá thành công'));
                     setChooseProductReview(0);
-                    console.log(response);
+                    console.log('review', response.data);
                 }, 1000);
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.destroy());
@@ -95,7 +95,7 @@ function ProductReviews({
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
-                console.log(response);
+                console.log('review', response.data);
             })
             .catch((err) => {
                 dispatch(notificationsSlice.actions.showError('Không thể thay đổi'));

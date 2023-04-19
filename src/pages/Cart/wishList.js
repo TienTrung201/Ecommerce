@@ -26,14 +26,14 @@ function WishList() {
                 }, 2000);
                 getData(api.wishLists, user.uid)
                     .then((response) => {
-                        dispatch(cartSlice.actions.setWishlist(response));
+                        dispatch(cartSlice.actions.setWishlist(response.data));
 
-                        console.log('wishlist', response);
+                        console.log('wishlist', response.data);
                     })
                     .catch((error) => {
                         console.log(error);
                     });
-                console.log('delete wishlist', response);
+                console.log('delete wishlist', response.data);
             })
             .catch((err) => {
                 console.log('delete wishlist', err);

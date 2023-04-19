@@ -92,7 +92,7 @@ function Order() {
     useEffect(() => {
         getData(api.orderStatuses)
             .then((response) => {
-                console.log('order Status', response);
+                console.log('order Status', response.data);
                 setOrderStatus(response.data);
             })
             .catch((error) => {

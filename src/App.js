@@ -39,8 +39,8 @@ function App() {
                 //               };
                 //     })
                 //     .filter((category) => category !== undefined);
-                Dispatch(categoriesSlice.actions.setCategories(values[0]));
-                Dispatch(optionsSlice.actions.setOptions(values[2].flatMap((option) => option.options)));
+                Dispatch(categoriesSlice.actions.setCategories(values[0].data));
+                Dispatch(optionsSlice.actions.setOptions(values[2].data.flatMap((option) => option.options)));
             })
             .catch((err) => console.error(err));
     }, [Dispatch]);
