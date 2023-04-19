@@ -13,9 +13,6 @@ function Header() {
     const overlay = useRef();
     const searchProduct = useRef();
 
-    const handleCloseSearch = () => {
-        searchProduct.current.classList.remove('search--open');
-    };
     const handleOpenSearch = () => {
         searchProduct.current.classList.add('search--open');
     };
