@@ -83,7 +83,7 @@ function Product() {
     useEffect(() => {
         async function fetchSimilarProducts() {
             try {
-                const listCategory = categories.filter((c) => categoryProduct.find((id) => id === c.categoriesId));
+                const listCategory = categories.filter((c) => categoryProduct.find((id) => id === c.categoryId));
                 const products = await listCategory.reduce(async (accPromise, category) => {
                     const acc = await accPromise;
                     const productCategory = await getData(api.products + `?category=${category.name}`);

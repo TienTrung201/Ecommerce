@@ -76,6 +76,7 @@ function ProductReviews({
             ratingValue: orderItems[positionArrayOrderItems].ratingValue,
             title: title,
             orderItemId: orderItems[positionArrayOrderItems].orderItemId,
+            reviewId: orderItems[positionArrayOrderItems].reviewId,
         };
         dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
         updateData(api.userReview + `/${orderItemId}`, postItemReviewData)
