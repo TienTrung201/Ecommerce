@@ -1,7 +1,6 @@
 import images from '@/assets/image';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useRef } from 'react';
 import UserAccount from '@/components/Layout/User';
