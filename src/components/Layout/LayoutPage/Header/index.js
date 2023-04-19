@@ -4,24 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useRef } from 'react';
-import CartHeader from '@/pages/Cart/CartHeader';
 import UserAccount from '@/components/Layout/User';
 function Header() {
     //event close open header
-    const cart = useRef();
     const menuBar = useRef();
     const overlay = useRef();
-    const searchProduct = useRef();
 
-    const handleCloseSearch = () => {
-        searchProduct.current.classList.remove('search--open');
-    };
-    const handleOpenSearch = () => {
-        searchProduct.current.classList.add('search--open');
-    };
     const handleCloseOverlay = () => {
         overlay.current.classList.remove('overlay-open');
-        cart.current.classList.remove('pushmenu-open');
         menuBar.current.classList.remove('pushmenu-open');
     };
     const handleOpenOverlay = () => {
@@ -96,9 +86,7 @@ function Header() {
             </div>
             {/* pushmenu-open */}
             {/* Push cart */}
-            <div ref={cart} className="pushmenu  pushmenu-left cart-box-container">
-                <CartHeader />
-            </div>
+
             {/* Push cart */}
 
             {/* Search form */}
@@ -221,7 +209,7 @@ function Header() {
                                 </Link>
                             </div>
                             <div className="col-md-4 col flex justify-content-end">
-                                <UserAccount onOpenSearch={handleOpenSearch} />
+                                <UserAccount />
                             </div>
                         </div>
                     </div>
