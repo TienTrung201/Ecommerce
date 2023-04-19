@@ -323,7 +323,7 @@ function Cart() {
                                     <thead>
                                         <tr>
                                             <th></th>
-                                            <th className="product-thumbnail">Sản phẩm</th>
+                                            <th className="">Sản phẩm</th>
                                             <th className="product-name">Mô tả</th>
                                             <th className="product-name">Loại</th>
                                             <th className="product-price">Giá</th>

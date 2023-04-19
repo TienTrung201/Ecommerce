@@ -102,7 +102,7 @@ function Header() {
             {/* Push cart */}
 
             {/* Search form */}
-            <div ref={searchProduct} className="search-form-wrapper header-search-form ">
+            {/* <div ref={searchProduct} className="search-form-wrapper header-search-form ">
                 <div className="container">
                     <div className="search-results-wrapper">
                         <div onClick={handleCloseSearch} className="btn-search-close">
@@ -148,11 +148,11 @@ function Header() {
                         </button>
                     </form>
                 </div>
-            </div>
+            </div> */}
             {/* Search form */}
 
-            <header id="header" className="header-v1">
-                <div className="header-center">
+            <header id="header " className="header-v1">
+                <div className="header-page2 position-sticky header-center">
                     <div className="container container-content">
                         <div className="row flex align-items-center justify-content-between">
                             <div className="col-md-4 col">

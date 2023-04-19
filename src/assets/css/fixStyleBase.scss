@@ -8,6 +8,24 @@
         @content;
     }
 }
+
+.position-sticky {
+    // top: -60px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    background-color: #fff;
+    left: 0;
+    // height: 100px;
+}
+
+.ribbon {
+    z-index: 0 !important;
+}
+.box-center {
+    z-index: 0 !important;
+}
 .header-center {
     .header-logo {
         // padding: 80px 0;
@@ -80,7 +98,6 @@
                 li {
                     padding: 0 10px;
                     &:hover {
-                        // background-color: #dfdfdf;
                         cursor: pointer;
                         color: #222 !important;
                     }
@@ -219,6 +236,11 @@ label.mail {
     padding-right: 20px;
     &::placeholder {
         color: #8d8d8d;
+    }
+}
+.shopping-cart {
+    .product-name {
+        border-top: none !important;
     }
 }
 .my-account {
