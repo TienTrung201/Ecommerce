@@ -45,7 +45,7 @@ function PaymentMethods({ user }) {
         });
     };
     // handle add paymentmethod
-    const handleAddNewAddress = () => {
+    const handleAddNewPaymentMethod = () => {
         dispatch(notificationsSlice.actions.showLoading('Đang cập nhật'));
         postData(api.paymentMethods, formData)
             .then((response) => {
@@ -54,6 +54,9 @@ function PaymentMethods({ user }) {
                     dispatch(
                         userSlice.actions.addPaymentMethod({ ...formData, paymentMethodId: response.paymentMethodId }),
                     );
+                    setTimeout(() => {
+                        dispatch(notificationsSlice.actions.destroy());
+                    }, 2000);
                     console.log(response);
                     handleSetNullFormData();
                 }, 1000);
@@ -63,6 +66,9 @@ function PaymentMethods({ user }) {
                 setTimeout(() => {
                     dispatch(notificationsSlice.actions.showError('Thất bại'));
                 }, 1000);
+                setTimeout(() => {
+                    dispatch(notificationsSlice.actions.destroy());
+                }, 2000);
                 console.warn(err);
             });
     };
@@ -96,7 +102,7 @@ function PaymentMethods({ user }) {
         <div className="address-list">
             <Modal
                 title={'Thêm phương thức thanh toán'}
-                haldleSendModal={handleAddNewAddress}
+                haldleSendModal={handleAddNewPaymentMethod}
                 save={'Thêm'}
                 visible={visible}
                 setVisible={setVisible}
