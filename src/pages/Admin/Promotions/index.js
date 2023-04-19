@@ -38,7 +38,7 @@ function Promotions() {
 
                 setTimeout(() => {
                     setLoading(false);
-                }, 400);
+                }, 200);
             })
             .catch((error) => {
                 console.warn(error.message);
