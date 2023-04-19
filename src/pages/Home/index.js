@@ -39,7 +39,7 @@ function Home() {
     const getDataWishlist = () => {
         getData(api.wishLists, user.uid)
             .then((response) => {
-                dispatch(cartSlice.actions.setWishlist(response));
+                dispatch(cartSlice.actions.setWishlist(response.data));
 
                 console.log('wishlist', response);
             })
@@ -57,7 +57,7 @@ function Home() {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
                 getDataWishlist();
-                console.log(response);
+                console.log('update wishlist', response.data);
             })
             .catch((err) => {
                 setTimeout(() => {
@@ -79,7 +79,7 @@ function Home() {
                     dispatch(notificationsSlice.actions.destroy());
                 }, 2000);
                 getDataWishlist();
-                console.log('delete wishlist', response);
+                console.log('delete wishlist', response.data);
             })
             .catch((err) => {
                 console.log('delete wishlist', err);
@@ -213,9 +213,14 @@ function Home() {
                                                     <div className="product-info text-center">
                                                         <h3 className="product-title">{product.name}</h3>
                                                         <div className="product-price">
-                                                            <span className="old">
-                                                                {convertVnd(product.items[0].price)}
-                                                            </span>
+                                                            {product.items[0].discountRate !== 0 ? (
+                                                                <span className="old">
+                                                                    {convertVnd(product.items[0].price)}
+                                                                </span>
+                                                            ) : (
+                                                                false
+                                                            )}
+
                                                             {product.items[0].discountRate === 0 ? (
                                                                 <span>{convertVnd(product.items[0].price)}</span>
                                                             ) : (
