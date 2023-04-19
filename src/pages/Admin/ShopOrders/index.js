@@ -21,6 +21,7 @@ dayjs.extend(timezone);
 
 function ShopOrders() {
     const [loading, setLoading] = useState(false);
+    const [totalPages, setTotalPages] = useState(1);
 
     const [shopOrders, setShopOrders] = useState([]);
     const [orderStatuses, setOrderStatuses] = useState([]);
@@ -31,6 +32,7 @@ function ShopOrders() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const page = queryParams.get('page');
         const search = queryParams.get('search');
         const sort = queryParams.get('sort');
         const status = queryParams.get('status');
@@ -38,17 +40,21 @@ function ShopOrders() {
         setLoading(true);
 
         Promise.all([
-            getData(api.shopOrders + `?search=${search || ''}&sort=${sort || ''}&status=${status || ''}`),
+            getData(
+                api.shopOrders + `?page=${page || 1}&search=${search || ''}&sort=${sort || ''}&status=${status || ''}`,
+            ),
             getData(api.orderStatuses),
         ])
             .then((response) => {
                 console.log(response);
                 setShopOrders(response[0].data);
+                setTotalPages(response[0].totalPages * 10);
+
                 setOrderStatuses(response[1].data);
 
                 setTimeout(() => {
                     setLoading(false);
-                }, 400);
+                }, 200);
             })
             .catch((error) => {
                 console.warn(error);
@@ -85,6 +91,10 @@ function ShopOrders() {
     const handleStatusParamChange = (e) => {
         let value = e.target.value;
         setQueryParams({ ...allQueryParams, status: value });
+    };
+
+    const handlePageParamChange = (page) => {
+        setQueryParams({ ...allQueryParams, page: page });
     };
     // --------- End Input change ---------
 
@@ -251,7 +261,13 @@ function ShopOrders() {
 
                     {/* Paging */}
                     <div className={cx('mt-5', 'd-flex', 'justify-content-end')}>
-                        <Pagination current={1} onChange={(page, pageSize) => {}} total={1} size="small" simple />
+                        <Pagination
+                            current={queryParams.get('page') || 1}
+                            onChange={handlePageParamChange}
+                            total={totalPages}
+                            size="small"
+                            simple
+                        />
                     </div>
                 </div>
             </div>

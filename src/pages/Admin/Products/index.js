@@ -49,7 +49,7 @@ function Products() {
 
                 setTimeout(() => {
                     setLoading(false);
-                }, 400);
+                }, 200);
             })
             .catch((error) => {
                 console.warn(error);
@@ -191,12 +191,26 @@ function Products() {
                                             className={cx('pointer')}
                                             key={product.productId}
                                         >
-                                            <td className={cx('py-1')}>
+                                            <td className={cx('py-1', 'relative')}>
                                                 <img
                                                     className={cx('rounded-6', 'border')}
                                                     src={product.image || images.placeholder}
                                                     alt=""
                                                 />
+
+                                                {product?.items[0]?.discountRate > 0 && (
+                                                    <span
+                                                        className={cx('fs-12', 'border', 'bg-white', 'rounded')}
+                                                        style={{
+                                                            position: 'absolute',
+                                                            top: '4px',
+                                                            right: '8px',
+                                                            padding: '1px',
+                                                        }}
+                                                    >
+                                                        -{product?.items[0]?.discountRate}%
+                                                    </span>
+                                                )}
                                             </td>
                                             <td className={cx('text-wrap', 'lh-base')} style={{ minWidth: '280px' }}>
                                                 {product.name}

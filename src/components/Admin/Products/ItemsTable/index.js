@@ -80,10 +80,12 @@ function ItemsTable({ items, productOptions, handleRemoveItem, handleSelectItem 
                                         onClick={(e) => {
                                             e.preventDefault();
                                         }}
-                                        className={cx('btn', 'btn-light', 'btn-rounded', 'btn-icon', 'ms-2')}
+                                        className={cx('btn', 'btn-light', 'btn-rounded', 'btn-icon', 'ms-2', {
+                                            disabled: item?.isHasOrder,
+                                        })}
                                     >
                                         {/* <FontAwesomeIcon icon={faTrash} /> */}
-                                        <Unicons.UilTrash size="18" />
+                                        <Unicons.UilTrash size="18" color={(item?.isHasOrder && '#888') || '#000'} />
                                     </button>
                                 </Popconfirm>
                                 {/* End Delete button */}
